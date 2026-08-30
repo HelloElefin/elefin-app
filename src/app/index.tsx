@@ -1,9 +1,13 @@
-// TEMPORÄR — Vorschau der Design-Tokens.
+// TEMPORÄR — Vorschau der Design-Tokens und der Textausgabe.
 // Wird gelöscht, sobald der erste echte Screen nach Spezifikation entsteht.
 import { ScrollView, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors, fontSize, radius, spacing, screenPadding } from '@/design';
 
-export default function TokenVorschau() {
+export default function Vorschau() {
+  // t ist die Funktion, die aus einem Schlüssel den fertigen Text macht.
+  const { t, i18n } = useTranslation();
+
   return (
     <ScrollView
       style={{ backgroundColor: colors.background }}
@@ -16,8 +20,9 @@ export default function TokenVorschau() {
           marginBottom: spacing.xs,
         }}
       >
-        Bildschirmtitel, 24 Punkt
+        {t('preview.title')}
       </Text>
+
       <Text
         style={{
           fontSize: fontSize.md,
@@ -25,8 +30,7 @@ export default function TokenVorschau() {
           marginBottom: spacing.lg,
         }}
       >
-        Erklärtext in 17 Punkt. So sieht ein normaler Absatz aus, wenn er über
-        mehr als eine Zeile geht und tatsächlich gelesen werden soll.
+        {t('preview.body')}
       </Text>
 
       <View
@@ -39,17 +43,27 @@ export default function TokenVorschau() {
           marginBottom: spacing.lg,
         }}
       >
-        <Text style={{ fontSize: fontSize.lg, color: colors.textPrimary }}>
-          Eine Karte
+        <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary }}>
+          Aktive Sprache: {i18n.language}
         </Text>
+        {/* Mehrzahlformen: i18next wählt anhand von count automatisch. */}
         <Text
           style={{
-            fontSize: fontSize.sm,
-            color: colors.textSecondary,
+            fontSize: fontSize.md,
+            color: colors.textPrimary,
             marginTop: spacing.xs,
           }}
         >
-          Weiße Fläche auf warmem Hintergrund, mit Rahmen.
+          {t('preview.entryCount', { count: 1 })} / {t('preview.entryCount', { count: 5 })}
+        </Text>
+        <Text
+          style={{
+            fontSize: fontSize.md,
+            color: colors.textPrimary,
+            marginTop: spacing.xs,
+          }}
+        >
+          {t('state.errorCode', { code: 'E-4A7C' })}
         </Text>
       </View>
 
@@ -59,35 +73,12 @@ export default function TokenVorschau() {
           borderRadius: radius.md,
           paddingVertical: spacing.md,
           alignItems: 'center',
-          marginBottom: spacing.lg,
         }}
       >
         <Text style={{ fontSize: fontSize.md, color: colors.textOnAccent }}>
-          Hauptknopf
+          {t('action.continue')}
         </Text>
       </View>
-
-      {(
-        [
-          ['danger', colors.danger, colors.dangerSubtle],
-          ['success', colors.success, colors.successSubtle],
-          ['warning', colors.warning, colors.warningSubtle],
-        ] as const
-      ).map(([name, stark, zart]) => (
-        <View
-          key={name}
-          style={{
-            backgroundColor: zart,
-            borderRadius: radius.md,
-            padding: spacing.md,
-            marginBottom: spacing.sm,
-          }}
-        >
-          <Text style={{ fontSize: fontSize.sm, color: stark }}>
-            {name} — Fehler E-4A7C
-          </Text>
-        </View>
-      ))}
     </ScrollView>
   );
 }

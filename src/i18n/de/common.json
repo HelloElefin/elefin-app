@@ -1,0 +1,24 @@
+{
+  "app": {
+    "name": "Elefin"
+  },
+  "action": {
+    "continue": "Weiter",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "retry": "Erneut versuchen"
+  },
+  "state": {
+    "loading": "Wird geladen …",
+    "empty": "Hier ist noch nichts.",
+    "error": "Da ist etwas schiefgegangen.",
+    "errorCode": "Fehler {{code}}"
+  },
+  "preview": {
+    "title": "Texte funktionieren",
+    "body": "Dieser Satz kommt aus einer Sprachdatei, nicht aus dem Code.",
+    "entryCount_one": "{{count}} Eintrag",
+    "entryCount_other": "{{count}} Einträge"
+  }
+}

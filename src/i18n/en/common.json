@@ -1,0 +1,24 @@
+{
+  "app": {
+    "name": "Elefin"
+  },
+  "action": {
+    "continue": "Continue",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "retry": "Try again"
+  },
+  "state": {
+    "loading": "Loading …",
+    "empty": "Nothing here yet.",
+    "error": "Something went wrong.",
+    "errorCode": "Error {{code}}"
+  },
+  "preview": {
+    "title": "Text handling works",
+    "body": "This sentence comes from a language file, not from the code.",
+    "entryCount_one": "{{count}} entry",
+    "entryCount_other": "{{count}} entries"
+  }
+}
