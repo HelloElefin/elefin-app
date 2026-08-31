@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "elefin",
-    "slug": "elefin",
+    "slug": "elefinapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -10,7 +10,8 @@
     "ios": {
       "icon": "./assets/expo.icon"
     },
-    "android": {
+        "android": {
+      "package": "com.helloelefin.elefin",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -38,6 +39,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9391d671-b725-4484-95ea-c8adfe5bdee1"
+      }
+    },
+    "owner": "elefin_app"
   }
 }
