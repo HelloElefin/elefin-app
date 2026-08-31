@@ -10,7 +10,7 @@
     "ios": {
       "icon": "./assets/expo.icon"
     },
-        "android": {
+    "android": {
       "package": "com.helloelefin.elefin",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -34,7 +34,8 @@
           "imageWidth": 76
         }
       ],
-      "expo-localization"
+      "expo-localization",
+      "react-native-quick-crypto"
     ],
     "experiments": {
       "typedRoutes": true,
