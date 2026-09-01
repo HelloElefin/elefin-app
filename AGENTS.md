@@ -38,12 +38,49 @@ Der Import-Alias `@/` zeigt auf `src/`. Also `@/crypto/...`, nicht `../../crypto
     werden (`bank_accounts`, nicht `Bankverbindungen`). Anzeigenamen kommen aus
     den Sprachdateien.
 11. Keine Fachlogik in Screens. Screens rendern und rufen Hooks auf.
+12. Der Krypto-Bereich wird ausschließlich über `@/crypto` angesprochen.
+    Niemals direkt aus `@/crypto/schluessel`, `@/crypto/umschlag` usw.
+    importieren. Ausnahme: Tests innerhalb von src/crypto.
 
 ## Sprache und Markt sind zwei getrennte Achsen
 Sprache = was jemand liest (`src/i18n/`). Markt = welches Recht gilt
 (`src/content/`). Eine türkischsprachige Familie in Wien braucht türkische
 Oberfläche und österreichische Rechtsinhalte. Marktinhalte bringen ihre eigenen
 Textschlüssel mit; es gibt keine zwei deutschen Sprachdateien.
+
+## Sicherheitsmodell (entschieden, nicht neu verhandeln)
+
+**Generalschlüssel:** Zufällig erzeugt, NICHT aus dem Passwort abgeleitet.
+Er wird mehrfach verpackt — mit dem Passwort, mit dem ausgedruckten
+Sicherheitsschlüssel, mit dem Gerät, und doppelt verschlossen für den
+Ernstfall. Ein Passwortwechsel ersetzt nur eine Verpackung; es wird nie
+etwas neu verschlüsselt.
+
+**Freigaben:** Pro Eintrag ein eigener zufälliger Datenschlüssel. Der wird
+pro berechtigter Person in einen Umschlag verpackt. Daraus folgt:
+abgestufte Freigaben sind möglich, Vollzugriff bedeutet einen Umschlag je
+Eintrag, und ein Entzug löscht die Umschlagzeilen wirklich — Ausblenden im
+Frontend genügt nicht.
+
+**Ernstfall:** Der Generalschlüssel liegt zusätzlich in einer doppelt
+verschlossenen Kiste — ein Anteil beim Server, einer bei der benannten
+Person. Getrennt ist beides wertlos. Freigabe nur nach geprüfter
+Sterbeurkunde, ohne Wartefrist.
+
+**Passwort vergessen:** Nur über den ausgedruckten Sicherheitsschlüssel oder
+ein angemeldetes Gerät. Kein Partner-Rückweg zu Lebzeiten, keine
+Wartefristen, kein Zurücksetzen per E-Mail — der Server kann das Passwort
+nicht ersetzen, weil er den Generalschlüssel nicht hat.
+
+**Verfahren:** scrypt (N=2^17, r=8, p=1) für die Ableitung aus dem Passwort,
+nativ über react-native-quick-crypto. XChaCha20-Poly1305, X25519 und HKDF
+über @noble. Kein Argon2id — in JavaScript braucht es auf einem aktuellen
+Gerät über 60 Sekunden.
+
+**Gerätebindung ist Bequemlichkeit, kein Fundament.** Ein Gerät verwahrt nur
+eine Verpackung des Generalschlüssels, niemals einen Zugang, der ohne
+Passwort oder Sicherheitsschlüssel funktioniert. Sonst ist die spätere
+Webversion nicht baubar.
 
 ## Arbeitsweise
 - Vor größeren Änderungen erst den Plan zeigen, dann auf Bestätigung warten.
@@ -54,9 +91,14 @@ Textschlüssel mit; es gibt keine zwei deutschen Sprachdateien.
 - Deutsch antworten.
 
 ## Testen
-Automatisierte Tests nur für `src/crypto/` und `src/domain/`. Alles andere
-manuell nach den Testschritten der Screen-Spezifikation. Ausdrücklich nicht:
-Snapshot-Tests, Komponententests der Oberfläche, Abdeckungsquoten.
+Automatisierte Tests nur für `src/crypto/` und `src/domain/`, mit Vitest
+(`npm test`). Diese laufen auf dem PC, nicht auf dem Gerät — beide Ordner
+enthalten reine Rechenfunktionen. Ausgenommen ist `src/crypto/ableitung.ts`,
+die als einzige Datei einen nativen Aufruf macht.
+
+Alles andere manuell nach den Testschritten der Screen-Spezifikation.
+Ausdrücklich nicht: Snapshot-Tests, Komponententests der Oberfläche,
+Abdeckungsquoten.
 
 ## Definition of Done
 Siehe `docs/DEFINITION-OF-DONE.md`. Ein Screen ist erst fertig, wenn alle
