@@ -74,4 +74,5 @@ export {
   inhaltEntschluesseln,
   inhaltVerschluesseln,
   type MitSchemaVersion,
+  type Pruefmuster,
 } from './inhalt';

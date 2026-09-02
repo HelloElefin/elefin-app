@@ -24,6 +24,15 @@ export const BankAccountInhalt = z.object({
   /** Name der Bank, z. B. "Erste Bank" oder "Sparkasse Köln". */
   institut: z.string().max(120).optional(),
 
+    /**
+   * Wem gehört das Konto? Leer heißt: dem Nutzer selbst.
+   *
+   * Wichtig bei gemeinsamen Konten und bei Konten, die auf jemand anderen
+   * lauten — etwa ein Sparbuch für ein Kind. Im Todesfall entscheidet der
+   * Inhaber darüber, was mit dem Konto passiert.
+   */
+  kontoinhaber: z.string().max(120).optional(),
+
   /** IBAN, wie eingegeben. Wird nicht auf Gültigkeit geprüft. */
   iban: z.string().max(42).optional(),
 
