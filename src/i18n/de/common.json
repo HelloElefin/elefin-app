@@ -7,6 +7,7 @@
     "back": "Zurück",
     "cancel": "Abbrechen",
     "save": "Speichern",
+    "skip": "Überspringen",
     "retry": "Erneut versuchen"
   },
   "state": {
@@ -15,10 +16,29 @@
     "error": "Da ist etwas schiefgegangen.",
     "errorCode": "Fehler {{code}}"
   },
-  "preview": {
-    "title": "Texte funktionieren",
-    "body": "Dieser Satz kommt aus einer Sprachdatei, nicht aus dem Code.",
-    "entryCount_one": "{{count}} Eintrag",
-    "entryCount_other": "{{count}} Einträge"
+  "step": {
+    "counter": "Schritt {{aktuell}} von {{gesamt}}"
+  },
+  "bankAccount": {
+    "title": "Deine Bankverbindung",
+    "why": "Banken sperren Konten im Todesfall automatisch. Wer weiß, wo welches Konto liegt, kommt schneller an Geld für laufende Kosten.",
+    "bezeichnung": "Wie nennst du das Konto?",
+    "bezeichnungPlatzhalter": "Gehaltskonto",
+    "institut": "Bei welcher Bank?",
+    "institutPlatzhalter": "Erste Bank",
+    "weitereAngaben": "Weitere Angaben",
+    "iban": "IBAN",
+    "ibanPlatzhalter": "AT00 0000 0000 0000 0000",
+    "kontoinhaber": "Kontoinhaber",
+    "kontoinhaberPlatzhalter": "Leer lassen, wenn es dein eigenes ist",
+    "gespeichert_one": "{{count}} Konto erfasst",
+    "gespeichert_other": "{{count}} Konten erfasst"
+  },
+  "iban": {
+    "pruefsumme": "Diese IBAN sieht nicht ganz richtig aus. Schau nochmal nach.",
+    "falsche_laenge": "Diese IBAN hat nicht die erwartete Länge.",
+    "ungueltige_zeichen": "Eine IBAN enthält nur Buchstaben und Ziffern.",
+    "zu_kurz": "Da fehlt noch etwas.",
+    "unbekanntes_land": "Dieses Länderkürzel kennen wir nicht."
   }
 }
