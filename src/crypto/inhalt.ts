@@ -18,7 +18,17 @@
  * Bankkonto ist. Sie bekommt ein Prüfmuster übergeben und wendet es an.
  * Die Muster selbst liegen in src/domain.
  */
-import type { z } from 'zod';
+/**
+ * Ein Prüfmuster, wie es zod liefert.
+ *
+ * Bewusst schmal beschrieben statt den vollen zod-Typ zu verlangen: Der
+ * Krypto-Bereich braucht nur safeParse und soll nicht an ein bestimmtes
+ * Prüfwerkzeug gebunden sein. Das hält ihn klein und in Tests leicht
+ * ersetzbar.
+ */
+export type Pruefmuster<T> = {
+  safeParse(wert: unknown): { success: true; data: T } | { success: false };
+};
 
 import { textNachUtf8, utf8NachText } from './bytes';
 import { KryptoFehler, KryptoFehlerCode } from './fehler';
@@ -84,7 +94,7 @@ export function inhaltEntschluesseln<T extends MitSchemaVersion>(
   datenschluessel: Uint8Array,
   eintragId: string,
   verpackt: VerpackterSchluessel,
-  muster: z.ZodType<T>,
+  muster: Pruefmuster<T>,
 ): T {
   const bytes = symEntschluesseln(
     datenschluessel,
