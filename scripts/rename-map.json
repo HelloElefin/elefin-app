@@ -1,0 +1,29 @@
+[
+  { "file": "src/crypto/bytes.ts", "from": "bytesVerbinden", "to": "concatBytes" },
+  { "file": "src/crypto/bytes.ts", "from": "bytesGleich", "to": "bytesEqual" },
+  { "file": "src/crypto/errors.ts", "from": "KryptoFehler", "to": "CryptoError" },
+  { "file": "src/crypto/errors.ts", "from": "schluesselLaengePruefen", "to": "assertKeyLength" },
+  { "file": "src/crypto/keys.ts", "from": "SCRYPT_STANDARD", "to": "SCRYPT_DEFAULTS" },
+  { "file": "src/crypto/content.ts", "from": "Pruefmuster", "to": "Validator" },
+
+  { "file": "src/data/errors.ts", "from": "DatenFehler", "to": "DataError" },
+  { "file": "src/data/errors.ts", "from": "datenbankFehler", "to": "toDataError" },
+  { "file": "src/data/supabase.ts", "from": "UMGEBUNG", "to": "ENVIRONMENT" },
+  { "file": "src/data/supabase.ts", "from": "verbindungTesten", "to": "testConnection" },
+  { "file": "src/data/session.ts", "from": "verpackungsSchluesselHolen", "to": "getWrappingKey" },
+  { "file": "src/data/session.ts", "from": "abmelden", "to": "signOut" },
+  { "file": "src/data/session.ts", "from": "allesLoeschen", "to": "deleteAll" },
+  { "file": "src/data/store.ts", "from": "Ablage", "to": "Store" },
+  { "file": "src/data/store.ts", "from": "Eintrag", "to": "Entry" },
+  { "file": "src/data/store.ts", "from": "NeuerEintrag", "to": "NewEntry" },
+  { "file": "src/data/local-store.ts", "from": "alleZeilenRoh", "to": "getAllRawRows" },
+
+  { "file": "src/domain/categories.ts", "from": "istKategorie", "to": "isCategory" },
+
+  { "file": "src/ui/Field.tsx", "from": "Feld", "to": "Field" },
+  { "file": "src/ui/Button.tsx", "from": "Knopf", "to": "Button" },
+  { "file": "src/ui/Button.tsx", "literal": "haupt", "to": "primary" },
+  { "file": "src/ui/Button.tsx", "literal": "leise", "to": "quiet" },
+  { "file": "src/app/index.tsx", "literal": "haupt", "to": "primary" },
+  { "file": "src/app/index.tsx", "literal": "leise", "to": "quiet" }
+]
