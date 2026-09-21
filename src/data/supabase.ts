@@ -11,13 +11,13 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 
-import { DatenFehler, DatenFehlerCode } from './errors';
+import { DataError, DatenFehlerCode } from './errors';
 
 const URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
 /** 'dev' oder 'prod'. Nur zur Anzeige, nie für Zugriffsentscheidungen. */
-export const UMGEBUNG = process.env.EXPO_PUBLIC_UMGEBUNG ?? 'unbekannt';
+export const ENVIRONMENT = process.env.EXPO_PUBLIC_UMGEBUNG ?? 'unbekannt';
 
 /**
  * Ablage für die Anmeldesitzung von Supabase Auth.
@@ -47,7 +47,7 @@ export function supabase(): SupabaseClient {
   if (klient !== null) return klient;
 
   if (URL === undefined || URL === '' || ANON_KEY === undefined || ANON_KEY === '') {
-    throw new DatenFehler(
+    throw new DataError(
       DatenFehlerCode.KONFIGURATION_FEHLT,
       'EXPO_PUBLIC_SUPABASE_URL oder EXPO_PUBLIC_SUPABASE_ANON_KEY fehlt. ' +
         '.env prüfen und die App mit "npx expo start --dev-client --clear" neu starten.',
@@ -74,7 +74,7 @@ export function supabase(): SupabaseClient {
  * Detail über die Antwort zurück — nur ob es geklappt hat und wie lange es
  * gedauert hat.
  */
-export async function verbindungTesten(): Promise<{
+export async function testConnection(): Promise<{
   erreichbar: boolean;
   dauerMs: number;
 }> {

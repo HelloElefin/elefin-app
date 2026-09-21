@@ -10,21 +10,21 @@ export {
   eintragLoeschen,
 } from './entries';
 
-export type { Eintrag, NeuerEintrag } from './store';
+export type { Entry, NewEntry } from './store';
 
 export {
-  DatenFehler,
+  DataError,
   DatenFehlerCode,
   type DatenFehlerCodeWert,
 } from './errors';
 
 export {
-  abmelden,
-  allesLoeschen,
+  signOut,
+  deleteAll,
   hatKonto,
   type KontoSitzung,
   type LokaleSitzung,
   type Sitzung,
 } from './session';
 
-export { UMGEBUNG } from './supabase';
+export { ENVIRONMENT } from './supabase';

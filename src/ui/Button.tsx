@@ -11,17 +11,17 @@ import { colors, fontSize, radius, spacing } from '@/design';
 type Props = {
   beschriftung: string;
   aufDruck: () => void;
-  art?: 'haupt' | 'leise';
+  art?: 'primary' | 'quiet';
   gesperrt?: boolean;
 };
 
-export function Knopf({
+export function Button({
   beschriftung,
   aufDruck,
-  art = 'haupt',
+  art = 'primary',
   gesperrt = false,
 }: Props) {
-  const gefuellt = art === 'haupt';
+  const gefuellt = art === 'primary';
 
   return (
     <Pressable

@@ -9,10 +9,10 @@
  * Sitzungszustands, welche Ablage benutzt wird. Kein Screen muss dafür
  * angefasst werden.
  */
-import type { Pruefmuster } from '@/crypto';
+import type { Validator } from '@/crypto';
 import type { Kategorie } from '@/domain';
 
-import type { Ablage, Eintrag, NeuerEintrag } from './store';
+import type { Store, Entry, NewEntry } from './store';
 import { lokaleAblage } from './local-store';
 import { hatKonto } from './session';
 
@@ -23,7 +23,7 @@ import { hatKonto } from './session';
  * gebaut ist. Die Weiche steht aber schon, damit der Wechsel später eine
  * Zeile ist.
  */
-async function ablage(): Promise<Ablage> {
+async function ablage(): Promise<Store> {
   if (await hatKonto()) {
     // TODO: serverAblage zurückgeben, sobald ablage-server.ts existiert.
     return lokaleAblage;
@@ -32,23 +32,23 @@ async function ablage(): Promise<Ablage> {
 }
 
 /** Legt einen Eintrag an und gibt seine Kennung zurück. */
-export async function eintragAnlegen(eintrag: NeuerEintrag): Promise<string> {
+export async function eintragAnlegen(eintrag: NewEntry): Promise<string> {
   return (await ablage()).eintragAnlegen(eintrag);
 }
 
 /** Lädt alle Einträge einer Kategorie, entschlüsselt und geprüft. */
 export async function eintraegeLaden<T extends { schemaVersion: number }>(
   kategorie: Kategorie,
-  muster: Pruefmuster<T>,
-): Promise<Eintrag<T>[]> {
+  muster: Validator<T>,
+): Promise<Entry<T>[]> {
   return (await ablage()).eintraegeLaden(kategorie, muster);
 }
 
 /** Lädt einen einzelnen Eintrag. Wirft E-DB05, wenn es ihn nicht gibt. */
 export async function eintragLaden<T extends { schemaVersion: number }>(
   id: string,
-  muster: Pruefmuster<T>,
-): Promise<Eintrag<T>> {
+  muster: Validator<T>,
+): Promise<Entry<T>> {
   return (await ablage()).eintragLaden(id, muster);
 }
 

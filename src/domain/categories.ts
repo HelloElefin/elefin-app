@@ -48,7 +48,7 @@ export type Kategorie = (typeof KATEGORIEN)[number];
 export const AKTIVE_KATEGORIEN: readonly Kategorie[] = ['bank_accounts'];
 
 /** Prüft, ob ein beliebiger Text eine bekannte Kategorie ist. */
-export function istKategorie(wert: string): wert is Kategorie {
+export function isCategory(wert: string): wert is Kategorie {
   return (KATEGORIEN as readonly string[]).includes(wert);
 }
 

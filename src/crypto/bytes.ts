@@ -60,7 +60,7 @@ export function utf8NachText(bytes: Uint8Array): string {
  * Hängt mehrere Byte-Folgen aneinander.
  * Wird gebraucht, um Umschläge zusammenzusetzen und wieder zu zerlegen.
  */
-export function bytesVerbinden(...teile: Uint8Array[]): Uint8Array {
+export function concatBytes(...teile: Uint8Array[]): Uint8Array {
   const gesamt = teile.reduce((summe, teil) => summe + teil.length, 0);
   const ergebnis = new Uint8Array(gesamt);
   let position = 0;
@@ -82,7 +82,7 @@ export function bytesVerbinden(...teile: Uint8Array[]): Uint8Array {
  * Für Prüfsummen und Vergleiche von Geheimnissen verwenden, nicht für
  * gewöhnliche Daten.
  */
-export function bytesGleich(a: Uint8Array, b: Uint8Array): boolean {
+export function bytesEqual(a: Uint8Array, b: Uint8Array): boolean {
   if (a.length !== b.length) return false;
   let unterschied = 0;
   for (let i = 0; i < a.length; i++) {

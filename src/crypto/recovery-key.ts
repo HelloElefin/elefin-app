@@ -19,7 +19,7 @@
 import { sha256 } from '@noble/hashes/sha2.js';
 
 import { textNachUtf8, zufallsBytes } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './errors';
+import { CryptoError, KryptoFehlerCode } from './errors';
 
 /**
  * 32 Zeichen, Crockfords Base32 ohne die verwechselbaren.
@@ -123,7 +123,7 @@ export function sicherheitsschluesselPruefen(eingabe: string): string {
   const roh = bereinigen(eingabe);
 
   if (roh.length !== LAENGE) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.SICHERHEITSSCHLUESSEL_FORM,
       `Eingabe hat ${roh.length} Zeichen, erwartet werden ${LAENGE}.`,
     );
@@ -131,7 +131,7 @@ export function sicherheitsschluesselPruefen(eingabe: string): string {
 
   for (const zeichen of roh) {
     if (!ZEICHEN.includes(zeichen)) {
-      throw new KryptoFehler(
+      throw new CryptoError(
         KryptoFehlerCode.SICHERHEITSSCHLUESSEL_FORM,
         'Eingabe enthält ein Zeichen, das nicht zum Vorrat gehört.',
       );
@@ -140,7 +140,7 @@ export function sicherheitsschluesselPruefen(eingabe: string): string {
 
   const inhalt = roh.slice(0, LAENGE - 1);
   if (roh[LAENGE - 1] !== pruefzeichen(inhalt)) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.SICHERHEITSSCHLUESSEL_PRUEFZIFFER,
       'Prüfzeichen stimmt nicht — vermutlich ein Tippfehler.',
     );

@@ -28,12 +28,12 @@ import { sha256 } from '@noble/hashes/sha2.js';
 
 import {
   bytesNachText,
-  bytesVerbinden,
+  concatBytes,
   textNachBytes,
   textNachUtf8,
   zufallsBytes,
 } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './errors';
+import { CryptoError, KryptoFehlerCode } from './errors';
 import { NONCE_LAENGE, SCHLUESSEL_LAENGE } from './keys';
 
 /** Aktuelle Umschlag-Version. Bei Verfahrenswechsel erhöhen, nie wiederverwenden. */
@@ -83,7 +83,7 @@ function verpackungsSchluessel(
     gemeinsamesGeheimnis,
     // Kein Salt nötig: Das gemeinsame Geheimnis ist bereits zufällig.
     undefined,
-    bytesVerbinden(UMSCHLAG_KENNUNG, wegwerfOeffentlich, empfaengerOeffentlich),
+    concatBytes(UMSCHLAG_KENNUNG, wegwerfOeffentlich, empfaengerOeffentlich),
     SCHLUESSEL_LAENGE,
   );
 }
@@ -111,7 +111,7 @@ export function umschlagVerpacken(
   const chiffre = xchacha20poly1305(schluessel, nonce).encrypt(inhalt);
 
   return bytesNachText(
-    bytesVerbinden(
+    concatBytes(
       new Uint8Array([UMSCHLAG_VERSION]),
       wegwerf.publicKey,
       nonce,
@@ -134,7 +134,7 @@ export function umschlagAuspacken(
 
   const kopfLaenge = 1 + X25519_LAENGE + NONCE_LAENGE;
   if (block.length <= kopfLaenge) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.UMSCHLAG_BESCHAEDIGT,
       `Umschlag ist ${block.length} Byte lang, mindestens ${kopfLaenge + 1} werden erwartet.`,
     );
@@ -142,7 +142,7 @@ export function umschlagAuspacken(
 
   const version = block[0];
   if (version !== UMSCHLAG_VERSION) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.UNBEKANNTE_UMSCHLAG_VERSION,
       `Umschlag hat Version ${String(version)}, diese App kennt nur ${UMSCHLAG_VERSION}.`,
     );
@@ -163,7 +163,7 @@ export function umschlagAuspacken(
   try {
     return xchacha20poly1305(schluessel, nonce).decrypt(chiffre);
   } catch {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.ENTSCHLUESSELN_FEHLGESCHLAGEN,
       'Umschlag konnte mit diesem privaten Schlüssel nicht geöffnet werden.',
     );

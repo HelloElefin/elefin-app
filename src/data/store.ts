@@ -22,7 +22,7 @@ import type { Kategorie } from '@/domain';
  * Ein Eintrag, wie ihn die Ablage nach oben herausgibt: entschlüsselt und
  * gegen sein Muster geprüft.
  */
-export type Eintrag<T> = {
+export type Entry<T> = {
   readonly id: string;
   readonly kategorie: Kategorie;
   readonly inhalt: T;
@@ -31,7 +31,7 @@ export type Eintrag<T> = {
 };
 
 /** Was beim Anlegen übergeben wird. Die ID vergibt die Ablage. */
-export type NeuerEintrag = {
+export type NewEntry = {
   readonly kategorie: Kategorie;
   readonly inhalt: Record<string, unknown>;
 };
@@ -42,9 +42,9 @@ export type NeuerEintrag = {
  * Alle Funktionen sind asynchron — auch die lokalen. Sonst müsste beim
  * Wechsel auf die Serverablage jede Aufrufstelle geändert werden.
  */
-export type Ablage = {
+export type Store = {
   /** Legt einen Eintrag an und gibt seine ID zurück. */
-  eintragAnlegen(eintrag: NeuerEintrag): Promise<string>;
+  eintragAnlegen(eintrag: NewEntry): Promise<string>;
 
   /**
    * Lädt alle Einträge einer Kategorie, entschlüsselt und geprüft.
@@ -55,13 +55,13 @@ export type Ablage = {
   eintraegeLaden<T extends { schemaVersion: number }>(
     kategorie: Kategorie,
     muster: MusterFuer<T>,
-  ): Promise<Eintrag<T>[]>;
+  ): Promise<Entry<T>[]>;
 
   /** Lädt einen einzelnen Eintrag. Wirft E-DB05, wenn es ihn nicht gibt. */
   eintragLaden<T extends { schemaVersion: number }>(
     id: string,
     muster: MusterFuer<T>,
-  ): Promise<Eintrag<T>>;
+  ): Promise<Entry<T>>;
 
   /** Ersetzt den Inhalt eines Eintrags. Der Datenschlüssel bleibt derselbe. */
   eintragAendern(id: string, inhalt: Record<string, unknown>): Promise<void>;

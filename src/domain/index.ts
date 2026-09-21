@@ -6,7 +6,7 @@ export {
   AKTIVE_KATEGORIEN,
   KATEGORIEN,
   istAktiv,
-  istKategorie,
+  isCategory,
   type Kategorie,
 } from './categories';
 

@@ -26,12 +26,12 @@
  * Prüfwerkzeug gebunden sein. Das hält ihn klein und in Tests leicht
  * ersetzbar.
  */
-export type Pruefmuster<T> = {
+export type Validator<T> = {
   safeParse(wert: unknown): { success: true; data: T } | { success: false };
 };
 
 import { textNachUtf8, utf8NachText } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './errors';
+import { CryptoError, KryptoFehlerCode } from './errors';
 import {
   symEntschluesseln,
   symVerschluesseln,
@@ -94,7 +94,7 @@ export function inhaltEntschluesseln<T extends MitSchemaVersion>(
   datenschluessel: Uint8Array,
   eintragId: string,
   verpackt: VerpackterSchluessel,
-  muster: Pruefmuster<T>,
+  muster: Validator<T>,
 ): T {
   const bytes = symEntschluesseln(
     datenschluessel,
@@ -106,7 +106,7 @@ export function inhaltEntschluesseln<T extends MitSchemaVersion>(
   try {
     roh = JSON.parse(utf8NachText(bytes));
   } catch {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.INHALT_UNGUELTIG,
       'Entschlüsselter Inhalt ist kein gültiges JSON.',
     );
@@ -117,7 +117,7 @@ export function inhaltEntschluesseln<T extends MitSchemaVersion>(
   // kaputt, die App ist zu alt.
   const version = (roh as MitSchemaVersion | null)?.schemaVersion;
   if (typeof version !== 'number' || !LESBARE_SCHEMA_VERSIONEN.has(version)) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.UNBEKANNTE_SCHEMA_VERSION,
       `Datensatz hat Schema-Version ${String(version)}, lesbar sind ${[...LESBARE_SCHEMA_VERSIONEN].join(', ')}.`,
     );
@@ -125,7 +125,7 @@ export function inhaltEntschluesseln<T extends MitSchemaVersion>(
 
   const ergebnis = muster.safeParse(roh);
   if (!ergebnis.success) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.INHALT_UNGUELTIG,
       'Entschlüsselter Inhalt passt nicht zum erwarteten Muster.',
     );

@@ -13,7 +13,7 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
 import { zufallsBytes } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './errors';
+import { CryptoError, KryptoFehlerCode } from './errors';
 import {
   AKTUELLE_SCHEMA_VERSION,
   inhaltEntschluesseln,
@@ -74,7 +74,7 @@ describe('Verschlüsseln und Entschlüsseln', () => {
 
     expect(() =>
       inhaltEntschluesseln(falsch, eintragId, verpackt, TestInhalt),
-    ).toThrow(KryptoFehler);
+    ).toThrow(CryptoError);
   });
 
   it('schlägt fehl, wenn das Chiffrat in eine andere Zeile verschoben wird', () => {
@@ -88,7 +88,7 @@ describe('Verschlüsseln und Entschlüsseln', () => {
     // Derselbe Schlüssel, aber eine fremde Eintrags-ID.
     expect(() =>
       inhaltEntschluesseln(schluessel, 'eintrag-2', verpackt, TestInhalt),
-    ).toThrow(KryptoFehler);
+    ).toThrow(CryptoError);
   });
 });
 
@@ -112,7 +112,7 @@ describe('Umschläge', () => {
     const umschlag = umschlagVerpacken(datenschluessel, anna.oeffentlich);
 
     expect(() => umschlagAuspacken(umschlag, schwester.privat)).toThrow(
-      KryptoFehler,
+      CryptoError,
     );
   });
 
@@ -204,8 +204,8 @@ describe('Sicherheitsschlüssel', () => {
       sicherheitsschluesselPruefen(vertippt);
       expect.unreachable('Hätte einen Fehler werfen müssen.');
     } catch (fehler) {
-      expect(fehler).toBeInstanceOf(KryptoFehler);
-      expect((fehler as KryptoFehler).code).toBe(
+      expect(fehler).toBeInstanceOf(CryptoError);
+      expect((fehler as CryptoError).code).toBe(
         KryptoFehlerCode.SICHERHEITSSCHLUESSEL_PRUEFZIFFER,
       );
     }

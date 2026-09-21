@@ -15,8 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { eintraegeLaden, eintragAnlegen } from '@/data';
 import { BankAccountInhalt, ibanPruefen, type IbanGrund } from '@/domain';
 import { colors, fontSize, radius, spacing, screenPadding } from '@/design';
-import { Feld } from '@/ui/Field';
-import { Knopf } from '@/ui/Button';
+import { Field } from '@/ui/Field';
+import { Button } from '@/ui/Button';
 
 const SCHRITT = 3;
 const SCHRITTE_GESAMT = 5;
@@ -143,14 +143,14 @@ export default function BankverbindungScreen() {
         </Text>
       </View>
 
-      <Feld
+      <Field
         beschriftung={t('bankAccount.bezeichnung')}
         wert={bezeichnung}
         aufAenderung={setBezeichnung}
         platzhalter={t('bankAccount.bezeichnungPlatzhalter')}
       />
 
-      <Feld
+      <Field
         beschriftung={t('bankAccount.institut')}
         wert={institut}
         aufAenderung={setInstitut}
@@ -180,7 +180,7 @@ export default function BankverbindungScreen() {
 
       {aufgeklappt && (
         <>
-          <Feld
+          <Field
             beschriftung={t('bankAccount.iban')}
             wert={iban}
             aufAenderung={setIban}
@@ -189,7 +189,7 @@ export default function BankverbindungScreen() {
             hinweis={ibanGrund !== null ? t(`iban.${ibanGrund}`) : undefined}
             hinweisArt={ibanGrund !== null ? 'warnung' : 'neutral'}
           />
-          <Feld
+          <Field
             beschriftung={t('bankAccount.kontoinhaber')}
             wert={kontoinhaber}
             aufAenderung={setKontoinhaber}
@@ -199,7 +199,7 @@ export default function BankverbindungScreen() {
       )}
 
       <View style={{ marginTop: spacing.md }}>
-        <Knopf
+        <Button
           beschriftung={t('action.save')}
           aufDruck={() => void speichern()}
           gesperrt={bezeichnung.trim() === ''}

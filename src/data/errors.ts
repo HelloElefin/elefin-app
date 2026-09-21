@@ -36,7 +36,7 @@ export const DatenFehlerCode = {
 export type DatenFehlerCodeWert =
   (typeof DatenFehlerCode)[keyof typeof DatenFehlerCode];
 
-export class DatenFehler extends Error {
+export class DataError extends Error {
   readonly code: DatenFehlerCodeWert;
 
   constructor(code: DatenFehlerCodeWert, hinweis: string) {
@@ -53,26 +53,26 @@ export class DatenFehler extends Error {
  * Spaltennamen und Werte enthalten, und was nicht mitgeschleppt wird, kann
  * auch nicht versehentlich protokolliert werden.
  */
-export function datenbankFehler(fehler: { code?: string; message?: string }): DatenFehler {
+export function toDataError(fehler: { code?: string; message?: string }): DataError {
   // Postgres-Fehlercodes, soweit für uns aussagekräftig.
   switch (fehler.code) {
     case '42501': // insufficient_privilege — RLS hat abgelehnt
-      return new DatenFehler(
+      return new DataError(
         DatenFehlerCode.KEIN_ZUGRIFF,
         'Zugriff durch Row Level Security verweigert.',
       );
     case '23505': // unique_violation
-      return new DatenFehler(
+      return new DataError(
         DatenFehlerCode.KONTO_EXISTIERT,
         'Ein Datensatz mit diesem eindeutigen Merkmal existiert bereits.',
       );
     case 'PGRST116': // kein Ergebnis bei .single()
-      return new DatenFehler(
+      return new DataError(
         DatenFehlerCode.NICHT_GEFUNDEN,
         'Kein passender Datensatz gefunden.',
       );
     default:
-      return new DatenFehler(
+      return new DataError(
         DatenFehlerCode.UNBEKANNT,
         'Unerwarteter Datenbankfehler.',
       );

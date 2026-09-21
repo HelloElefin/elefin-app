@@ -26,7 +26,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { bytesNachText, textNachBytes, zufallsBytes } from '@/crypto';
 
-import { DatenFehler, DatenFehlerCode } from './errors';
+import { DataError, DatenFehlerCode } from './errors';
 
 const GERAETESCHLUESSEL = 'elefin.geraeteschluessel';
 const GENERALSCHLUESSEL = 'elefin.generalschluessel';
@@ -115,7 +115,7 @@ export async function sitzungLaden(): Promise<Sitzung> {
  * die Ablage ist der Unterschied damit erledigt — sie verpackt einfach mit
  * dem, was sie hier bekommt.
  */
-export async function verpackungsSchluesselHolen(): Promise<Uint8Array> {
+export async function getWrappingKey(): Promise<Uint8Array> {
   const sitzung = await sitzungLaden();
   return sitzung.art === 'konto'
     ? sitzung.generalschluessel
@@ -130,7 +130,7 @@ export async function verpackungsSchluesselHolen(): Promise<Uint8Array> {
 export async function kontoSitzungFordern(): Promise<KontoSitzung> {
   const sitzung = await sitzungLaden();
   if (sitzung.art !== 'konto') {
-    throw new DatenFehler(
+    throw new DataError(
       DatenFehlerCode.NICHT_ANGEMELDET,
       'Dieser Vorgang benötigt ein Konto.',
     );
@@ -149,7 +149,7 @@ export async function hatKonto(): Promise<boolean> {
  * Der Geräteschlüssel bleibt, weil lokale Daten weiter lesbar sein sollen —
  * Abmelden ist nicht dasselbe wie Alles-Löschen.
  */
-export async function abmelden(): Promise<void> {
+export async function signOut(): Promise<void> {
   await SecureStore.deleteItemAsync(NUTZER_ID);
   await SecureStore.deleteItemAsync(GENERALSCHLUESSEL);
   await SecureStore.deleteItemAsync(PRIVATER_SCHLUESSEL);
@@ -161,7 +161,7 @@ export async function abmelden(): Promise<void> {
  * Danach sind die lokalen Daten unwiederbringlich unlesbar. Nur für
  * "Alle Daten löschen" im Einstellungsbereich.
  */
-export async function allesLoeschen(): Promise<void> {
-  await abmelden();
+export async function deleteAll(): Promise<void> {
+  await signOut();
   await SecureStore.deleteItemAsync(GERAETESCHLUESSEL);
 }

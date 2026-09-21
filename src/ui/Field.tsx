@@ -18,7 +18,7 @@ type Props = {
   aufVerlassen?: () => void;
 };
 
-export function Feld({
+export function Field({
   beschriftung,
   wert,
   aufAenderung,

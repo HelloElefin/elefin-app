@@ -38,7 +38,7 @@ export type KryptoFehlerCodeWert =
  * Fehler mit Code. Die Oberfläche zeigt den Code an, der Text bleibt
  * für Entwickler — er wird nie übersetzt und nie dem Nutzer gezeigt.
  */
-export class KryptoFehler extends Error {
+export class CryptoError extends Error {
   readonly code: KryptoFehlerCodeWert;
 
   constructor(code: KryptoFehlerCodeWert, hinweis: string) {
@@ -53,12 +53,12 @@ export class KryptoFehler extends Error {
  * Verhindert die stille Fehlfunktion, wenn irgendwo ein falscher Wert
  * durchgereicht wird.
  */
-export function schluesselLaengePruefen(
+export function assertKeyLength(
   schluessel: Uint8Array,
   erwartet: number,
 ): void {
   if (schluessel.length !== erwartet) {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.SCHLUESSEL_LAENGE,
       `Schlüssel hat ${schluessel.length} Byte, erwartet werden ${erwartet}.`,
     );

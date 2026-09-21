@@ -25,11 +25,11 @@ import {
   zufallsBytes,
   type VerpackterSchluessel,
 } from '@/crypto';
-import { istKategorie, type Kategorie } from '@/domain';
+import { isCategory, type Kategorie } from '@/domain';
 
-import type { Ablage, Eintrag, MusterFuer, NeuerEintrag } from './store';
-import { DatenFehler, DatenFehlerCode } from './errors';
-import { verpackungsSchluesselHolen } from './session';
+import type { Store, Entry, MusterFuer, NewEntry } from './store';
+import { DataError, DatenFehlerCode } from './errors';
+import { getWrappingKey } from './session';
 
 const DATENBANK = 'elefin.db';
 
@@ -103,7 +103,7 @@ async function datenschluesselVon(zeile: Zeile): Promise<Uint8Array> {
   };
   return generalschluesselAuspacken(
     verpackung,
-    await verpackungsSchluesselHolen(),
+    await getWrappingKey(),
   );
 }
 
@@ -111,7 +111,7 @@ async function datenschluesselVon(zeile: Zeile): Promise<Uint8Array> {
 async function zeileEntschluesseln<T extends { schemaVersion: number }>(
   zeile: Zeile,
   muster: MusterFuer<T>,
-): Promise<Eintrag<T>> {
+): Promise<Entry<T>> {
   const datenschluessel = await datenschluesselVon(zeile);
 
   const inhalt = inhaltEntschluesseln(
@@ -121,8 +121,8 @@ async function zeileEntschluesseln<T extends { schemaVersion: number }>(
     muster,
   );
 
-  if (!istKategorie(zeile.kategorie)) {
-    throw new DatenFehler(
+  if (!isCategory(zeile.kategorie)) {
+    throw new DataError(
       DatenFehlerCode.UNBEKANNT,
       'Datensatz trägt eine Kategorie, die diese App-Fassung nicht kennt.',
     );
@@ -137,8 +137,8 @@ async function zeileEntschluesseln<T extends { schemaVersion: number }>(
   };
 }
 
-export const lokaleAblage: Ablage = {
-  async eintragAnlegen(eintrag: NeuerEintrag): Promise<string> {
+export const lokaleAblage: Store = {
+  async eintragAnlegen(eintrag: NewEntry): Promise<string> {
     const datenbankVerbindung = await datenbank();
     const id = idErzeugen();
     const jetzt = new Date().toISOString();
@@ -149,7 +149,7 @@ export const lokaleAblage: Ablage = {
     const inhalt = inhaltVerschluesseln(datenschluessel, id, eintrag.inhalt);
     const verpackt = generalschluesselVerpacken(
       datenschluessel,
-      await verpackungsSchluesselHolen(),
+      await getWrappingKey(),
     );
 
     await datenbankVerbindung.runAsync(
@@ -175,7 +175,7 @@ export const lokaleAblage: Ablage = {
   async eintraegeLaden<T extends { schemaVersion: number }>(
     kategorie: Kategorie,
     muster: MusterFuer<T>,
-  ): Promise<Eintrag<T>[]> {
+  ): Promise<Entry<T>[]> {
     const datenbankVerbindung = await datenbank();
     const zeilen = await datenbankVerbindung.getAllAsync<Zeile>(
       `select * from entries
@@ -184,7 +184,7 @@ export const lokaleAblage: Ablage = {
       [kategorie],
     );
 
-    const ergebnis: Eintrag<T>[] = [];
+    const ergebnis: Entry<T>[] = [];
     for (const zeile of zeilen) {
       ergebnis.push(await zeileEntschluesseln(zeile, muster));
     }
@@ -194,7 +194,7 @@ export const lokaleAblage: Ablage = {
   async eintragLaden<T extends { schemaVersion: number }>(
     id: string,
     muster: MusterFuer<T>,
-  ): Promise<Eintrag<T>> {
+  ): Promise<Entry<T>> {
     const datenbankVerbindung = await datenbank();
     const zeile = await datenbankVerbindung.getFirstAsync<Zeile>(
       'select * from entries where id = ?',
@@ -202,7 +202,7 @@ export const lokaleAblage: Ablage = {
     );
 
     if (zeile === null) {
-      throw new DatenFehler(
+      throw new DataError(
         DatenFehlerCode.NICHT_GEFUNDEN,
         'Kein Eintrag mit dieser Kennung.',
       );
@@ -222,7 +222,7 @@ export const lokaleAblage: Ablage = {
     );
 
     if (zeile === null) {
-      throw new DatenFehler(
+      throw new DataError(
         DatenFehlerCode.NICHT_GEFUNDEN,
         'Kein Eintrag mit dieser Kennung.',
       );
@@ -257,7 +257,7 @@ export const lokaleAblage: Ablage = {
     for (const zeile of zeilen) {
       // Kategorien, die diese App-Fassung nicht kennt, werden übergangen —
       // eine Zählung ist kein Ort für einen Abbruch.
-      if (istKategorie(zeile.kategorie)) {
+      if (isCategory(zeile.kategorie)) {
         ergebnis[zeile.kategorie] = zeile.anzahl;
       }
     }
@@ -282,7 +282,7 @@ export async function lokaleDatenLoeschen(): Promise<void> {
  * Nur für den Umzug ins Konto. Die Inhalte bleiben verschlüsselt wie sie
  * sind; neu verpackt wird ausschließlich der Datenschlüssel.
  */
-export async function alleZeilenRoh(): Promise<Zeile[]> {
+export async function getAllRawRows(): Promise<Zeile[]> {
   const datenbankVerbindung = await datenbank();
   return datenbankVerbindung.getAllAsync<Zeile>('select * from entries');
 }

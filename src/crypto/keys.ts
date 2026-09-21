@@ -17,9 +17,9 @@ import { xchacha20poly1305 } from '@noble/ciphers/chacha.js';
 
 import { bytesNachText, textNachBytes, zufallsBytes } from './bytes';
 import {
-  KryptoFehler,
+  CryptoError,
   KryptoFehlerCode,
-  schluesselLaengePruefen,
+  assertKeyLength,
 } from './errors';
 
 /** Länge aller symmetrischen Schlüssel in Byte. */
@@ -46,7 +46,7 @@ export const SALT_LAENGE = 16;
  * in JavaScript, und dort braucht es auf demselben Gerät über 60 Sekunden.
  * scrypt ist ebenfalls speicherhart und nativ verfügbar.
  */
-export const SCRYPT_STANDARD = {
+export const SCRYPT_DEFAULTS = {
   /** Kostenfaktor. Speicherbedarf ist ungefähr 128 * N * r Byte, hier 128 MiB. */
   N: 131072,
   /** Blockgröße. */
@@ -101,7 +101,7 @@ export function symVerschluesseln(
   klartext: Uint8Array,
   zusatz?: Uint8Array,
 ): VerpackterSchluessel {
-  schluesselLaengePruefen(schluessel, SCHLUESSEL_LAENGE);
+  assertKeyLength(schluessel, SCHLUESSEL_LAENGE);
   const nonce = zufallsBytes(NONCE_LAENGE);
   const chiffre = xchacha20poly1305(schluessel, nonce, zusatz).encrypt(klartext);
   return {
@@ -123,7 +123,7 @@ export function symEntschluesseln(
   verpackt: VerpackterSchluessel,
   zusatz?: Uint8Array,
 ): Uint8Array {
-  schluesselLaengePruefen(schluessel, SCHLUESSEL_LAENGE);
+  assertKeyLength(schluessel, SCHLUESSEL_LAENGE);
   try {
     return xchacha20poly1305(
       schluessel,
@@ -131,7 +131,7 @@ export function symEntschluesseln(
       zusatz,
     ).decrypt(textNachBytes(verpackt.chiffre));
   } catch {
-    throw new KryptoFehler(
+    throw new CryptoError(
       KryptoFehlerCode.ENTSCHLUESSELN_FEHLGESCHLAGEN,
       'Falscher Schlüssel, veränderte Daten oder abweichende Zusatzinformation.',
     );
@@ -146,7 +146,7 @@ export function generalschluesselVerpacken(
   generalschluessel: Uint8Array,
   verpackungsSchluessel: Uint8Array,
 ): VerpackterSchluessel {
-  schluesselLaengePruefen(generalschluessel, SCHLUESSEL_LAENGE);
+  assertKeyLength(generalschluessel, SCHLUESSEL_LAENGE);
   return symVerschluesseln(verpackungsSchluessel, generalschluessel);
 }
 

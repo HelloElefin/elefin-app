@@ -16,9 +16,9 @@
 
 // --- Grundlagen ---
 export {
-  bytesGleich,
+  bytesEqual,
   bytesNachText,
-  bytesVerbinden,
+  concatBytes,
   textNachBytes,
   textNachUtf8,
   utf8NachText,
@@ -27,7 +27,7 @@ export {
 
 // --- Fehler ---
 export {
-  KryptoFehler,
+  CryptoError,
   KryptoFehlerCode,
   type KryptoFehlerCodeWert,
 } from './errors';
@@ -37,7 +37,7 @@ export {
   NONCE_LAENGE,
   SALT_LAENGE,
   SCHLUESSEL_LAENGE,
-  SCRYPT_STANDARD,
+  SCRYPT_DEFAULTS,
   datenschluesselErzeugen,
   generalschluesselAuspacken,
   generalschluesselErzeugen,
@@ -74,5 +74,5 @@ export {
   inhaltEntschluesseln,
   inhaltVerschluesseln,
   type MitSchemaVersion,
-  type Pruefmuster,
+  type Validator,
 } from './content';
