@@ -50,20 +50,46 @@ export type AccountSession = {
 export type AppSession = LocalSession | AccountSession;
 
 /**
+ * Merkt sich den laufenden Erstaufruf von getDeviceKey.
+ *
+ * Ohne das würden zwei gleichzeitige Erstaufrufe (z. B. zwei Screens beim
+ * App-Start) je einen eigenen Schlüssel erzeugen und speichern — der zweite
+ * überschreibt den ersten, und alles, was mit dem ersten verschlüsselt
+ * wurde, ist verloren. Mit dem gemerkten Promise bekommen beide Aufrufer
+ * dasselbe Ergebnis.
+ */
+let deviceKeyPromise: Promise<Uint8Array> | null = null;
+
+/**
  * Holt den Geräteschlüssel und legt ihn beim ersten Aufruf an.
  *
  * Wird beim allerersten App-Start aufgerufen, noch vor jedem Onboarding.
  * Ab diesem Moment kann die App lokal verschlüsselt speichern.
  */
 export async function getDeviceKey(): Promise<Uint8Array> {
-  const existing = await SecureStore.getItemAsync(DEVICE_KEY);
-  if (existing !== null) {
-    return textToBytes(existing);
+  if (deviceKeyPromise !== null) {
+    return deviceKeyPromise;
   }
 
-  const created = secureRandomBytes(32);
-  await SecureStore.setItemAsync(DEVICE_KEY, bytesToText(created));
-  return created;
+  deviceKeyPromise = (async () => {
+    const existing = await SecureStore.getItemAsync(DEVICE_KEY);
+    if (existing !== null) {
+      return textToBytes(existing);
+    }
+
+    const created = secureRandomBytes(32);
+    await SecureStore.setItemAsync(DEVICE_KEY, bytesToText(created));
+    return created;
+  })();
+
+  try {
+    return await deviceKeyPromise;
+  } catch (error) {
+    // Zurücksetzen, damit ein späterer Aufruf es neu versucht, statt für
+    // immer an einem fehlgeschlagenen Versuch hängen zu bleiben.
+    deviceKeyPromise = null;
+    throw error;
+  }
 }
 
 /** Legt die Kontodaten ab. Nach jedem erfolgreichen Entsperren. */
@@ -164,4 +190,7 @@ export async function signOut(): Promise<void> {
 export async function deleteAll(): Promise<void> {
   await signOut();
   await SecureStore.deleteItemAsync(DEVICE_KEY);
+  // Sonst würde ein späterer Aufruf von getDeviceKey() den gelöschten
+  // Schlüssel aus dem Speicher zurückgeben, statt einen neuen anzulegen.
+  deviceKeyPromise = null;
 }

@@ -33,7 +33,14 @@ import { getWrappingKey } from './session';
 
 const DATABASE_NAME = 'elefin.db';
 
-let db: SQLite.SQLiteDatabase | null = null;
+/**
+ * Merkt sich das laufende Öffnen der Datenbank.
+ *
+ * Ohne das würden zwei gleichzeitige Erstaufrufe je eine eigene Verbindung
+ * öffnen und je einmal die Tabellen anlegen — das Promise wird deshalb
+ * sofort gemerkt, nicht erst die Verbindung nach dem await.
+ */
+let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 
 /**
  * Öffnet die Datenbank und legt beim ersten Aufruf die Tabellen an.
@@ -43,31 +50,41 @@ let db: SQLite.SQLiteDatabase | null = null;
  * setzen alle ein Konto voraus.
  */
 async function getDatabase(): Promise<SQLite.SQLiteDatabase> {
-  if (db !== null) return db;
+  if (dbPromise !== null) return dbPromise;
 
-  db = await SQLite.openDatabaseAsync(DATABASE_NAME);
+  dbPromise = (async () => {
+    const database = await SQLite.openDatabaseAsync(DATABASE_NAME);
 
-  await db.execAsync(`
-    pragma journal_mode = WAL;
+    await database.execAsync(`
+      pragma journal_mode = WAL;
 
-    create table if not exists entries (
-      id text primary key not null,
-      kategorie text not null,
-      inhalt_chiffre text not null,
-      inhalt_nonce text not null,
-      -- Der Datenschlüssel dieses Eintrags, verpackt mit dem Geräteschlüssel.
-      -- Auf dem Server steht an dieser Stelle ein Umschlag in entry_grants.
-      schluessel_chiffre text not null,
-      schluessel_nonce text not null,
-      angelegt_am text not null,
-      geaendert_am text not null
-    );
+      create table if not exists entries (
+        id text primary key not null,
+        kategorie text not null,
+        inhalt_chiffre text not null,
+        inhalt_nonce text not null,
+        -- Der Datenschlüssel dieses Eintrags, verpackt mit dem Geräteschlüssel.
+        -- Auf dem Server steht an dieser Stelle ein Umschlag in entry_grants.
+        schluessel_chiffre text not null,
+        schluessel_nonce text not null,
+        angelegt_am text not null,
+        geaendert_am text not null
+      );
 
-    create index if not exists entries_kategorie_idx
-      on entries (kategorie);
-  `);
+      create index if not exists entries_kategorie_idx
+        on entries (kategorie);
+    `);
 
-  return db;
+    return database;
+  })();
+
+  try {
+    return await dbPromise;
+  } catch (error) {
+    // Zurücksetzen, damit ein späterer Aufruf es neu versucht.
+    dbPromise = null;
+    throw error;
+  }
 }
 
 /** Erzeugt eine zufällige ID im selben Format wie der Server. */
