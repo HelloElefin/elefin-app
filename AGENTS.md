@@ -66,7 +66,7 @@ src/app/       Screens (expo-router)
 3. Kein Text im Code. Alle Texte über i18n-Schlüssel, auch Fehlermeldungen und
    Knopfbeschriftungen. Schlüssel sind englisch, sprechend und stabil:
    `flow.<screen>.title`, `question.<category>.<field>.label`,
-   `option.<category>.<field>.<value>`, `common.<element>`. Ein Schlüssel wird
+   `option.<category>.<field>..<value>.label`, `common.<element>`. Ein Schlüssel wird
    nie umbenannt, auch wenn sich der Text komplett ändert. Ein Schlüssel je
    Textstelle, auch bei gleichem Wortlaut.
 4. Keine harten Farb-, Abstands- oder Schriftwerte. Nur Tokens aus `src/design/`.

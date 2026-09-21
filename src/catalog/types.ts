@@ -10,16 +10,20 @@
  *
  *   Screen      flow.<screenId>.title
  *               flow.<screenId>.subtitle
- *               flow.<screenId>.next
- *               flow.<screenId>.note.title    Hinweiskasten „Warum wir das fragen"
+ *               flow.<screenId>.next              sonst common.next
+ *               flow.<screenId>.note.title        Hinweiskasten „Gut zu wissen"
  *               flow.<screenId>.note.text
- *   Block       block.<blockId>.title         Überschrift über dem Screen
+ *               flow.<screenId>.disclosure.title  Beschriftung des Aufklappers
+ *               flow.<screenId>.summary.title     Zeile auf der Übersicht
+ *               flow.<screenId>.summary.empty     Text, solange nichts eingetragen ist
+ *               flow.<screenId>.<…>               weitere Texte nur bei Rahmenscreens
+ *   Block       block.<blockId>.title             Überschrift über dem Screen
  *   Feld        question.<category>.<fieldId>.label
  *               question.<category>.<fieldId>.placeholder
+ *               question.<category>.<fieldId>.unknown_hint   Zusatz unter „Weiß ich gerade nicht"
  *   Option      option.<category>.<fieldId>.<value>.label
  *               option.<category>.<fieldId>.<value>.hint
- *   Allgemein   common.back
- *               common.unknown                „Weiß ich gerade nicht"
+ *   Allgemein   common.<element>                  z. B. common.back, common.unknown
  *
  * Optionen enden bewusst auf .label statt auf <value> selbst: Ein Schlüssel
  * kann in den Sprachdateien nicht zugleich Text und Behälter für .hint sein.
@@ -84,8 +88,14 @@ export type CatalogScreen = {
    * (applies = true). Fehlt der Wert, wird der Screen immer gezeigt.
    */
   showIf?: Category;
-  /** Ein Durchgang je erklärter Anzahl, z. B. dreimal für drei Konten. */
+  /**
+   * Mehrere Durchgänge desselben Screens.
+   *   mit showIf    so viele Durchgänge, wie im Inventar erklärt (drei Konten)
+   *   ohne showIf   ein Durchgang, weitere über „Weitere hinzufügen"
+   */
   repeatable: boolean;
+  /** Zeigt den Vertrauenshinweis common.trust („Wie am Anfang gesagt"). */
+  trustNote?: boolean;
   fields: CatalogField[];
 };
 

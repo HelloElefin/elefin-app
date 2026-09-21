@@ -1,0 +1,861 @@
+{
+  "schemaVersion": 1,
+  "screens": [
+    {
+      "id": "start",
+      "kind": "frame",
+      "block": "intro",
+      "repeatable": false,
+      "fields": []
+    },
+    {
+      "id": "principles",
+      "kind": "frame",
+      "block": "before-start",
+      "repeatable": false,
+      "fields": []
+    },
+    {
+      "id": "situation",
+      "kind": "frame",
+      "block": "situation",
+      "category": "case_profile",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "marital_status",
+          "type": "choice",
+          "options": [
+            {
+              "value": "single"
+            },
+            {
+              "value": "married"
+            },
+            {
+              "value": "partnership"
+            },
+            {
+              "value": "divorced"
+            },
+            {
+              "value": "widowed"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "children_status",
+          "type": "choice",
+          "options": [
+            {
+              "value": "none"
+            },
+            {
+              "value": "all_adult"
+            },
+            {
+              "value": "some_minor"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "inventory",
+      "kind": "frame",
+      "block": "your-list",
+      "category": "case_profile",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "inventory",
+          "type": "multi",
+          "options": [
+            {
+              "value": "bank_accounts"
+            },
+            {
+              "value": "securities"
+            },
+            {
+              "value": "safe_deposit"
+            },
+            {
+              "value": "valuables"
+            },
+            {
+              "value": "real_estate"
+            },
+            {
+              "value": "vehicles"
+            },
+            {
+              "value": "pets"
+            },
+            {
+              "value": "insurances"
+            },
+            {
+              "value": "digital_accounts"
+            },
+            {
+              "value": "contracts"
+            },
+            {
+              "value": "memberships"
+            },
+            {
+              "value": "medical"
+            },
+            {
+              "value": "power_of_attorney"
+            },
+            {
+              "value": "living_will"
+            },
+            {
+              "value": "last_will"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "emergency-contact",
+      "kind": "question",
+      "block": "who-knows",
+      "category": "emergency_contacts",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "name",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "relationship",
+          "type": "choice",
+          "options": [
+            {
+              "value": "partner"
+            },
+            {
+              "value": "child"
+            },
+            {
+              "value": "sibling"
+            },
+            {
+              "value": "other"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "phone",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "funeral",
+      "kind": "question",
+      "block": "your-wishes",
+      "category": "funeral_wishes",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "burial_type",
+          "type": "choice",
+          "options": [
+            {
+              "value": "burial"
+            },
+            {
+              "value": "cremation"
+            },
+            {
+              "value": "sea"
+            },
+            {
+              "value": "natural"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        },
+        {
+          "id": "preferred_place",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        },
+        {
+          "id": "prepaid_contract",
+          "type": "choice",
+          "options": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": true
+        },
+        {
+          "id": "funeral_home",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "organ-donation",
+      "kind": "question",
+      "block": "your-wishes",
+      "category": "funeral_wishes",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "organ_donation",
+          "type": "choice",
+          "options": [
+            {
+              "value": "card"
+            },
+            {
+              "value": "registry"
+            },
+            {
+              "value": "none"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        },
+        {
+          "id": "card_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        },
+        {
+          "id": "decision",
+          "type": "choice",
+          "options": [
+            {
+              "value": "consent"
+            },
+            {
+              "value": "objection"
+            },
+            {
+              "value": "partial"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "documents",
+      "kind": "question",
+      "block": "findability",
+      "category": "document_locations",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "key_holder",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "home-access",
+      "kind": "question",
+      "block": "findability",
+      "category": "home_access",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "key_holder",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "landlord",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "employment-pension",
+      "kind": "question",
+      "block": "work",
+      "category": "employment_pension",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "status",
+          "type": "choice",
+          "options": [
+            {
+              "value": "employed"
+            },
+            {
+              "value": "self_employed"
+            },
+            {
+              "value": "retired"
+            },
+            {
+              "value": "other"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "payer",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "company_pension",
+          "type": "choice",
+          "options": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "bank-account",
+      "kind": "question",
+      "block": "money",
+      "category": "bank_accounts",
+      "showIf": "bank_accounts",
+      "repeatable": true,
+      "trustNote": true,
+      "fields": [
+        {
+          "id": "institution",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "account_type",
+          "type": "choice",
+          "options": [
+            {
+              "value": "checking"
+            },
+            {
+              "value": "savings"
+            },
+            {
+              "value": "joint"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "purpose",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "securities",
+      "kind": "question",
+      "block": "money",
+      "category": "securities",
+      "showIf": "securities",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "institution",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "contact_person",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "safe-deposit",
+      "kind": "question",
+      "block": "money",
+      "category": "safe_deposit",
+      "showIf": "safe_deposit",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "institution",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "key_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "valuables",
+      "kind": "question",
+      "block": "money",
+      "category": "valuables",
+      "showIf": "valuables",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "items",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "real-estate",
+      "kind": "question",
+      "block": "property",
+      "category": "real_estate",
+      "showIf": "real_estate",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "property_type",
+          "type": "choice",
+          "options": [
+            {
+              "value": "apartment"
+            },
+            {
+              "value": "house"
+            },
+            {
+              "value": "land"
+            },
+            {
+              "value": "rented_out"
+            }
+          ],
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "land_register_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "vehicle",
+      "kind": "question",
+      "block": "property",
+      "category": "vehicles",
+      "showIf": "vehicles",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "description",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "key_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "papers_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "pet",
+      "kind": "question",
+      "block": "home",
+      "category": "pets",
+      "showIf": "pets",
+      "repeatable": true,
+      "fields": [
+        {
+          "id": "animal",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "caretaker",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "insurances",
+      "kind": "question",
+      "block": "protection",
+      "category": "insurances",
+      "showIf": "insurances",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "types",
+          "type": "multi",
+          "options": [
+            {
+              "value": "life"
+            },
+            {
+              "value": "funeral_expenses"
+            },
+            {
+              "value": "accident"
+            },
+            {
+              "value": "disability"
+            },
+            {
+              "value": "liability"
+            },
+            {
+              "value": "household"
+            },
+            {
+              "value": "car"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        },
+        {
+          "id": "policies_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "subscriptions",
+      "kind": "question",
+      "block": "recurring",
+      "category": "digital_accounts",
+      "showIf": "digital_accounts",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "subscriptions",
+          "type": "multi",
+          "options": [
+            {
+              "value": "streaming"
+            },
+            {
+              "value": "newspaper"
+            },
+            {
+              "value": "fitness"
+            },
+            {
+              "value": "cloud"
+            },
+            {
+              "value": "software"
+            },
+            {
+              "value": "delivery"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        },
+        {
+          "id": "main_email",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "contracts",
+      "kind": "question",
+      "block": "recurring",
+      "category": "contracts",
+      "showIf": "contracts",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "contracts",
+          "type": "multi",
+          "options": [
+            {
+              "value": "electricity"
+            },
+            {
+              "value": "gas"
+            },
+            {
+              "value": "mobile"
+            },
+            {
+              "value": "internet"
+            },
+            {
+              "value": "rent"
+            },
+            {
+              "value": "loan"
+            },
+            {
+              "value": "broadcasting_fee"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "memberships",
+      "kind": "question",
+      "block": "recurring",
+      "category": "memberships",
+      "showIf": "memberships",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "memberships",
+          "type": "multi",
+          "options": [
+            {
+              "value": "club"
+            },
+            {
+              "value": "automobile_club"
+            },
+            {
+              "value": "professional"
+            },
+            {
+              "value": "charity"
+            },
+            {
+              "value": "other"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        },
+        {
+          "id": "details",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "medical",
+      "kind": "question",
+      "block": "protection",
+      "category": "medical",
+      "showIf": "medical",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "family_doctor",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "records_location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": true
+        }
+      ]
+    },
+    {
+      "id": "power-of-attorney",
+      "kind": "question",
+      "block": "protection",
+      "category": "power_of_attorney",
+      "showIf": "power_of_attorney",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "attorney",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "registered",
+          "type": "choice",
+          "options": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "living-will",
+      "kind": "question",
+      "block": "protection",
+      "category": "living_will",
+      "showIf": "living_will",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "copy_holder",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "last-will",
+      "kind": "question",
+      "block": "estate",
+      "category": "last_will",
+      "showIf": "last_will",
+      "repeatable": false,
+      "fields": [
+        {
+          "id": "location",
+          "type": "text",
+          "allowUnknown": false,
+          "inDisclosure": false
+        },
+        {
+          "id": "will_type",
+          "type": "choice",
+          "options": [
+            {
+              "value": "handwritten"
+            },
+            {
+              "value": "notarial"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        },
+        {
+          "id": "deposited",
+          "type": "choice",
+          "options": [
+            {
+              "value": "yes"
+            },
+            {
+              "value": "no"
+            }
+          ],
+          "allowUnknown": true,
+          "inDisclosure": false
+        }
+      ]
+    },
+    {
+      "id": "summary",
+      "kind": "frame",
+      "block": "done",
+      "repeatable": false,
+      "fields": []
+    },
+    {
+      "id": "finish",
+      "kind": "frame",
+      "block": "finish",
+      "repeatable": false,
+      "fields": []
+    }
+  ]
+}

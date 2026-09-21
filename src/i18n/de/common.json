@@ -1,4 +1,964 @@
 {
+  "flow": {
+    "start": {
+      "title": "Alles Wichtige an einem Ort",
+      "subtitle": "Beantworte ein paar Fragen. Am Ende hast du eine Übersicht, die deinen Angehörigen im Ernstfall das Suchen erspart.",
+      "next": "Jetzt starten",
+      "point_1": "Du brauchst keine Unterlagen",
+      "point_2": "Wir fragen keine Passwörter ab",
+      "point_3": "Alles bleibt auf deinem Gerät",
+      "bereavement": {
+        "question": "Ist gerade jemand gestorben?",
+        "link": "Was jetzt zu tun ist"
+      }
+    },
+    "principles": {
+      "title": "So gehen wir mit deinen Angaben um",
+      "subtitle": "Du schreibst hier auf, wo Dinge liegen, die dir wichtig sind. Deshalb sagen wir vorher, was damit passiert — und was nicht.",
+      "next": "Verstanden, los geht’s",
+      "item_1": {
+        "title": "Es bleibt zuerst auf deinem Gerät",
+        "text": "Was du eingibst, wird sofort auf deinem Handy verschlüsselt. Ohne Konto verlässt es das Gerät überhaupt nicht."
+      },
+      "item_2": {
+        "title": "Wir können es nicht lesen",
+        "text": "Der Schlüssel liegt bei dir, nicht bei uns. Auch wenn du später bei uns speicherst, sehen wir nur unlesbare Zeichen. Das ist keine Zusage, die wir brechen könnten — wir haben schlicht keinen Weg dorthin."
+      },
+      "item_3": {
+        "title": "Wenn du speicherst, dann in Frankfurt",
+        "text": "Unsere Server stehen in Frankfurt. Es gilt europäisches Datenschutzrecht. [Noch nicht juristisch geprüft]"
+      },
+      "item_4": {
+        "title": "Wir fragen nie nach Passwörtern",
+        "text": "Keine PIN, keine Zugangsdaten, keine Kontonummer. Es geht immer nur darum, wo etwas zu finden ist."
+      },
+      "item_5": {
+        "title": "Nichts davon musst du beantworten",
+        "text": "Es gibt kein Pflichtfeld. Was du nicht weißt oder nicht angeben willst, überspringst du und ergänzt es später — oder nie."
+      }
+    },
+    "situation": {
+      "title": "Erzähl uns kurz, wie du lebst",
+      "subtitle": "Das steuert nur, welche Fragen später überhaupt kommen.",
+      "note": {
+        "title": "Warum wir das fragen",
+        "text": "Ohne Testament entscheidet die gesetzliche Erbfolge. Wie die aussieht, hängt genau an diesen zwei Angaben."
+      }
+    },
+    "inventory": {
+      "title": "Was davon trifft auf dich zu?",
+      "subtitle": "Tipp einfach an, was es gibt. Danach fragen wir nur noch zu dem nach, was du angetippt hast."
+    },
+    "emergency-contact": {
+      "title": "Wen sollen deine Angehörigen zuerst anrufen?",
+      "subtitle": "Diese Nummer steht später in deiner Übersicht. Damit jemand, der vor deinem Aktenordner steht, weiß, bei wem er anfangen soll.",
+      "note": {
+        "title": "Wir rufen hier niemanden an",
+        "text": "Elefin verschickt keine Nachrichten und wählt keine Nummern. Die Angabe steht nur in deiner eigenen Übersicht — für Menschen, nicht für uns."
+      },
+      "summary": {
+        "title": "Wer zuerst informiert wird",
+        "empty": "Name und Telefon fehlen noch"
+      }
+    },
+    "funeral": {
+      "title": "Wie möchtest du bestattet werden?",
+      "note": {
+        "title": "Ein klarer Wunsch entlastet",
+        "text": "Angehörige müssen dann nicht raten, während sie ohnehin überfordert sind."
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Bestattungswunsch",
+        "empty": "Noch nicht festgelegt"
+      }
+    },
+    "organ-donation": {
+      "title": "Hast du etwas zur Organspende festgelegt?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Ohne Erklärung werden im Ernstfall die Angehörigen gefragt. Seit 2024 gibt es dafür ein bundesweites Register. [Noch nicht juristisch geprüft]"
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Organspende",
+        "empty": "Noch nichts hinterlegt"
+      }
+    },
+    "documents": {
+      "title": "Wo liegen deine wichtigen Unterlagen?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Ausweis, Verträge und Policen sollten an einem Ort liegen, den jemand kennt."
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Fundort der Unterlagen",
+        "empty": "Noch kein Ort notiert"
+      }
+    },
+    "home-access": {
+      "title": "Wie kommt jemand in deine Wohnung?",
+      "subtitle": "Damit in den ersten Tagen jemand nach dem Rechten sehen kann — Post, Heizung, Blumen.",
+      "note": {
+        "title": "Bitte keine Codes",
+        "text": "Trag hier keine Codes für Tür oder Alarmanlage ein. Schreib auf, wer sie kennt — das genügt."
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Zugang zur Wohnung",
+        "empty": "Noch niemand benannt"
+      }
+    },
+    "employment-pension": {
+      "title": "Arbeitest du noch, oder bist du schon in Pension bzw. Rente?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Arbeitgeber und Pensionsversicherung sollten früh Bescheid wissen. Zu viel Ausgezahltes wird sonst später zurückgefordert. [Noch nicht juristisch geprüft]"
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Arbeitgeber oder Pension",
+        "empty": "Noch keine Stelle notiert"
+      }
+    },
+    "bank-account": {
+      "title": "Bei welcher Bank liegt dein Konto?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Banken sperren Konten im Todesfall automatisch. Wer weiß, wo welches Konto liegt, kommt schneller an Geld für laufende Kosten."
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Konten",
+        "empty": "Bank fehlt noch"
+      }
+    },
+    "securities": {
+      "title": "Wo liegt dein Depot?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Wertpapiere gehen nicht verloren. Sie werden nur oft lange nicht gefunden."
+      },
+      "summary": {
+        "title": "Depot",
+        "empty": "Bank fehlt noch"
+      }
+    },
+    "safe-deposit": {
+      "title": "Wo ist dein Schließfach?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Der Zugang endet mit dem Tod. Erben brauchen einen Erbschein oder ein Testament, um es öffnen zu lassen."
+      },
+      "summary": {
+        "title": "Schließfach",
+        "empty": "Filiale fehlt noch"
+      }
+    },
+    "valuables": {
+      "title": "Was gibt es an Wertsachen und wo liegt es?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Was niemand kennt, wird beim Räumen der Wohnung übersehen."
+      },
+      "summary": {
+        "title": "Wertsachen",
+        "empty": "Noch nichts notiert"
+      }
+    },
+    "real-estate": {
+      "title": "Was für eine Immobilie ist das?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Ohne Grundbuchauszug beginnt für Erben eine längere Suche."
+      },
+      "summary": {
+        "title": "Immobilie",
+        "empty": "Noch nichts notiert"
+      }
+    },
+    "vehicle": {
+      "title": "Welches Fahrzeug ist das?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Zulassungsbescheinigung und Schlüssel liegen selten am selben Ort. Für eine Abmeldung oder einen Verkauf braucht man beides."
+      },
+      "summary": {
+        "title": "Fahrzeug",
+        "empty": "Noch nichts notiert"
+      }
+    },
+    "pet": {
+      "title": "Wer kümmert sich um dein Tier?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "In den ersten Tagen ist das oft die dringendste Frage überhaupt."
+      },
+      "summary": {
+        "title": "Betreuung des Tieres",
+        "empty": "Noch niemand benannt"
+      }
+    },
+    "insurances": {
+      "title": "Welche Versicherungen hast du?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Eine Lebensversicherung zahlt erst, wenn jemand sie kennt und meldet."
+      },
+      "disclosure": {
+        "title": "Wo liegen die Policen?"
+      },
+      "summary": {
+        "title": "Versicherungen",
+        "empty": "Noch nichts angekreuzt"
+      }
+    },
+    "subscriptions": {
+      "title": "Welche Abos laufen auf deinen Namen?",
+      "subtitle": "Gemeint ist alles, was monatlich abgebucht wird und was man kündigen kann.",
+      "note": {
+        "title": "Warum die E-Mail-Adresse hilft",
+        "text": "Fast jedes Abo lässt sich über die Anmeldeadresse kündigen — das Passwort kann man sich darüber neu setzen lassen. Deshalb fragen wir danach und nie nach dem Passwort selbst."
+      },
+      "disclosure": {
+        "title": "Haupt-E-Mail-Adresse"
+      },
+      "summary": {
+        "title": "Abos",
+        "empty": "Noch nichts angekreuzt"
+      }
+    },
+    "contracts": {
+      "title": "Welche laufenden Verträge gibt es?",
+      "subtitle": "Gemeint sind Verträge für Dinge, die du täglich brauchst — die läuft man nicht einfach aus.",
+      "note": {
+        "title": "Warum getrennt von den Abos",
+        "text": "Verträge für Strom oder Miete müssen übernommen oder umgemeldet werden. Abos kündigt man einfach. Das sind zwei ganz verschiedene Aufgaben."
+      },
+      "summary": {
+        "title": "Laufende Verträge",
+        "empty": "Noch nichts angekreuzt"
+      }
+    },
+    "memberships": {
+      "title": "Wo bist du Mitglied?",
+      "subtitle": "Mitgliedsbeiträge laufen weiter, bis jemand kündigt.",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Manche Mitgliedschaften enthalten ein Sterbegeld oder eine Versicherung, von der die Familie nichts weiß. [Noch nicht juristisch geprüft]"
+      },
+      "disclosure": {
+        "title": "Namen, damit man sie findet"
+      },
+      "summary": {
+        "title": "Mitgliedschaften",
+        "empty": "Noch nichts angekreuzt"
+      }
+    },
+    "medical": {
+      "title": "Wer ist deine Hausärztin oder dein Hausarzt?",
+      "note": {
+        "title": "Wir fragen nicht nach Diagnosen",
+        "text": "Es geht nur darum, wer dich kennt und wo die Unterlagen liegen. Was darin steht, bleibt deine Sache."
+      },
+      "disclosure": {
+        "title": "Weitere Angaben"
+      },
+      "summary": {
+        "title": "Hausärztin oder Hausarzt",
+        "empty": "Noch niemand notiert"
+      }
+    },
+    "power-of-attorney": {
+      "title": "Wo liegt deine Vorsorgevollmacht?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Damit darf eine Person für dich entscheiden, wenn du es selbst nicht mehr kannst. [Noch nicht juristisch geprüft]"
+      },
+      "summary": {
+        "title": "Vorsorgevollmacht",
+        "empty": "Fundort fehlt noch"
+      }
+    },
+    "living-will": {
+      "title": "Wo liegt deine Patientenverfügung?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Ärzte fragen im Ernstfall zuerst die Angehörigen danach, nicht die Schublade."
+      },
+      "summary": {
+        "title": "Patientenverfügung",
+        "empty": "Fundort fehlt noch"
+      }
+    },
+    "last-will": {
+      "title": "Wo liegt dein Testament?",
+      "note": {
+        "title": "Gut zu wissen",
+        "text": "Ein Testament in der Wohnung kann übersehen werden. Beim Nachlassgericht wird es sicher gefunden. [Noch nicht juristisch geprüft]"
+      },
+      "summary": {
+        "title": "Testament",
+        "empty": "Fundort fehlt noch"
+      }
+    },
+    "summary": {
+      "title": "Das hast du festgehalten",
+      "subtitle": "Was offen ist, ist kein Versäumnis. Es ist einfach der nächste Schritt."
+    },
+    "finish": {
+      "title": "Wie möchtest du das sichern?",
+      "note": {
+        "title": "Was das PDF nicht kann",
+        "text": "Es liegt dort, wo du es hinlegst. Geht das Gerät verloren, ist auch die Übersicht weg."
+      },
+      "pdf": {
+        "title": "Als PDF speichern",
+        "hint": "Kostenlos, auch ohne Konto. Das Blatt für den Ordner — unverschlüsselt, also nichts, was du offen herumliegen lassen solltest."
+      },
+      "account": {
+        "title": "Für dich aufbewahren lassen",
+        "hint": "Verschlüsselt, auf allen deinen Geräten, im Ernstfall für die benannte Person erreichbar. Ab hier beginnt das Konto."
+      }
+    }
+  },
+  "question": {
+    "case_profile": {
+      "marital_status": {
+        "label": "Familienstand"
+      },
+      "children_status": {
+        "label": "Kinder"
+      },
+      "inventory": {
+        "unknown_hint": "Wir überspringen diesen Teil und du kannst später ergänzen"
+      }
+    },
+    "emergency_contacts": {
+      "name": {
+        "label": "Name",
+        "placeholder": "z. B. Maria Musterfrau"
+      },
+      "relationship": {
+        "label": "Beziehung zu dir"
+      },
+      "phone": {
+        "label": "Telefon",
+        "placeholder": "z. B. 0170 0000000"
+      }
+    },
+    "funeral_wishes": {
+      "burial_type": {
+        "unknown_hint": "Möchte ich später festlegen"
+      },
+      "preferred_place": {
+        "label": "Wunschort",
+        "placeholder": "z. B. Friedhof Wilmersdorf"
+      },
+      "prepaid_contract": {
+        "label": "Gibt es einen Bestattungsvorsorgevertrag?"
+      },
+      "funeral_home": {
+        "label": "Name des Bestatters",
+        "placeholder": "z. B. Bestattungshaus Krüger"
+      },
+      "card_location": {
+        "label": "Wo liegt der Ausweis?",
+        "placeholder": "z. B. Geldbörse"
+      },
+      "decision": {
+        "label": "Zustimmung oder Widerspruch?"
+      }
+    },
+    "document_locations": {
+      "location": {
+        "label": "Ort",
+        "placeholder": "z. B. Ordner „Wichtiges“ im Schlafzimmerschrank"
+      },
+      "key_holder": {
+        "label": "Wer hat einen Schlüssel dazu?",
+        "placeholder": "z. B. meine Schwester"
+      }
+    },
+    "home_access": {
+      "key_holder": {
+        "label": "Wer hat einen Schlüssel?",
+        "placeholder": "z. B. meine Nachbarin Frau Sahin"
+      },
+      "landlord": {
+        "label": "Hausverwaltung oder Vermieter",
+        "placeholder": "z. B. Hausverwaltung Berger"
+      }
+    },
+    "employment_pension": {
+      "payer": {
+        "label": "Arbeitgeber oder auszahlende Stelle",
+        "placeholder": "z. B. Firma Muster GmbH oder Pensionsversicherung"
+      },
+      "company_pension": {
+        "label": "Gibt es eine Betriebspension oder betriebliche Altersvorsorge?"
+      }
+    },
+    "bank_accounts": {
+      "institution": {
+        "label": "Bank",
+        "placeholder": "z. B. Sparkasse Berlin"
+      },
+      "account_type": {
+        "label": "Kontoart"
+      },
+      "purpose": {
+        "label": "Wofür ist das Konto?",
+        "placeholder": "z. B. Rücklage"
+      }
+    },
+    "securities": {
+      "institution": {
+        "label": "Bank oder Broker",
+        "placeholder": "z. B. comdirect"
+      },
+      "contact_person": {
+        "label": "Ansprechpartner",
+        "placeholder": "z. B. Herr Weber, Filiale Steglitz"
+      }
+    },
+    "safe_deposit": {
+      "institution": {
+        "label": "Bank und Filiale",
+        "placeholder": "z. B. Sparkasse, Filiale Schöneberg"
+      },
+      "key_location": {
+        "label": "Wo liegt der Schlüssel?",
+        "placeholder": "z. B. kleine Blechdose im Schreibtisch"
+      }
+    },
+    "valuables": {
+      "items": {
+        "label": "Was ist es?",
+        "placeholder": "z. B. Schmuck meiner Mutter, Münzsammlung"
+      },
+      "location": {
+        "label": "Wo liegt es?",
+        "placeholder": "z. B. Schublade unten links im Kleiderschrank"
+      }
+    },
+    "real_estate": {
+      "land_register_location": {
+        "label": "Wo liegt der Grundbuchauszug?",
+        "placeholder": "z. B. beim Notar Dr. Berger"
+      }
+    },
+    "vehicles": {
+      "description": {
+        "label": "Fahrzeug",
+        "placeholder": "z. B. VW Golf, B-XY 1234"
+      },
+      "key_location": {
+        "label": "Wo liegt der Fahrzeugschlüssel?",
+        "placeholder": "z. B. Schlüsselbrett im Flur, Zweitschlüssel bei Jonas"
+      },
+      "papers_location": {
+        "label": "Wo liegen die Papiere?",
+        "placeholder": "z. B. Handschuhfach"
+      }
+    },
+    "pets": {
+      "animal": {
+        "label": "Tierart und Name",
+        "placeholder": "z. B. Katze, Mimi"
+      },
+      "caretaker": {
+        "label": "Wer übernimmt?",
+        "placeholder": "z. B. Nachbarin Frau Sahin"
+      }
+    },
+    "insurances": {
+      "types": {
+        "unknown_hint": "Steht alles in den Unterlagen, die wir vorhin notiert haben"
+      },
+      "policies_location": {
+        "label": "Ort",
+        "placeholder": "z. B. Ordner „Versicherungen“"
+      }
+    },
+    "digital_accounts": {
+      "subscriptions": {
+        "unknown_hint": "Wer den Zugang zum Postfach hat, findet sie"
+      },
+      "main_email": {
+        "label": "Adresse, mit der du dich bei Abos anmeldest",
+        "placeholder": "z. B. name@web.de"
+      }
+    },
+    "memberships": {
+      "memberships": {
+        "unknown_hint": "Die Abbuchungen auf dem Kontoauszug verraten sie"
+      },
+      "details": {
+        "label": "Welche genau?",
+        "placeholder": "z. B. Alpenverein Sektion Wien, ÖAMTC"
+      }
+    },
+    "medical": {
+      "family_doctor": {
+        "label": "Name und Praxis",
+        "placeholder": "z. B. Dr. Lange, Praxis am Markt"
+      },
+      "records_location": {
+        "label": "Wo liegen Medikamentenplan und Befunde?",
+        "placeholder": "z. B. blaue Mappe im Küchenschrank"
+      }
+    },
+    "power_of_attorney": {
+      "location": {
+        "label": "Ort",
+        "placeholder": "z. B. Ordner „Wichtiges“"
+      },
+      "attorney": {
+        "label": "Wer ist bevollmächtigt?",
+        "placeholder": "z. B. mein Sohn Jonas"
+      },
+      "registered": {
+        "label": "Im Vorsorgeregister eingetragen?"
+      }
+    },
+    "living_will": {
+      "location": {
+        "label": "Ort",
+        "placeholder": "z. B. Ordner „Wichtiges“"
+      },
+      "copy_holder": {
+        "label": "Wer hat eine Kopie?",
+        "placeholder": "z. B. Hausärztin Dr. Lange"
+      }
+    },
+    "last_will": {
+      "location": {
+        "label": "Ort",
+        "placeholder": "z. B. beim Notar Dr. Berger"
+      },
+      "will_type": {
+        "label": "Art"
+      },
+      "deposited": {
+        "label": "Beim Nachlassgericht hinterlegt?"
+      }
+    }
+  },
+  "option": {
+    "case_profile": {
+      "marital_status": {
+        "single": {
+          "label": "Ledig"
+        },
+        "married": {
+          "label": "Verheiratet"
+        },
+        "partnership": {
+          "label": "Partnerschaft"
+        },
+        "divorced": {
+          "label": "Geschieden"
+        },
+        "widowed": {
+          "label": "Verwitwet"
+        }
+      },
+      "children_status": {
+        "none": {
+          "label": "Keine"
+        },
+        "all_adult": {
+          "label": "Ja, alle über 18"
+        },
+        "some_minor": {
+          "label": "Ja, mindestens eines unter 18"
+        }
+      },
+      "inventory": {
+        "bank_accounts": {
+          "label": "Konto oder Sparbuch"
+        },
+        "securities": {
+          "label": "Depot oder Wertpapiere"
+        },
+        "safe_deposit": {
+          "label": "Schließfach"
+        },
+        "valuables": {
+          "label": "Schmuck, Gold oder Sammlung"
+        },
+        "real_estate": {
+          "label": "Immobilie"
+        },
+        "vehicles": {
+          "label": "Fahrzeug"
+        },
+        "pets": {
+          "label": "Haustier"
+        },
+        "insurances": {
+          "label": "Versicherungen"
+        },
+        "digital_accounts": {
+          "label": "Abos",
+          "hint": "Streaming, Zeitung, Fitness"
+        },
+        "contracts": {
+          "label": "Laufende Verträge",
+          "hint": "Strom, Handy, Internet, Miete"
+        },
+        "memberships": {
+          "label": "Mitgliedschaften",
+          "hint": "Verein, Automobilclub, Spenden"
+        },
+        "medical": {
+          "label": "Hausarzt oder regelmäßige Behandlung"
+        },
+        "power_of_attorney": {
+          "label": "Vorsorgevollmacht"
+        },
+        "living_will": {
+          "label": "Patientenverfügung"
+        },
+        "last_will": {
+          "label": "Testament"
+        }
+      }
+    },
+    "emergency_contacts": {
+      "relationship": {
+        "partner": {
+          "label": "Partner/in"
+        },
+        "child": {
+          "label": "Kind"
+        },
+        "sibling": {
+          "label": "Geschwister"
+        },
+        "other": {
+          "label": "Andere"
+        }
+      }
+    },
+    "funeral_wishes": {
+      "burial_type": {
+        "burial": {
+          "label": "Erdbestattung",
+          "hint": "Klassisches Grab"
+        },
+        "cremation": {
+          "label": "Feuerbestattung",
+          "hint": "Urne, Einäscherung"
+        },
+        "sea": {
+          "label": "Seebestattung",
+          "hint": "Beisetzung auf See"
+        },
+        "natural": {
+          "label": "Naturbestattung",
+          "hint": "Ruheforst, Baumgrab"
+        }
+      },
+      "prepaid_contract": {
+        "yes": {
+          "label": "Ja"
+        },
+        "no": {
+          "label": "Nein"
+        }
+      },
+      "organ_donation": {
+        "card": {
+          "label": "Ja, ich habe einen Ausweis"
+        },
+        "registry": {
+          "label": "Ja, im Organspende-Register"
+        },
+        "none": {
+          "label": "Nein, nichts festgelegt"
+        }
+      },
+      "decision": {
+        "consent": {
+          "label": "Zustimmung"
+        },
+        "objection": {
+          "label": "Widerspruch"
+        },
+        "partial": {
+          "label": "Nur bestimmte Organe"
+        }
+      }
+    },
+    "employment_pension": {
+      "status": {
+        "employed": {
+          "label": "Angestellt"
+        },
+        "self_employed": {
+          "label": "Selbstständig"
+        },
+        "retired": {
+          "label": "In Pension bzw. Rente"
+        },
+        "other": {
+          "label": "Etwas anderes"
+        }
+      },
+      "company_pension": {
+        "yes": {
+          "label": "Ja"
+        },
+        "no": {
+          "label": "Nein"
+        }
+      }
+    },
+    "bank_accounts": {
+      "account_type": {
+        "checking": {
+          "label": "Girokonto"
+        },
+        "savings": {
+          "label": "Sparbuch oder Tagesgeld"
+        },
+        "joint": {
+          "label": "Gemeinschaftskonto"
+        }
+      }
+    },
+    "real_estate": {
+      "property_type": {
+        "apartment": {
+          "label": "Eigene Wohnung"
+        },
+        "house": {
+          "label": "Haus"
+        },
+        "land": {
+          "label": "Grundstück"
+        },
+        "rented_out": {
+          "label": "Vermietete Immobilie"
+        }
+      }
+    },
+    "insurances": {
+      "types": {
+        "life": {
+          "label": "Lebensversicherung"
+        },
+        "funeral_expenses": {
+          "label": "Sterbegeldversicherung"
+        },
+        "accident": {
+          "label": "Unfallversicherung"
+        },
+        "disability": {
+          "label": "Berufsunfähigkeit"
+        },
+        "liability": {
+          "label": "Haftpflicht"
+        },
+        "household": {
+          "label": "Hausrat"
+        },
+        "car": {
+          "label": "Kfz"
+        }
+      }
+    },
+    "digital_accounts": {
+      "subscriptions": {
+        "streaming": {
+          "label": "Streaming",
+          "hint": "Netflix, Spotify, Disney+"
+        },
+        "newspaper": {
+          "label": "Zeitung oder Zeitschrift"
+        },
+        "fitness": {
+          "label": "Fitnessstudio"
+        },
+        "cloud": {
+          "label": "Cloud-Speicher",
+          "hint": "iCloud, Dropbox, Google One"
+        },
+        "software": {
+          "label": "Software-Abo"
+        },
+        "delivery": {
+          "label": "Liefer- oder Einkaufsdienst"
+        }
+      }
+    },
+    "contracts": {
+      "contracts": {
+        "electricity": {
+          "label": "Strom"
+        },
+        "gas": {
+          "label": "Gas oder Fernwärme"
+        },
+        "mobile": {
+          "label": "Mobilfunk"
+        },
+        "internet": {
+          "label": "Internet und Festnetz"
+        },
+        "rent": {
+          "label": "Mietvertrag"
+        },
+        "loan": {
+          "label": "Kredit oder Darlehen"
+        },
+        "broadcasting_fee": {
+          "label": "Rundfunkbeitrag"
+        }
+      }
+    },
+    "memberships": {
+      "memberships": {
+        "club": {
+          "label": "Verein",
+          "hint": "Sport, Kultur, Alpenverein"
+        },
+        "automobile_club": {
+          "label": "Automobilclub",
+          "hint": "z. B. ÖAMTC, ADAC"
+        },
+        "professional": {
+          "label": "Berufsverband oder Kammer"
+        },
+        "charity": {
+          "label": "Spende oder Patenschaft mit Dauerauftrag"
+        },
+        "other": {
+          "label": "Etwas anderes"
+        }
+      }
+    },
+    "power_of_attorney": {
+      "registered": {
+        "yes": {
+          "label": "Ja"
+        },
+        "no": {
+          "label": "Nein"
+        }
+      }
+    },
+    "last_will": {
+      "will_type": {
+        "handwritten": {
+          "label": "Handschriftlich"
+        },
+        "notarial": {
+          "label": "Notariell"
+        }
+      },
+      "deposited": {
+        "yes": {
+          "label": "Ja"
+        },
+        "no": {
+          "label": "Nein"
+        }
+      }
+    }
+  },
+  "block": {
+    "before-start": {
+      "title": "Bevor wir anfangen"
+    },
+    "situation": {
+      "title": "Deine Situation"
+    },
+    "your-list": {
+      "title": "Deine Liste"
+    },
+    "who-knows": {
+      "title": "Wer Bescheid weiß"
+    },
+    "your-wishes": {
+      "title": "Dein Wunsch"
+    },
+    "findability": {
+      "title": "Auffindbarkeit"
+    },
+    "work": {
+      "title": "Arbeit und Pension"
+    },
+    "money": {
+      "title": "Geld und Werte"
+    },
+    "property": {
+      "title": "Besitz"
+    },
+    "home": {
+      "title": "Zuhause"
+    },
+    "protection": {
+      "title": "Absicherung"
+    },
+    "recurring": {
+      "title": "Abos und Verträge"
+    },
+    "estate": {
+      "title": "Nachlass"
+    },
+    "done": {
+      "title": "Geschafft"
+    }
+  },
+  "common": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "done": "Fertig",
+    "later": "Später weiter",
+    "progress": "Bereich {{current}} von {{total}}",
+    "unknown": "Weiß ich gerade nicht",
+    "skip_unknown": "Weiß ich gerade nicht — überspringen",
+    "multi_hint": "Mehrfachauswahl möglich",
+    "select_all": "Alles auswählen",
+    "deselect_all": "Auswahl aufheben",
+    "disclosure_later": "Kannst du auch später ergänzen",
+    "add_another": "Weitere hinzufügen",
+    "pass": "{{current}} von {{total}}",
+    "count_question": "Wie viele?",
+    "count": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "more": "Mehr als 3",
+      "unknown": "Weiß ich nicht"
+    },
+    "trust": {
+      "title": "Wie am Anfang gesagt",
+      "text": "Wir fragen nie nach Kontonummer, PIN oder Passwort. Es geht nur darum, wo etwas liegt — damit niemand suchen muss."
+    },
+    "summary_state": {
+      "answered": "Steht fest",
+      "unknown": "Später klären",
+      "open": "Nächster Schritt"
+    },
+    "test_banner": "Test-App — deine Angaben werden nicht verschlüsselt und beim Schließen gelöscht."
+  },
   "app": {
     "name": "Elefin"
   },
