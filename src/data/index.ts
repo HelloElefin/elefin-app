@@ -8,15 +8,15 @@ export {
   eintragAnlegen,
   eintragLaden,
   eintragLoeschen,
-} from './eintraege';
+} from './entries';
 
-export type { Eintrag, NeuerEintrag } from './ablage';
+export type { Eintrag, NeuerEintrag } from './store';
 
 export {
   DatenFehler,
   DatenFehlerCode,
   type DatenFehlerCodeWert,
-} from './fehler';
+} from './errors';
 
 export {
   abmelden,
@@ -25,6 +25,6 @@ export {
   type KontoSitzung,
   type LokaleSitzung,
   type Sitzung,
-} from './sitzung';
+} from './session';
 
 export { UMGEBUNG } from './supabase';

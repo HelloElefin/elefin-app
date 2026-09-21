@@ -19,7 +19,7 @@
 import { sha256 } from '@noble/hashes/sha2.js';
 
 import { textNachUtf8, zufallsBytes } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './fehler';
+import { KryptoFehler, KryptoFehlerCode } from './errors';
 
 /**
  * 32 Zeichen, Crockfords Base32 ohne die verwechselbaren.

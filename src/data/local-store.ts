@@ -27,9 +27,9 @@ import {
 } from '@/crypto';
 import { istKategorie, type Kategorie } from '@/domain';
 
-import type { Ablage, Eintrag, MusterFuer, NeuerEintrag } from './ablage';
-import { DatenFehler, DatenFehlerCode } from './fehler';
-import { verpackungsSchluesselHolen } from './sitzung';
+import type { Ablage, Eintrag, MusterFuer, NeuerEintrag } from './store';
+import { DatenFehler, DatenFehlerCode } from './errors';
+import { verpackungsSchluesselHolen } from './session';
 
 const DATENBANK = 'elefin.db';
 

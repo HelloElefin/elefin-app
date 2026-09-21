@@ -8,7 +8,7 @@ export {
   istAktiv,
   istKategorie,
   type Kategorie,
-} from './kategorien';
+} from './categories';
 
 export { BankAccountInhalt } from './bank-accounts';
 

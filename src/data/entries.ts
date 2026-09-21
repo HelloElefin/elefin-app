@@ -12,9 +12,9 @@
 import type { Pruefmuster } from '@/crypto';
 import type { Kategorie } from '@/domain';
 
-import type { Ablage, Eintrag, NeuerEintrag } from './ablage';
-import { lokaleAblage } from './ablage-lokal';
-import { hatKonto } from './sitzung';
+import type { Ablage, Eintrag, NeuerEintrag } from './store';
+import { lokaleAblage } from './local-store';
+import { hatKonto } from './session';
 
 /**
  * Wählt die passende Ablage.

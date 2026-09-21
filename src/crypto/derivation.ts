@@ -14,7 +14,7 @@
  */
 import { scrypt } from 'react-native-quick-crypto';
 
-import { SCHLUESSEL_LAENGE, type ScryptKosten } from './schluessel';
+import { SCHLUESSEL_LAENGE, type ScryptKosten } from './keys';
 
 /**
  * Leitet aus Passwort und Salt einen 32-Byte-Schlüssel ab.

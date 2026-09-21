@@ -30,7 +30,7 @@ export {
   KryptoFehler,
   KryptoFehlerCode,
   type KryptoFehlerCodeWert,
-} from './fehler';
+} from './errors';
 
 // --- Generalschlüssel und symmetrische Verschlüsselung ---
 export {
@@ -47,10 +47,10 @@ export {
   symVerschluesseln,
   type ScryptKosten,
   type VerpackterSchluessel,
-} from './schluessel';
+} from './keys';
 
 // --- Ableitung aus dem Passwort (nativ, langsam mit Absicht) ---
-export { passwortSchluesselAbleiten } from './ableitung';
+export { passwortSchluesselAbleiten } from './derivation';
 
 // --- Umschläge für andere Personen ---
 export {
@@ -59,14 +59,14 @@ export {
   umschlagAuspacken,
   umschlagVerpacken,
   type Schluesselpaar,
-} from './umschlag';
+} from './envelope';
 
 // --- Sicherheitsschlüssel zum Ausdrucken ---
 export {
   sicherheitsschluesselAbleiten,
   sicherheitsschluesselErzeugen,
   sicherheitsschluesselPruefen,
-} from './sicherheitsschluessel';
+} from './recovery-key';
 
 // --- Eintragsinhalte ---
 export {
@@ -75,4 +75,4 @@ export {
   inhaltVerschluesseln,
   type MitSchemaVersion,
   type Pruefmuster,
-} from './inhalt';
+} from './content';

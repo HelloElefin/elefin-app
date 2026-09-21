@@ -31,12 +31,12 @@ export type Pruefmuster<T> = {
 };
 
 import { textNachUtf8, utf8NachText } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './fehler';
+import { KryptoFehler, KryptoFehlerCode } from './errors';
 import {
   symEntschluesseln,
   symVerschluesseln,
   type VerpackterSchluessel,
-} from './schluessel';
+} from './keys';
 
 /**
  * Aktuelle Schema-Version für Eintragsinhalte.

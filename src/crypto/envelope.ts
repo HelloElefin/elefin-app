@@ -33,8 +33,8 @@ import {
   textNachUtf8,
   zufallsBytes,
 } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './fehler';
-import { NONCE_LAENGE, SCHLUESSEL_LAENGE } from './schluessel';
+import { KryptoFehler, KryptoFehlerCode } from './errors';
+import { NONCE_LAENGE, SCHLUESSEL_LAENGE } from './keys';
 
 /** Aktuelle Umschlag-Version. Bei Verfahrenswechsel erhöhen, nie wiederverwenden. */
 const UMSCHLAG_VERSION = 1;

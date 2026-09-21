@@ -13,28 +13,28 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
 import { zufallsBytes } from './bytes';
-import { KryptoFehler, KryptoFehlerCode } from './fehler';
+import { KryptoFehler, KryptoFehlerCode } from './errors';
 import {
   AKTUELLE_SCHEMA_VERSION,
   inhaltEntschluesseln,
   inhaltVerschluesseln,
-} from './inhalt';
+} from './content';
 import {
   datenschluesselErzeugen,
   generalschluesselAuspacken,
   generalschluesselErzeugen,
   generalschluesselVerpacken,
-} from './schluessel';
+} from './keys';
 import {
   sicherheitsschluesselAbleiten,
   sicherheitsschluesselErzeugen,
   sicherheitsschluesselPruefen,
-} from './sicherheitsschluessel';
+} from './recovery-key';
 import {
   schluesselpaarErzeugen,
   umschlagAuspacken,
   umschlagVerpacken,
-} from './umschlag';
+} from './envelope';
 
 /** Muster für die Testinhalte. In der echten App kommen die aus src/domain. */
 const TestInhalt = z.object({

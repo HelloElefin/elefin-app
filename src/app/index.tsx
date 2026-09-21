@@ -15,8 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { eintraegeLaden, eintragAnlegen } from '@/data';
 import { BankAccountInhalt, ibanPruefen, type IbanGrund } from '@/domain';
 import { colors, fontSize, radius, spacing, screenPadding } from '@/design';
-import { Feld } from '@/ui/Feld';
-import { Knopf } from '@/ui/Knopf';
+import { Feld } from '@/ui/Field';
+import { Knopf } from '@/ui/Button';
 
 const SCHRITT = 3;
 const SCHRITTE_GESAMT = 5;

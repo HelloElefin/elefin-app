@@ -26,7 +26,7 @@ import * as SecureStore from 'expo-secure-store';
 
 import { bytesNachText, textNachBytes, zufallsBytes } from '@/crypto';
 
-import { DatenFehler, DatenFehlerCode } from './fehler';
+import { DatenFehler, DatenFehlerCode } from './errors';
 
 const GERAETESCHLUESSEL = 'elefin.geraeteschluessel';
 const GENERALSCHLUESSEL = 'elefin.generalschluessel';

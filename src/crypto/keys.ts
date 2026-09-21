@@ -20,7 +20,7 @@ import {
   KryptoFehler,
   KryptoFehlerCode,
   schluesselLaengePruefen,
-} from './fehler';
+} from './errors';
 
 /** Länge aller symmetrischen Schlüssel in Byte. */
 export const SCHLUESSEL_LAENGE = 32;
