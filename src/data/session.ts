@@ -68,7 +68,7 @@ export async function getDeviceKey(): Promise<Uint8Array> {
 
 /** Legt die Kontodaten ab. Nach jedem erfolgreichen Entsperren. */
 export async function saveAccountSession(
-  session: Omit<AccountSession, 'art'>,
+  session: Omit<AccountSession, 'kind'>,
 ): Promise<void> {
   await SecureStore.setItemAsync(USER_ID, session.userId);
   await SecureStore.setItemAsync(
