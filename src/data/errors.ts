@@ -41,7 +41,7 @@ export class DataError extends Error {
 
   constructor(code: DataErrorCodeValue, hint: string) {
     super(`${code}: ${hint}`);
-    this.name = 'DatenFehler';
+    this.name = 'DataError';
     this.code = code;
   }
 }

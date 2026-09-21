@@ -14,7 +14,7 @@ type Props = {
   onChangeText: (text: string) => void;
   placeholder?: string;
   hint?: string;
-  hintType?: 'neutral' | 'warnung';
+  hintType?: 'neutral' | 'warning';
   onBlur?: () => void;
 };
 
@@ -49,7 +49,7 @@ export function Field({
           backgroundColor: colors.surface,
           borderWidth: 1,
           borderColor:
-            hintType === 'warnung' ? colors.warning : colors.border,
+            hintType === 'warning' ? colors.warning : colors.border,
           borderRadius: radius.md,
           paddingHorizontal: spacing.md,
           paddingVertical: spacing.md,
@@ -64,7 +64,7 @@ export function Field({
           style={{
             fontSize: fontSize.sm,
             color:
-              hintType === 'warnung' ? colors.warning : colors.textSecondary,
+              hintType === 'warning' ? colors.warning : colors.textSecondary,
             marginTop: spacing.xs,
           }}
         >

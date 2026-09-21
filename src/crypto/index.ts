@@ -2,7 +2,7 @@
  * Die Fassade des Krypto-Bereichs.
  *
  * Nur was hier steht, darf der Rest der App benutzen. Kein anderer Ordner
- * importiert jemals direkt aus src/crypto/schluessel oder src/crypto/umschlag —
+ * importiert jemals direkt aus src/crypto/keys oder src/crypto/envelope —
  * immer über '@/crypto'.
  *
  * Der Nutzen zeigt sich beim Umbau: Wenn ihr scrypt später gegen Argon2id

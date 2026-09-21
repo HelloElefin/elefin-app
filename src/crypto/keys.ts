@@ -91,7 +91,7 @@ export function generateDataKey(): Uint8Array {
 /**
  * Verschlüsselt beliebige Bytes mit einem 32-Byte-Schlüssel.
  *
- * zusatz ist Zusatzinformation, die MITSIGNIERT, aber NICHT verschlüsselt
+ * additionalData ist Zusatzinformation, die MITSIGNIERT, aber NICHT verschlüsselt
  * wird. Damit lässt sich ein Chiffrat an seinen Platz binden: Gibt man
  * hier die Eintrags-ID an, schlägt das Entschlüsseln fehl, sobald jemand
  * das Chiffrat in eine andere Zeile kopiert.
@@ -111,7 +111,7 @@ export function symEncrypt(
 }
 
 /**
- * Kehrt symVerschluesseln um.
+ * Kehrt symEncrypt um.
  *
  * Wirft E-CR01, wenn der Schlüssel falsch ist ODER die Daten verändert
  * wurden ODER der zusatz nicht übereinstimmt. Diese Echtheitsprüfung ist
@@ -150,7 +150,7 @@ export function wrapMasterKey(
   return symEncrypt(wrappingKey, masterKey);
 }
 
-/** Kehrt generalschluesselVerpacken um. Wirft E-CR01 bei falschem Schlüssel. */
+/** Kehrt wrapMasterKey um. Wirft E-CR01 bei falschem Schlüssel. */
 export function unwrapMasterKey(
   wrapped: WrappedKey,
   wrappingKey: Uint8Array,

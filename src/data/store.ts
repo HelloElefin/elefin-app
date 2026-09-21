@@ -4,8 +4,8 @@
  * Hier steht, WAS eine Ablage können muss — nicht wie. Es gibt zwei
  * Umsetzungen:
  *
- *   ablage-lokal.ts   expo-sqlite, ohne Konto, nur auf diesem Gerät
- *   ablage-server.ts  Supabase, mit Konto und Freigaben
+ *   local-store.ts    expo-sqlite, ohne Konto, nur auf diesem Gerät
+ *   server-store.ts   Supabase, mit Konto und Freigaben
  *
  * Screens und Hooks sehen nur diese Schnittstelle. Deshalb muss beim
  * Übergang vom lokalen Modus ins Konto kein einziger Screen angefasst
@@ -49,7 +49,7 @@ export type Store = {
   /**
    * Lädt alle Einträge einer Kategorie, entschlüsselt und geprüft.
    *
-   * muster ist das zod-Muster aus src/domain. Die Ablage kennt die
+   * validator ist das zod-Muster aus src/domain. Die Ablage kennt die
    * Fachstruktur nicht — sie wendet nur an, was sie bekommt.
    */
   loadEntries<T extends { schemaVersion: number }>(

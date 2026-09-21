@@ -43,7 +43,7 @@ export class CryptoError extends Error {
 
   constructor(code: CryptoErrorCodeValue, hint: string) {
     super(`${code}: ${hint}`);
-    this.name = 'KryptoFehler';
+    this.name = 'CryptoError';
     this.code = code;
   }
 }

@@ -35,13 +35,13 @@ const USER_ID = 'elefin.nutzerid';
 
 /** Der lokale Zustand: kein Konto, nur ein Geräteschlüssel. */
 export type LocalSession = {
-  readonly kind: 'lokal';
+  readonly kind: 'local';
   readonly deviceKey: Uint8Array;
 };
 
 /** Der angemeldete Zustand. */
 export type AccountSession = {
-  readonly kind: 'konto';
+  readonly kind: 'account';
   readonly userId: string;
   readonly masterKey: Uint8Array;
   readonly privateKey: Uint8Array;
@@ -121,7 +121,7 @@ export async function loadSession(): Promise<AppSession> {
 
   if (userId !== null && masterKey !== null && privateKey !== null) {
     return {
-      kind: 'konto',
+      kind: 'account',
       userId: userId,
       masterKey: base64ToBytes(masterKey),
       privateKey: base64ToBytes(privateKey),
@@ -129,7 +129,7 @@ export async function loadSession(): Promise<AppSession> {
   }
 
   return {
-    kind: 'lokal',
+    kind: 'local',
     deviceKey: await getDeviceKey(),
   };
 }
@@ -143,7 +143,7 @@ export async function loadSession(): Promise<AppSession> {
  */
 export async function getWrappingKey(): Promise<Uint8Array> {
   const session = await loadSession();
-  return session.kind === 'konto'
+  return session.kind === 'account'
     ? session.masterKey
     : session.deviceKey;
 }
@@ -155,7 +155,7 @@ export async function getWrappingKey(): Promise<Uint8Array> {
  */
 export async function requireAccountSession(): Promise<AccountSession> {
   const session = await loadSession();
-  if (session.kind !== 'konto') {
+  if (session.kind !== 'account') {
     throw new DataError(
       DataErrorCode.NOT_SIGNED_IN,
       'Dieser Vorgang benötigt ein Konto.',

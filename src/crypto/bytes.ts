@@ -51,7 +51,7 @@ export function textToUtf8(text: string): Uint8Array {
   return new TextEncoder().encode(text);
 }
 
-/** Bytes (UTF-8) -> Text. Kehrt textNachUtf8 um. */
+/** Bytes (UTF-8) -> Text. Kehrt textToUtf8 um. */
 export function utf8ToText(bytes: Uint8Array): string {
   return new TextDecoder().decode(bytes);
 }

@@ -57,7 +57,7 @@ export type WithSchemaVersion = {
 /**
  * Verschlüsselt einen Eintragsinhalt.
  *
- * eintragId wird mitsigniert, aber nicht verschlüsselt — sie steht ohnehin
+ * entryId wird mitsigniert, aber nicht verschlüsselt — sie steht ohnehin
  * unverschlüsselt in der Datenbank. Der Nutzen liegt allein darin, dass das
  * Chiffrat an diese Zeile gebunden ist.
  */

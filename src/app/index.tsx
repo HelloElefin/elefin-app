@@ -187,7 +187,7 @@ export default function BankverbindungScreen() {
             onBlur={ibanPruefenBeimVerlassen}
             placeholder={t('bankAccount.ibanPlatzhalter')}
             hint={ibanGrund !== null ? t(`iban.${ibanGrund}`) : undefined}
-            hintType={ibanGrund !== null ? 'warnung' : 'neutral'}
+            hintType={ibanGrund !== null ? 'warning' : 'neutral'}
           />
           <Field
             label={t('bankAccount.kontoinhaber')}

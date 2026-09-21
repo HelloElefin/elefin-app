@@ -121,7 +121,7 @@ export function sealEnvelope(
 }
 
 /**
- * Kehrt umschlagVerpacken um.
+ * Kehrt sealEnvelope um.
  *
  * Wirft E-CR02 bei unbekannter Version, E-CR03 bei zu kurzem Umschlag und
  * E-CR01, wenn der private Schlüssel nicht passt.

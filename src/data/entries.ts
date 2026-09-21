@@ -5,7 +5,7 @@
  * lokal in SQLite oder in Supabase liegen — und sollen es auch nicht.
  *
  * Solange kein Konto besteht, geht alles an die lokale Ablage. Sobald
- * ablage-server.ts existiert, entscheidet diese Datei anhand des
+ * server-store.ts existiert, entscheidet diese Datei anhand des
  * Sitzungszustands, welche Ablage benutzt wird. Kein Screen muss dafür
  * angefasst werden.
  */
@@ -25,7 +25,7 @@ import { hasAccount } from './session';
  */
 async function getStore(): Promise<Store> {
   if (await hasAccount()) {
-    // TODO: serverAblage zurückgeben, sobald ablage-server.ts existiert.
+    // TODO: serverStore zurückgeben, sobald server-store.ts existiert.
     return localStore;
   }
   return localStore;

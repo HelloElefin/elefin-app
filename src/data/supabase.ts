@@ -26,7 +26,7 @@ export const ENVIRONMENT = process.env.EXPO_PUBLIC_UMGEBUNG ?? 'unbekannt';
  * im Android-Keystore bzw. im iOS-Schlüsselbund.
  *
  * ACHTUNG: Das ist NUR die Anmeldesitzung, nicht der Generalschlüssel. Der
- * wird getrennt verwaltet, in sitzung.ts.
+ * wird getrennt verwaltet, in session.ts.
  */
 const SecureStoreAdapter = {
   getItem: (key: string) => SecureStore.getItemAsync(key),
