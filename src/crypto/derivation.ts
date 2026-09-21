@@ -35,7 +35,11 @@ export function derivePasswordKey(
 ): Promise<Uint8Array> {
   return new Promise((resolve, reject) => {
     scrypt(
-      password,
+      // NFC-Normalisierung nach RFC 8265 (OpaqueString): Umlaute können je
+      // nach Tastatur und System zusammengesetzt oder zerlegt ankommen.
+      // Ohne Normalisierung ergäbe dasselbe Passwort auf einem anderen
+      // Gerät einen anderen Schlüssel.
+      password.normalize('NFC'),
       salt,
       KEY_LENGTH,
       {
