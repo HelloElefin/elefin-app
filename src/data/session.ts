@@ -24,7 +24,7 @@
  */
 import * as SecureStore from 'expo-secure-store';
 
-import { bytesToText, textToBytes, secureRandomBytes } from '@/crypto';
+import { bytesToBase64, base64ToBytes, secureRandomBytes } from '@/crypto';
 
 import { DataError, DataErrorCode } from './errors';
 
@@ -74,11 +74,11 @@ export async function getDeviceKey(): Promise<Uint8Array> {
   deviceKeyPromise = (async () => {
     const existing = await SecureStore.getItemAsync(DEVICE_KEY);
     if (existing !== null) {
-      return textToBytes(existing);
+      return base64ToBytes(existing);
     }
 
     const created = secureRandomBytes(32);
-    await SecureStore.setItemAsync(DEVICE_KEY, bytesToText(created));
+    await SecureStore.setItemAsync(DEVICE_KEY, bytesToBase64(created));
     return created;
   })();
 
@@ -99,11 +99,11 @@ export async function saveAccountSession(
   await SecureStore.setItemAsync(USER_ID, session.userId);
   await SecureStore.setItemAsync(
     MASTER_KEY,
-    bytesToText(session.masterKey),
+    bytesToBase64(session.masterKey),
   );
   await SecureStore.setItemAsync(
     PRIVATE_KEY,
-    bytesToText(session.privateKey),
+    bytesToBase64(session.privateKey),
   );
 }
 
@@ -123,8 +123,8 @@ export async function loadSession(): Promise<AppSession> {
     return {
       kind: 'konto',
       userId: userId,
-      masterKey: textToBytes(masterKey),
-      privateKey: textToBytes(privateKey),
+      masterKey: base64ToBytes(masterKey),
+      privateKey: base64ToBytes(privateKey),
     };
   }
 

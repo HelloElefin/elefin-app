@@ -17,9 +17,9 @@
 // --- Grundlagen ---
 export {
   bytesEqual,
-  bytesToText,
+  bytesToBase64,
   concatBytes,
-  textToBytes,
+  base64ToBytes,
   textToUtf8,
   utf8ToText,
   secureRandomBytes,

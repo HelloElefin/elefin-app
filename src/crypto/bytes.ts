@@ -27,7 +27,7 @@ export function secureRandomBytes(count: number): Uint8Array {
 }
 
 /** Bytes -> base64-Text. Für alles, was in einer Textspalte landet. */
-export function bytesToText(bytes: Uint8Array): string {
+export function bytesToBase64(bytes: Uint8Array): string {
   let binary = '';
   for (const byte of bytes) {
     binary += String.fromCharCode(byte);
@@ -35,8 +35,8 @@ export function bytesToText(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
-/** base64-Text -> Bytes. Kehrt bytesNachText um. */
-export function textToBytes(text: string): Uint8Array {
+/** base64-Text -> Bytes. Kehrt bytesToBase64 um. */
+export function base64ToBytes(text: string): Uint8Array {
   const binary = atob(text);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) {

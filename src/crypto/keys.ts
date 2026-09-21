@@ -15,7 +15,7 @@
  */
 import { xchacha20poly1305 } from '@noble/ciphers/chacha.js';
 
-import { bytesToText, textToBytes, secureRandomBytes } from './bytes';
+import { bytesToBase64, base64ToBytes, secureRandomBytes } from './bytes';
 import {
   CryptoError,
   CryptoErrorCode,
@@ -105,8 +105,8 @@ export function symEncrypt(
   const nonce = secureRandomBytes(NONCE_LENGTH);
   const ciphertext = xchacha20poly1305(key, nonce, additionalData).encrypt(plaintext);
   return {
-    chiffre: bytesToText(ciphertext),
-    nonce: bytesToText(nonce),
+    chiffre: bytesToBase64(ciphertext),
+    nonce: bytesToBase64(nonce),
   };
 }
 
@@ -127,9 +127,9 @@ export function symDecrypt(
   try {
     return xchacha20poly1305(
       key,
-      textToBytes(wrapped.nonce),
+      base64ToBytes(wrapped.nonce),
       additionalData,
-    ).decrypt(textToBytes(wrapped.chiffre));
+    ).decrypt(base64ToBytes(wrapped.chiffre));
   } catch {
     throw new CryptoError(
       CryptoErrorCode.DECRYPTION_FAILED,

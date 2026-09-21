@@ -27,9 +27,9 @@ import { hkdf } from '@noble/hashes/hkdf.js';
 import { sha256 } from '@noble/hashes/sha2.js';
 
 import {
-  bytesToText,
+  bytesToBase64,
   concatBytes,
-  textToBytes,
+  base64ToBytes,
   textToUtf8,
   secureRandomBytes,
 } from './bytes';
@@ -110,7 +110,7 @@ export function sealEnvelope(
   const nonce = secureRandomBytes(NONCE_LENGTH);
   const ciphertext = xchacha20poly1305(key, nonce).encrypt(content);
 
-  return bytesToText(
+  return bytesToBase64(
     concatBytes(
       new Uint8Array([ENVELOPE_VERSION]),
       ephemeral.publicKey,
@@ -130,7 +130,7 @@ export function openEnvelope(
   envelopeText: string,
   myPrivate: Uint8Array,
 ): Uint8Array {
-  const block = textToBytes(envelopeText);
+  const block = base64ToBytes(envelopeText);
 
   const headerLength = 1 + X25519_LENGTH + NONCE_LENGTH;
   if (block.length <= headerLength) {
