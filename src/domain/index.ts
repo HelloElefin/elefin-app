@@ -4,18 +4,18 @@
  */
 export {
   AKTIVE_KATEGORIEN,
-  KATEGORIEN,
+  CATEGORIES,
   istAktiv,
   isCategory,
-  type Kategorie,
+  type Category,
 } from './categories';
 
-export { BankAccountInhalt } from './bank-accounts';
+export { BankAccountContent } from './bank-accounts';
 
 export {
-  ibanFormatieren,
-  ibanNormalisieren,
-  ibanPruefen,
-  type IbanGrund,
-  type IbanPruefung,
+  formatIban,
+  normalizeIban,
+  validateIban,
+  type IbanReason,
+  type IbanValidation,
 } from './iban';

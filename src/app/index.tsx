@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-import { eintraegeLaden, eintragAnlegen } from '@/data';
-import { BankAccountInhalt, ibanPruefen, type IbanGrund } from '@/domain';
+import { loadEntries, createEntry } from '@/data';
+import { BankAccountContent, validateIban, type IbanReason } from '@/domain';
 import { colors, fontSize, radius, spacing, screenPadding } from '@/design';
 import { Field } from '@/ui/Field';
 import { Button } from '@/ui/Button';
@@ -30,7 +30,7 @@ export default function BankverbindungScreen() {
   const [kontoinhaber, setKontoinhaber] = useState('');
 
   const [aufgeklappt, setAufgeklappt] = useState(false);
-  const [ibanGrund, setIbanGrund] = useState<Exclude<IbanGrund, 'leer'> | null>(
+  const [ibanGrund, setIbanGrund] = useState<Exclude<IbanReason, 'leer'> | null>(
     null,
   );
   const [anzahl, setAnzahl] = useState(0);
@@ -42,7 +42,7 @@ export default function BankverbindungScreen() {
 
   async function anzahlAktualisieren() {
     try {
-      const vorhandene = await eintraegeLaden('bank_accounts', BankAccountInhalt);
+      const vorhandene = await loadEntries('bank_accounts', BankAccountContent);
       setAnzahl(vorhandene.length);
     } catch (fehler) {
       setFehlerCode(codeVon(fehler));
@@ -51,21 +51,21 @@ export default function BankverbindungScreen() {
 
   /** Prüft die IBAN, sobald das Feld verlassen wird — nicht bei jedem Zeichen. */
   function ibanPruefenBeimVerlassen() {
-    const ergebnis = ibanPruefen(iban);
+    const ergebnis = validateIban(iban);
     // 'leer' ist kein Fehler: Die IBAN ist ein optionales Feld.
-    if (ergebnis.gueltig || ergebnis.grund === 'leer') {
+    if (ergebnis.valid || ergebnis.reason === 'leer') {
       setIbanGrund(null);
       return;
     }
-    setIbanGrund(ergebnis.grund);
+    setIbanGrund(ergebnis.reason);
   }
 
   async function speichern() {
     setFehlerCode(null);
     try {
-      await eintragAnlegen({
-        kategorie: 'bank_accounts',
-        inhalt: {
+      await createEntry({
+        category: 'bank_accounts',
+        content: {
           bezeichnung: bezeichnung.trim(),
           ...(institut.trim() !== '' && { institut: institut.trim() }),
           ...(iban.trim() !== '' && { iban: iban.trim() }),
@@ -144,17 +144,17 @@ export default function BankverbindungScreen() {
       </View>
 
       <Field
-        beschriftung={t('bankAccount.bezeichnung')}
-        wert={bezeichnung}
-        aufAenderung={setBezeichnung}
-        platzhalter={t('bankAccount.bezeichnungPlatzhalter')}
+        label={t('bankAccount.bezeichnung')}
+        value={bezeichnung}
+        onChangeText={setBezeichnung}
+        placeholder={t('bankAccount.bezeichnungPlatzhalter')}
       />
 
       <Field
-        beschriftung={t('bankAccount.institut')}
-        wert={institut}
-        aufAenderung={setInstitut}
-        platzhalter={t('bankAccount.institutPlatzhalter')}
+        label={t('bankAccount.institut')}
+        value={institut}
+        onChangeText={setInstitut}
+        placeholder={t('bankAccount.institutPlatzhalter')}
       />
 
       <Pressable
@@ -181,28 +181,28 @@ export default function BankverbindungScreen() {
       {aufgeklappt && (
         <>
           <Field
-            beschriftung={t('bankAccount.iban')}
-            wert={iban}
-            aufAenderung={setIban}
-            aufVerlassen={ibanPruefenBeimVerlassen}
-            platzhalter={t('bankAccount.ibanPlatzhalter')}
-            hinweis={ibanGrund !== null ? t(`iban.${ibanGrund}`) : undefined}
-            hinweisArt={ibanGrund !== null ? 'warnung' : 'neutral'}
+            label={t('bankAccount.iban')}
+            value={iban}
+            onChangeText={setIban}
+            onBlur={ibanPruefenBeimVerlassen}
+            placeholder={t('bankAccount.ibanPlatzhalter')}
+            hint={ibanGrund !== null ? t(`iban.${ibanGrund}`) : undefined}
+            hintType={ibanGrund !== null ? 'warnung' : 'neutral'}
           />
           <Field
-            beschriftung={t('bankAccount.kontoinhaber')}
-            wert={kontoinhaber}
-            aufAenderung={setKontoinhaber}
-            platzhalter={t('bankAccount.kontoinhaberPlatzhalter')}
+            label={t('bankAccount.kontoinhaber')}
+            value={kontoinhaber}
+            onChangeText={setKontoinhaber}
+            placeholder={t('bankAccount.kontoinhaberPlatzhalter')}
           />
         </>
       )}
 
       <View style={{ marginTop: spacing.md }}>
         <Button
-          beschriftung={t('action.save')}
-          aufDruck={() => void speichern()}
-          gesperrt={bezeichnung.trim() === ''}
+          label={t('action.save')}
+          onPress={() => void speichern()}
+          disabled={bezeichnung.trim() === ''}
         />
       </View>
 

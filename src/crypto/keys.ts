@@ -15,21 +15,21 @@
  */
 import { xchacha20poly1305 } from '@noble/ciphers/chacha.js';
 
-import { bytesNachText, textNachBytes, zufallsBytes } from './bytes';
+import { bytesToText, textToBytes, secureRandomBytes } from './bytes';
 import {
   CryptoError,
-  KryptoFehlerCode,
+  CryptoErrorCode,
   assertKeyLength,
 } from './errors';
 
 /** Länge aller symmetrischen Schlüssel in Byte. */
-export const SCHLUESSEL_LAENGE = 32;
+export const KEY_LENGTH = 32;
 
 /** Länge des Nonce für XChaCha20-Poly1305 in Byte. */
-export const NONCE_LAENGE = 24;
+export const NONCE_LENGTH = 24;
 
 /** Länge des Salt für die Schlüsselableitung in Byte. */
-export const SALT_LAENGE = 16;
+export const SALT_LENGTH = 16;
 
 /**
  * Kosten für die Schlüsselableitung aus einem Passwort (scrypt).
@@ -55,7 +55,7 @@ export const SCRYPT_DEFAULTS = {
   p: 1,
 } as const;
 
-export type ScryptKosten = {
+export type ScryptCost = {
   readonly N: number;
   readonly r: number;
   readonly p: number;
@@ -65,7 +65,7 @@ export type ScryptKosten = {
  * Ein verpackter Schlüssel, so wie er gespeichert wird.
  * Beide Felder sind base64-Text, damit sie in Textspalten passen.
  */
-export type VerpackterSchluessel = {
+export type WrappedKey = {
   readonly chiffre: string;
   readonly nonce: string;
 };
@@ -74,18 +74,18 @@ export type VerpackterSchluessel = {
  * Erzeugt einen neuen zufälligen Generalschlüssel.
  * Wird genau einmal pro Nutzer aufgerufen, beim Anlegen des Kontos.
  */
-export function generalschluesselErzeugen(): Uint8Array {
-  return zufallsBytes(SCHLUESSEL_LAENGE);
+export function generateMasterKey(): Uint8Array {
+  return secureRandomBytes(KEY_LENGTH);
 }
 
 /** Erzeugt einen neuen zufälligen Salt für die Ableitung. */
-export function saltErzeugen(): Uint8Array {
-  return zufallsBytes(SALT_LAENGE);
+export function generateSalt(): Uint8Array {
+  return secureRandomBytes(SALT_LENGTH);
 }
 
 /** Erzeugt einen neuen zufälligen Datenschlüssel für einen einzelnen Eintrag. */
-export function datenschluesselErzeugen(): Uint8Array {
-  return zufallsBytes(SCHLUESSEL_LAENGE);
+export function generateDataKey(): Uint8Array {
+  return secureRandomBytes(KEY_LENGTH);
 }
 
 /**
@@ -96,17 +96,17 @@ export function datenschluesselErzeugen(): Uint8Array {
  * hier die Eintrags-ID an, schlägt das Entschlüsseln fehl, sobald jemand
  * das Chiffrat in eine andere Zeile kopiert.
  */
-export function symVerschluesseln(
-  schluessel: Uint8Array,
-  klartext: Uint8Array,
-  zusatz?: Uint8Array,
-): VerpackterSchluessel {
-  assertKeyLength(schluessel, SCHLUESSEL_LAENGE);
-  const nonce = zufallsBytes(NONCE_LAENGE);
-  const chiffre = xchacha20poly1305(schluessel, nonce, zusatz).encrypt(klartext);
+export function symEncrypt(
+  key: Uint8Array,
+  plaintext: Uint8Array,
+  additionalData?: Uint8Array,
+): WrappedKey {
+  assertKeyLength(key, KEY_LENGTH);
+  const nonce = secureRandomBytes(NONCE_LENGTH);
+  const ciphertext = xchacha20poly1305(key, nonce, additionalData).encrypt(plaintext);
   return {
-    chiffre: bytesNachText(chiffre),
-    nonce: bytesNachText(nonce),
+    chiffre: bytesToText(ciphertext),
+    nonce: bytesToText(nonce),
   };
 }
 
@@ -118,21 +118,21 @@ export function symVerschluesseln(
  * der Grund, warum ein falsches Passwort sofort auffällt: Der Nutzer
  * bekommt einen klaren Fehler statt sinnlosem Datenmüll.
  */
-export function symEntschluesseln(
-  schluessel: Uint8Array,
-  verpackt: VerpackterSchluessel,
-  zusatz?: Uint8Array,
+export function symDecrypt(
+  key: Uint8Array,
+  wrapped: WrappedKey,
+  additionalData?: Uint8Array,
 ): Uint8Array {
-  assertKeyLength(schluessel, SCHLUESSEL_LAENGE);
+  assertKeyLength(key, KEY_LENGTH);
   try {
     return xchacha20poly1305(
-      schluessel,
-      textNachBytes(verpackt.nonce),
-      zusatz,
-    ).decrypt(textNachBytes(verpackt.chiffre));
+      key,
+      textToBytes(wrapped.nonce),
+      additionalData,
+    ).decrypt(textToBytes(wrapped.chiffre));
   } catch {
     throw new CryptoError(
-      KryptoFehlerCode.ENTSCHLUESSELN_FEHLGESCHLAGEN,
+      CryptoErrorCode.DECRYPTION_FAILED,
       'Falscher Schlüssel, veränderte Daten oder abweichende Zusatzinformation.',
     );
   }
@@ -142,18 +142,18 @@ export function symEntschluesseln(
  * Verpackt den Generalschlüssel mit einem abgeleiteten Schlüssel.
  * Wird für alle Kisten verwendet: Passwort, Sicherheitsschlüssel, Gerät.
  */
-export function generalschluesselVerpacken(
-  generalschluessel: Uint8Array,
-  verpackungsSchluessel: Uint8Array,
-): VerpackterSchluessel {
-  assertKeyLength(generalschluessel, SCHLUESSEL_LAENGE);
-  return symVerschluesseln(verpackungsSchluessel, generalschluessel);
+export function wrapMasterKey(
+  masterKey: Uint8Array,
+  wrappingKey: Uint8Array,
+): WrappedKey {
+  assertKeyLength(masterKey, KEY_LENGTH);
+  return symEncrypt(wrappingKey, masterKey);
 }
 
 /** Kehrt generalschluesselVerpacken um. Wirft E-CR01 bei falschem Schlüssel. */
-export function generalschluesselAuspacken(
-  verpackt: VerpackterSchluessel,
-  verpackungsSchluessel: Uint8Array,
+export function unwrapMasterKey(
+  wrapped: WrappedKey,
+  wrappingKey: Uint8Array,
 ): Uint8Array {
-  return symEntschluesseln(verpackungsSchluessel, verpackt);
+  return symDecrypt(wrappingKey, wrapped);
 }

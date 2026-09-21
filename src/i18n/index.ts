@@ -27,18 +27,18 @@ export const FALLBACK_LANGUAGE: SupportedLanguage = 'de';
  * Ermittelt die Gerätesprache und prüft, ob wir sie unterstützen.
  * Das Gerät meldet z. B. "de-AT" — uns interessiert nur der Teil davor.
  */
-function geraeteSpracheErmitteln(): SupportedLanguage {
+function detectDeviceLanguage(): SupportedLanguage {
   const locales = getLocales();
   // Kann aus zwei Gründen leer sein: Die Liste ist leer (deshalb der
   // optionale Zugriff mit ?.) oder das Gerät meldet keinen Sprachcode
   // (dann ist der Wert null). Beides fängt die Prüfung unten ab.
-  const ersteSprache = locales[0]?.languageCode;
+  const firstLanguage = locales[0]?.languageCode;
 
   if (
-    ersteSprache != null &&
-    (SUPPORTED_LANGUAGES as readonly string[]).includes(ersteSprache)
+    firstLanguage != null &&
+    (SUPPORTED_LANGUAGES as readonly string[]).includes(firstLanguage)
   ) {
-    return ersteSprache as SupportedLanguage;
+    return firstLanguage as SupportedLanguage;
   }
 
   return FALLBACK_LANGUAGE;
@@ -49,7 +49,7 @@ void i18n.use(initReactI18next).init({
     de: { common: deCommon },
     en: { common: enCommon },
   },
-  lng: geraeteSpracheErmitteln(),
+  lng: detectDeviceLanguage(),
   fallbackLng: FALLBACK_LANGUAGE,
   defaultNS: 'common',
   ns: ['common'],

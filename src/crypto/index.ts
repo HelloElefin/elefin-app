@@ -17,62 +17,62 @@
 // --- Grundlagen ---
 export {
   bytesEqual,
-  bytesNachText,
+  bytesToText,
   concatBytes,
-  textNachBytes,
-  textNachUtf8,
-  utf8NachText,
-  zufallsBytes,
+  textToBytes,
+  textToUtf8,
+  utf8ToText,
+  secureRandomBytes,
 } from './bytes';
 
 // --- Fehler ---
 export {
   CryptoError,
-  KryptoFehlerCode,
-  type KryptoFehlerCodeWert,
+  CryptoErrorCode,
+  type CryptoErrorCodeValue,
 } from './errors';
 
 // --- Generalschlüssel und symmetrische Verschlüsselung ---
 export {
-  NONCE_LAENGE,
-  SALT_LAENGE,
-  SCHLUESSEL_LAENGE,
+  NONCE_LENGTH,
+  SALT_LENGTH,
+  KEY_LENGTH,
   SCRYPT_DEFAULTS,
-  datenschluesselErzeugen,
-  generalschluesselAuspacken,
-  generalschluesselErzeugen,
-  generalschluesselVerpacken,
-  saltErzeugen,
-  symEntschluesseln,
-  symVerschluesseln,
-  type ScryptKosten,
-  type VerpackterSchluessel,
+  generateDataKey,
+  unwrapMasterKey,
+  generateMasterKey,
+  wrapMasterKey,
+  generateSalt,
+  symDecrypt,
+  symEncrypt,
+  type ScryptCost,
+  type WrappedKey,
 } from './keys';
 
 // --- Ableitung aus dem Passwort (nativ, langsam mit Absicht) ---
-export { passwortSchluesselAbleiten } from './derivation';
+export { derivePasswordKey } from './derivation';
 
 // --- Umschläge für andere Personen ---
 export {
-  X25519_LAENGE,
-  schluesselpaarErzeugen,
-  umschlagAuspacken,
-  umschlagVerpacken,
-  type Schluesselpaar,
+  X25519_LENGTH,
+  generateKeyPair,
+  openEnvelope,
+  sealEnvelope,
+  type KeyPair,
 } from './envelope';
 
 // --- Sicherheitsschlüssel zum Ausdrucken ---
 export {
-  sicherheitsschluesselAbleiten,
-  sicherheitsschluesselErzeugen,
-  sicherheitsschluesselPruefen,
+  deriveFromRecoveryKey,
+  generateRecoveryKey,
+  validateRecoveryKey,
 } from './recovery-key';
 
 // --- Eintragsinhalte ---
 export {
-  AKTUELLE_SCHEMA_VERSION,
-  inhaltEntschluesseln,
-  inhaltVerschluesseln,
-  type MitSchemaVersion,
+  CURRENT_SCHEMA_VERSION,
+  decryptContent,
+  encryptContent,
+  type WithSchemaVersion,
   type Validator,
 } from './content';

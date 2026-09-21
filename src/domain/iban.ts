@@ -15,7 +15,7 @@
  */
 
 /** Erwartete Gesamtlänge je Land. Nur die für uns relevanten. */
-const LAENGEN: Record<string, number> = {
+const LENGTHS: Record<string, number> = {
   AT: 20,
   DE: 22,
   CH: 21,
@@ -28,7 +28,7 @@ const LAENGEN: Record<string, number> = {
   LU: 20,
 };
 
-export type IbanGrund =
+export type IbanReason =
   | 'leer'
   | 'zu_kurz'
   | 'ungueltige_zeichen'
@@ -36,23 +36,23 @@ export type IbanGrund =
   | 'falsche_laenge'
   | 'pruefsumme';
 
-export type IbanPruefung =
-  | { readonly gueltig: true }
-  | { readonly gueltig: false; readonly grund: IbanGrund };
+export type IbanValidation =
+  | { readonly valid: true }
+  | { readonly valid: false; readonly reason: IbanReason };
 
 /** Entfernt Leerzeichen und macht Großbuchstaben. */
-export function ibanNormalisieren(eingabe: string): string {
-  return eingabe.replace(/\s/g, '').toUpperCase();
+export function normalizeIban(input: string): string {
+  return input.replace(/\s/g, '').toUpperCase();
 }
 
 /** Formatiert eine IBAN in Vierergruppen für die Anzeige. */
-export function ibanFormatieren(eingabe: string): string {
-  const roh = ibanNormalisieren(eingabe);
-  const gruppen: string[] = [];
-  for (let i = 0; i < roh.length; i += 4) {
-    gruppen.push(roh.slice(i, i + 4));
+export function formatIban(input: string): string {
+  const raw = normalizeIban(input);
+  const groups: string[] = [];
+  for (let i = 0; i < raw.length; i += 4) {
+    groups.push(raw.slice(i, i + 4));
   }
-  return gruppen.join(' ');
+  return groups.join(' ');
 }
 
 /**
@@ -63,39 +63,39 @@ export function ibanFormatieren(eingabe: string): string {
  * 'leer'; ob das ein Problem ist, entscheidet der Screen, denn die IBAN ist
  * ein optionales Feld.
  */
-export function ibanPruefen(eingabe: string): IbanPruefung {
-  const iban = ibanNormalisieren(eingabe);
+export function validateIban(input: string): IbanValidation {
+  const iban = normalizeIban(input);
 
   if (iban.length === 0) {
-    return { gueltig: false, grund: 'leer' };
+    return { valid: false, reason: 'leer' };
   }
 
   if (!/^[A-Z0-9]+$/.test(iban)) {
-    return { gueltig: false, grund: 'ungueltige_zeichen' };
+    return { valid: false, reason: 'ungueltige_zeichen' };
   }
 
   if (iban.length < 5) {
-    return { gueltig: false, grund: 'zu_kurz' };
+    return { valid: false, reason: 'zu_kurz' };
   }
 
-  const land = iban.slice(0, 2);
-  const erwarteteLaenge = LAENGEN[land];
+  const country = iban.slice(0, 2);
+  const expectedLength = LENGTHS[country];
 
-  if (erwarteteLaenge === undefined) {
+  if (expectedLength === undefined) {
     // Unbekanntes Land: Wir prüfen trotzdem die Prüfsumme, aber ohne Länge.
     // Besser als abzulehnen — es gibt über siebzig IBAN-Länder.
-    return pruefsummePruefen(iban)
-      ? { gueltig: true }
-      : { gueltig: false, grund: 'unbekanntes_land' };
+    return verifyChecksum(iban)
+      ? { valid: true }
+      : { valid: false, reason: 'unbekanntes_land' };
   }
 
-  if (iban.length !== erwarteteLaenge) {
-    return { gueltig: false, grund: 'falsche_laenge' };
+  if (iban.length !== expectedLength) {
+    return { valid: false, reason: 'falsche_laenge' };
   }
 
-  return pruefsummePruefen(iban)
-    ? { gueltig: true }
-    : { gueltig: false, grund: 'pruefsumme' };
+  return verifyChecksum(iban)
+    ? { valid: true }
+    : { valid: false, reason: 'pruefsumme' };
 }
 
 /**
@@ -104,22 +104,22 @@ export function ibanPruefen(eingabe: string): IbanPruefung {
  * Die Zahl wird zu groß für normale Zahlentypen, deshalb wird sie
  * stückweise durch 97 geteilt — dasselbe Ergebnis, ohne Überlauf.
  */
-function pruefsummePruefen(iban: string): boolean {
-  const umgestellt = iban.slice(4) + iban.slice(0, 4);
+function verifyChecksum(iban: string): boolean {
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
 
-  let ziffern = '';
-  for (const zeichen of umgestellt) {
-    if (zeichen >= 'A' && zeichen <= 'Z') {
+  let digits = '';
+  for (const char of rearranged) {
+    if (char >= 'A' && char <= 'Z') {
       // A wird zu 10, B zu 11, und so weiter.
-      ziffern += String(zeichen.charCodeAt(0) - 55);
+      digits += String(char.charCodeAt(0) - 55);
     } else {
-      ziffern += zeichen;
+      digits += char;
     }
   }
 
-  let rest = 0;
-  for (const ziffer of ziffern) {
-    rest = (rest * 10 + Number(ziffer)) % 97;
+  let remainder = 0;
+  for (const digit of digits) {
+    remainder = (remainder * 10 + Number(digit)) % 97;
   }
-  return rest === 1;
+  return remainder === 1;
 }

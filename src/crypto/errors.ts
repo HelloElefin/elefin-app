@@ -12,37 +12,37 @@
  */
 
 /** Alle Fehlercodes des Krypto-Bereichs. Bereich CR. */
-export const KryptoFehlerCode = {
+export const CryptoErrorCode = {
   /** Entschlüsselung fehlgeschlagen: falscher Schlüssel oder veränderte Daten. */
-  ENTSCHLUESSELN_FEHLGESCHLAGEN: 'E-CR01',
+  DECRYPTION_FAILED: 'E-CR01',
   /** Der Umschlag hat eine Version, die diese App-Fassung nicht kennt. */
-  UNBEKANNTE_UMSCHLAG_VERSION: 'E-CR02',
+  UNKNOWN_ENVELOPE_VERSION: 'E-CR02',
   /** Der Umschlag ist zu kurz oder anders beschädigt. */
-  UMSCHLAG_BESCHAEDIGT: 'E-CR03',
+  ENVELOPE_CORRUPTED: 'E-CR03',
   /** Der Sicherheitsschlüssel hat die falsche Form (Länge, Zeichen). */
-  SICHERHEITSSCHLUESSEL_FORM: 'E-CR04',
+  RECOVERY_KEY_FORMAT: 'E-CR04',
   /** Die Prüfziffer des Sicherheitsschlüssels stimmt nicht — meist ein Tippfehler. */
-  SICHERHEITSSCHLUESSEL_PRUEFZIFFER: 'E-CR05',
+  RECOVERY_KEY_CHECKSUM: 'E-CR05',
   /** Der verschlüsselte Datensatz hat eine unbekannte schemaVersion. */
-  UNBEKANNTE_SCHEMA_VERSION: 'E-CR06',
+  UNKNOWN_SCHEMA_VERSION: 'E-CR06',
   /** Der entschlüsselte Inhalt hat nicht die erwartete Struktur. */
-  INHALT_UNGUELTIG: 'E-CR07',
+  CONTENT_INVALID: 'E-CR07',
   /** Ein übergebener Schlüssel hat die falsche Länge. */
-  SCHLUESSEL_LAENGE: 'E-CR08',
+  KEY_LENGTH: 'E-CR08',
 } as const;
 
-export type KryptoFehlerCodeWert =
-  (typeof KryptoFehlerCode)[keyof typeof KryptoFehlerCode];
+export type CryptoErrorCodeValue =
+  (typeof CryptoErrorCode)[keyof typeof CryptoErrorCode];
 
 /**
  * Fehler mit Code. Die Oberfläche zeigt den Code an, der Text bleibt
  * für Entwickler — er wird nie übersetzt und nie dem Nutzer gezeigt.
  */
 export class CryptoError extends Error {
-  readonly code: KryptoFehlerCodeWert;
+  readonly code: CryptoErrorCodeValue;
 
-  constructor(code: KryptoFehlerCodeWert, hinweis: string) {
-    super(`${code}: ${hinweis}`);
+  constructor(code: CryptoErrorCodeValue, hint: string) {
+    super(`${code}: ${hint}`);
     this.name = 'KryptoFehler';
     this.code = code;
   }
@@ -54,13 +54,13 @@ export class CryptoError extends Error {
  * durchgereicht wird.
  */
 export function assertKeyLength(
-  schluessel: Uint8Array,
-  erwartet: number,
+  key: Uint8Array,
+  expected: number,
 ): void {
-  if (schluessel.length !== erwartet) {
+  if (key.length !== expected) {
     throw new CryptoError(
-      KryptoFehlerCode.SCHLUESSEL_LAENGE,
-      `Schlüssel hat ${schluessel.length} Byte, erwartet werden ${erwartet}.`,
+      CryptoErrorCode.KEY_LENGTH,
+      `Schlüssel hat ${key.length} Byte, erwartet werden ${expected}.`,
     );
   }
 }

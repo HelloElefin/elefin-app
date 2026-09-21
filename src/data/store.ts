@@ -16,7 +16,7 @@
  * das streng genommen unnötig, macht den späteren Umzug aber zu einem
  * Kopiervorgang statt einer Umformung.
  */
-import type { Kategorie } from '@/domain';
+import type { Category } from '@/domain';
 
 /**
  * Ein Eintrag, wie ihn die Ablage nach oben herausgibt: entschlüsselt und
@@ -24,16 +24,16 @@ import type { Kategorie } from '@/domain';
  */
 export type Entry<T> = {
   readonly id: string;
-  readonly kategorie: Kategorie;
-  readonly inhalt: T;
-  readonly angelegtAm: string;
-  readonly geaendertAm: string;
+  readonly category: Category;
+  readonly content: T;
+  readonly createdAt: string;
+  readonly updatedAt: string;
 };
 
 /** Was beim Anlegen übergeben wird. Die ID vergibt die Ablage. */
 export type NewEntry = {
-  readonly kategorie: Kategorie;
-  readonly inhalt: Record<string, unknown>;
+  readonly category: Category;
+  readonly content: Record<string, unknown>;
 };
 
 /**
@@ -44,7 +44,7 @@ export type NewEntry = {
  */
 export type Store = {
   /** Legt einen Eintrag an und gibt seine ID zurück. */
-  eintragAnlegen(eintrag: NewEntry): Promise<string>;
+  createEntry(entry: NewEntry): Promise<string>;
 
   /**
    * Lädt alle Einträge einer Kategorie, entschlüsselt und geprüft.
@@ -52,22 +52,22 @@ export type Store = {
    * muster ist das zod-Muster aus src/domain. Die Ablage kennt die
    * Fachstruktur nicht — sie wendet nur an, was sie bekommt.
    */
-  eintraegeLaden<T extends { schemaVersion: number }>(
-    kategorie: Kategorie,
-    muster: MusterFuer<T>,
+  loadEntries<T extends { schemaVersion: number }>(
+    category: Category,
+    validator: ValidatorFor<T>,
   ): Promise<Entry<T>[]>;
 
   /** Lädt einen einzelnen Eintrag. Wirft E-DB05, wenn es ihn nicht gibt. */
-  eintragLaden<T extends { schemaVersion: number }>(
+  loadEntry<T extends { schemaVersion: number }>(
     id: string,
-    muster: MusterFuer<T>,
+    validator: ValidatorFor<T>,
   ): Promise<Entry<T>>;
 
   /** Ersetzt den Inhalt eines Eintrags. Der Datenschlüssel bleibt derselbe. */
-  eintragAendern(id: string, inhalt: Record<string, unknown>): Promise<void>;
+  updateEntry(id: string, content: Record<string, unknown>): Promise<void>;
 
   /** Löscht einen Eintrag samt aller zugehörigen Verpackungen. */
-  eintragLoeschen(id: string): Promise<void>;
+  deleteEntry(id: string): Promise<void>;
 
   /**
    * Zählt Einträge je Kategorie, ohne zu entschlüsseln.
@@ -75,7 +75,7 @@ export type Store = {
    * Für das Dashboard. Die Kategorie steht im Klartext, deshalb geht das
    * ohne jeden Schlüssel — und ohne dass der Server je einen Inhalt sieht.
    */
-  anzahlJeKategorie(): Promise<Partial<Record<Kategorie, number>>>;
+  countByCategory(): Promise<Partial<Record<Category, number>>>;
 };
 
 /**
@@ -85,8 +85,8 @@ export type Store = {
  * Ablage braucht nur safeParse. So bleibt die Schnittstelle unabhängig
  * davon, mit welchem Werkzeug geprüft wird.
  */
-export type MusterFuer<T> = {
-  safeParse(wert: unknown):
+export type ValidatorFor<T> = {
+  safeParse(value: unknown):
     | { success: true; data: T }
     | { success: false };
 };

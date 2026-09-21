@@ -15,7 +15,7 @@
  */
 
 /** Alle Kategorien, die Elefin kennt — auch die noch nicht ausgelieferten. */
-export const KATEGORIEN = [
+export const CATEGORIES = [
   'funeral_wishes',
   'emergency_contacts',
   'home_access',
@@ -33,7 +33,7 @@ export const KATEGORIEN = [
   'memberships',
 ] as const;
 
-export type Kategorie = (typeof KATEGORIEN)[number];
+export type Category = (typeof CATEGORIES)[number];
 
 /**
  * Kategorien, die in der App tatsächlich sichtbar sind.
@@ -45,14 +45,14 @@ export type Kategorie = (typeof KATEGORIEN)[number];
  * Stand: Wir starten mit einer einzigen Kategorie, damit der komplette Weg
  * einmal durchläuft, bevor er vierzehnmal wiederholt wird.
  */
-export const AKTIVE_KATEGORIEN: readonly Kategorie[] = ['bank_accounts'];
+export const AKTIVE_KATEGORIEN: readonly Category[] = ['bank_accounts'];
 
 /** Prüft, ob ein beliebiger Text eine bekannte Kategorie ist. */
-export function isCategory(wert: string): wert is Kategorie {
-  return (KATEGORIEN as readonly string[]).includes(wert);
+export function isCategory(value: string): value is Category {
+  return (CATEGORIES as readonly string[]).includes(value);
 }
 
 /** Prüft, ob eine Kategorie derzeit ausgeliefert wird. */
-export function istAktiv(kategorie: Kategorie): boolean {
-  return AKTIVE_KATEGORIEN.includes(kategorie);
+export function istAktiv(category: Category): boolean {
+  return AKTIVE_KATEGORIEN.includes(category);
 }

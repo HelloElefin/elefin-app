@@ -15,7 +15,7 @@
  */
 import { z } from 'zod';
 
-export const BankAccountInhalt = z.object({
+export const BankAccountContent = z.object({
   schemaVersion: z.number(),
 
   /** Pflicht: Ohne Bezeichnung ist der Eintrag in einer Liste wertlos. */
@@ -49,4 +49,4 @@ export const BankAccountInhalt = z.object({
   notiz: z.string().max(2000).optional(),
 });
 
-export type BankAccountInhalt = z.infer<typeof BankAccountInhalt>;
+export type BankAccountContent = z.infer<typeof BankAccountContent>;

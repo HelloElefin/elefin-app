@@ -22,37 +22,37 @@ import { randomBytes } from '@noble/hashes/utils.js';
  *
  * Niemals Math.random() für irgendetwas Kryptografisches verwenden.
  */
-export function zufallsBytes(anzahl: number): Uint8Array {
-  return randomBytes(anzahl);
+export function secureRandomBytes(count: number): Uint8Array {
+  return randomBytes(count);
 }
 
 /** Bytes -> base64-Text. Für alles, was in einer Textspalte landet. */
-export function bytesNachText(bytes: Uint8Array): string {
-  let binaer = '';
+export function bytesToText(bytes: Uint8Array): string {
+  let binary = '';
   for (const byte of bytes) {
-    binaer += String.fromCharCode(byte);
+    binary += String.fromCharCode(byte);
   }
-  return btoa(binaer);
+  return btoa(binary);
 }
 
 /** base64-Text -> Bytes. Kehrt bytesNachText um. */
-export function textNachBytes(text: string): Uint8Array {
-  const binaer = atob(text);
-  const bytes = new Uint8Array(binaer.length);
-  for (let i = 0; i < binaer.length; i++) {
+export function textToBytes(text: string): Uint8Array {
+  const binary = atob(text);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
     // charCodeAt liefert immer eine Zahl, weil i innerhalb der Länge liegt.
-    bytes[i] = binaer.charCodeAt(i);
+    bytes[i] = binary.charCodeAt(i);
   }
   return bytes;
 }
 
 /** Text -> Bytes (UTF-8). Für Passwörter und andere Zeichenketten. */
-export function textNachUtf8(text: string): Uint8Array {
+export function textToUtf8(text: string): Uint8Array {
   return new TextEncoder().encode(text);
 }
 
 /** Bytes (UTF-8) -> Text. Kehrt textNachUtf8 um. */
-export function utf8NachText(bytes: Uint8Array): string {
+export function utf8ToText(bytes: Uint8Array): string {
   return new TextDecoder().decode(bytes);
 }
 
@@ -60,15 +60,15 @@ export function utf8NachText(bytes: Uint8Array): string {
  * Hängt mehrere Byte-Folgen aneinander.
  * Wird gebraucht, um Umschläge zusammenzusetzen und wieder zu zerlegen.
  */
-export function concatBytes(...teile: Uint8Array[]): Uint8Array {
-  const gesamt = teile.reduce((summe, teil) => summe + teil.length, 0);
-  const ergebnis = new Uint8Array(gesamt);
+export function concatBytes(...parts: Uint8Array[]): Uint8Array {
+  const total = parts.reduce((sum, part) => sum + part.length, 0);
+  const result = new Uint8Array(total);
   let position = 0;
-  for (const teil of teile) {
-    ergebnis.set(teil, position);
-    position += teil.length;
+  for (const part of parts) {
+    result.set(part, position);
+    position += part.length;
   }
-  return ergebnis;
+  return result;
 }
 
 /**
@@ -84,11 +84,11 @@ export function concatBytes(...teile: Uint8Array[]): Uint8Array {
  */
 export function bytesEqual(a: Uint8Array, b: Uint8Array): boolean {
   if (a.length !== b.length) return false;
-  let unterschied = 0;
+  let diff = 0;
   for (let i = 0; i < a.length; i++) {
     // Das Ausrufezeichen sagt TypeScript: An dieser Stelle existiert der Wert.
     // Das ist hier sicher, weil i kleiner als a.length ist und beide gleich lang sind.
-    unterschied |= a[i]! ^ b[i]!;
+    diff |= a[i]! ^ b[i]!;
   }
-  return unterschied === 0;
+  return diff === 0;
 }

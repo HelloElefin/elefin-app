@@ -10,11 +10,11 @@
  * angefasst werden.
  */
 import type { Validator } from '@/crypto';
-import type { Kategorie } from '@/domain';
+import type { Category } from '@/domain';
 
 import type { Store, Entry, NewEntry } from './store';
-import { lokaleAblage } from './local-store';
-import { hatKonto } from './session';
+import { localStore } from './local-store';
+import { hasAccount } from './session';
 
 /**
  * Wählt die passende Ablage.
@@ -23,49 +23,49 @@ import { hatKonto } from './session';
  * gebaut ist. Die Weiche steht aber schon, damit der Wechsel später eine
  * Zeile ist.
  */
-async function ablage(): Promise<Store> {
-  if (await hatKonto()) {
+async function getStore(): Promise<Store> {
+  if (await hasAccount()) {
     // TODO: serverAblage zurückgeben, sobald ablage-server.ts existiert.
-    return lokaleAblage;
+    return localStore;
   }
-  return lokaleAblage;
+  return localStore;
 }
 
 /** Legt einen Eintrag an und gibt seine Kennung zurück. */
-export async function eintragAnlegen(eintrag: NewEntry): Promise<string> {
-  return (await ablage()).eintragAnlegen(eintrag);
+export async function createEntry(entry: NewEntry): Promise<string> {
+  return (await getStore()).createEntry(entry);
 }
 
 /** Lädt alle Einträge einer Kategorie, entschlüsselt und geprüft. */
-export async function eintraegeLaden<T extends { schemaVersion: number }>(
-  kategorie: Kategorie,
-  muster: Validator<T>,
+export async function loadEntries<T extends { schemaVersion: number }>(
+  category: Category,
+  validator: Validator<T>,
 ): Promise<Entry<T>[]> {
-  return (await ablage()).eintraegeLaden(kategorie, muster);
+  return (await getStore()).loadEntries(category, validator);
 }
 
 /** Lädt einen einzelnen Eintrag. Wirft E-DB05, wenn es ihn nicht gibt. */
-export async function eintragLaden<T extends { schemaVersion: number }>(
+export async function loadEntry<T extends { schemaVersion: number }>(
   id: string,
-  muster: Validator<T>,
+  validator: Validator<T>,
 ): Promise<Entry<T>> {
-  return (await ablage()).eintragLaden(id, muster);
+  return (await getStore()).loadEntry(id, validator);
 }
 
 /** Ersetzt den Inhalt eines Eintrags. */
-export async function eintragAendern(
+export async function updateEntry(
   id: string,
-  inhalt: Record<string, unknown>,
+  content: Record<string, unknown>,
 ): Promise<void> {
-  return (await ablage()).eintragAendern(id, inhalt);
+  return (await getStore()).updateEntry(id, content);
 }
 
 /** Löscht einen Eintrag. */
-export async function eintragLoeschen(id: string): Promise<void> {
-  return (await ablage()).eintragLoeschen(id);
+export async function deleteEntry(id: string): Promise<void> {
+  return (await getStore()).deleteEntry(id);
 }
 
 /** Zählt Einträge je Kategorie, ohne zu entschlüsseln. Für das Dashboard. */
-export async function anzahlJeKategorie(): Promise<Partial<Record<Kategorie, number>>> {
-  return (await ablage()).anzahlJeKategorie();
+export async function countByCategory(): Promise<Partial<Record<Category, number>>> {
+  return (await getStore()).countByCategory();
 }

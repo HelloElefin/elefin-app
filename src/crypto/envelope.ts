@@ -27,29 +27,29 @@ import { hkdf } from '@noble/hashes/hkdf.js';
 import { sha256 } from '@noble/hashes/sha2.js';
 
 import {
-  bytesNachText,
+  bytesToText,
   concatBytes,
-  textNachBytes,
-  textNachUtf8,
-  zufallsBytes,
+  textToBytes,
+  textToUtf8,
+  secureRandomBytes,
 } from './bytes';
-import { CryptoError, KryptoFehlerCode } from './errors';
-import { NONCE_LAENGE, SCHLUESSEL_LAENGE } from './keys';
+import { CryptoError, CryptoErrorCode } from './errors';
+import { NONCE_LENGTH, KEY_LENGTH } from './keys';
 
 /** Aktuelle Umschlag-Version. Bei Verfahrenswechsel erhöhen, nie wiederverwenden. */
-const UMSCHLAG_VERSION = 1;
+const ENVELOPE_VERSION = 1;
 
 /** Länge eines X25519-Schlüssels in Byte. */
-export const X25519_LAENGE = 32;
+export const X25519_LENGTH = 32;
 
 /**
  * Trennt diese Ableitung von jeder anderen Verwendung derselben Verfahren.
  * Ohne diese Kennzeichnung könnte ein Umschlag theoretisch in einem anderen
  * Zusammenhang wiederverwendet werden.
  */
-const UMSCHLAG_KENNUNG = textNachUtf8('elefin/umschlag/v1');
+const ENVELOPE_LABEL = textToUtf8('elefin/umschlag/v1');
 
-export type Schluesselpaar = {
+export type KeyPair = {
   readonly privat: Uint8Array;
   readonly oeffentlich: Uint8Array;
 };
@@ -61,9 +61,9 @@ export type Schluesselpaar = {
  * für diese Person verpacken können. Der private Teil wird nur verpackt
  * gespeichert, geschützt durch den Generalschlüssel.
  */
-export function schluesselpaarErzeugen(): Schluesselpaar {
-  const paar = x25519.keygen();
-  return { privat: paar.secretKey, oeffentlich: paar.publicKey };
+export function generateKeyPair(): KeyPair {
+  const pair = x25519.keygen();
+  return { privat: pair.secretKey, oeffentlich: pair.publicKey };
 }
 
 /**
@@ -73,18 +73,18 @@ export function schluesselpaarErzeugen(): Schluesselpaar {
  * genau dieses Paar aus Absender-Wegwerfschlüssel und Empfänger — er lässt
  * sich nicht für einen anderen Empfänger umdeuten.
  */
-function verpackungsSchluessel(
-  gemeinsamesGeheimnis: Uint8Array,
-  wegwerfOeffentlich: Uint8Array,
-  empfaengerOeffentlich: Uint8Array,
+function deriveWrappingKey(
+  sharedSecret: Uint8Array,
+  ephemeralPublic: Uint8Array,
+  recipientPublic: Uint8Array,
 ): Uint8Array {
   return hkdf(
     sha256,
-    gemeinsamesGeheimnis,
+    sharedSecret,
     // Kein Salt nötig: Das gemeinsame Geheimnis ist bereits zufällig.
     undefined,
-    concatBytes(UMSCHLAG_KENNUNG, wegwerfOeffentlich, empfaengerOeffentlich),
-    SCHLUESSEL_LAENGE,
+    concatBytes(ENVELOPE_LABEL, ephemeralPublic, recipientPublic),
+    KEY_LENGTH,
   );
 }
 
@@ -92,30 +92,30 @@ function verpackungsSchluessel(
  * Verpackt einen Schlüssel für den Besitzer des angegebenen öffentlichen
  * Schlüssels. Ergebnis ist base64-Text, fertig zum Speichern.
  */
-export function umschlagVerpacken(
-  inhalt: Uint8Array,
-  empfaengerOeffentlich: Uint8Array,
+export function sealEnvelope(
+  content: Uint8Array,
+  recipientPublic: Uint8Array,
 ): string {
-  const wegwerf = x25519.keygen();
-  const gemeinsam = x25519.getSharedSecret(
-    wegwerf.secretKey,
-    empfaengerOeffentlich,
+  const ephemeral = x25519.keygen();
+  const shared = x25519.getSharedSecret(
+    ephemeral.secretKey,
+    recipientPublic,
   );
-  const schluessel = verpackungsSchluessel(
-    gemeinsam,
-    wegwerf.publicKey,
-    empfaengerOeffentlich,
+  const key = deriveWrappingKey(
+    shared,
+    ephemeral.publicKey,
+    recipientPublic,
   );
 
-  const nonce = zufallsBytes(NONCE_LAENGE);
-  const chiffre = xchacha20poly1305(schluessel, nonce).encrypt(inhalt);
+  const nonce = secureRandomBytes(NONCE_LENGTH);
+  const ciphertext = xchacha20poly1305(key, nonce).encrypt(content);
 
-  return bytesNachText(
+  return bytesToText(
     concatBytes(
-      new Uint8Array([UMSCHLAG_VERSION]),
-      wegwerf.publicKey,
+      new Uint8Array([ENVELOPE_VERSION]),
+      ephemeral.publicKey,
       nonce,
-      chiffre,
+      ciphertext,
     ),
   );
 }
@@ -126,45 +126,45 @@ export function umschlagVerpacken(
  * Wirft E-CR02 bei unbekannter Version, E-CR03 bei zu kurzem Umschlag und
  * E-CR01, wenn der private Schlüssel nicht passt.
  */
-export function umschlagAuspacken(
-  umschlagText: string,
-  meinPrivat: Uint8Array,
+export function openEnvelope(
+  envelopeText: string,
+  myPrivate: Uint8Array,
 ): Uint8Array {
-  const block = textNachBytes(umschlagText);
+  const block = textToBytes(envelopeText);
 
-  const kopfLaenge = 1 + X25519_LAENGE + NONCE_LAENGE;
-  if (block.length <= kopfLaenge) {
+  const headerLength = 1 + X25519_LENGTH + NONCE_LENGTH;
+  if (block.length <= headerLength) {
     throw new CryptoError(
-      KryptoFehlerCode.UMSCHLAG_BESCHAEDIGT,
-      `Umschlag ist ${block.length} Byte lang, mindestens ${kopfLaenge + 1} werden erwartet.`,
+      CryptoErrorCode.ENVELOPE_CORRUPTED,
+      `Umschlag ist ${block.length} Byte lang, mindestens ${headerLength + 1} werden erwartet.`,
     );
   }
 
   const version = block[0];
-  if (version !== UMSCHLAG_VERSION) {
+  if (version !== ENVELOPE_VERSION) {
     throw new CryptoError(
-      KryptoFehlerCode.UNBEKANNTE_UMSCHLAG_VERSION,
-      `Umschlag hat Version ${String(version)}, diese App kennt nur ${UMSCHLAG_VERSION}.`,
+      CryptoErrorCode.UNKNOWN_ENVELOPE_VERSION,
+      `Umschlag hat Version ${String(version)}, diese App kennt nur ${ENVELOPE_VERSION}.`,
     );
   }
 
-  const wegwerfOeffentlich = block.slice(1, 1 + X25519_LAENGE);
-  const nonce = block.slice(1 + X25519_LAENGE, kopfLaenge);
-  const chiffre = block.slice(kopfLaenge);
+  const ephemeralPublic = block.slice(1, 1 + X25519_LENGTH);
+  const nonce = block.slice(1 + X25519_LENGTH, headerLength);
+  const ciphertext = block.slice(headerLength);
 
-  const meinOeffentlich = x25519.getPublicKey(meinPrivat);
-  const gemeinsam = x25519.getSharedSecret(meinPrivat, wegwerfOeffentlich);
-  const schluessel = verpackungsSchluessel(
-    gemeinsam,
-    wegwerfOeffentlich,
-    meinOeffentlich,
+  const myPublic = x25519.getPublicKey(myPrivate);
+  const shared = x25519.getSharedSecret(myPrivate, ephemeralPublic);
+  const key = deriveWrappingKey(
+    shared,
+    ephemeralPublic,
+    myPublic,
   );
 
   try {
-    return xchacha20poly1305(schluessel, nonce).decrypt(chiffre);
+    return xchacha20poly1305(key, nonce).decrypt(ciphertext);
   } catch {
     throw new CryptoError(
-      KryptoFehlerCode.ENTSCHLUESSELN_FEHLGESCHLAGEN,
+      CryptoErrorCode.DECRYPTION_FAILED,
       'Umschlag konnte mit diesem privaten Schlüssel nicht geöffnet werden.',
     );
   }

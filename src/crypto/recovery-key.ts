@@ -18,48 +18,48 @@
  */
 import { sha256 } from '@noble/hashes/sha2.js';
 
-import { textNachUtf8, zufallsBytes } from './bytes';
-import { CryptoError, KryptoFehlerCode } from './errors';
+import { textToUtf8, secureRandomBytes } from './bytes';
+import { CryptoError, CryptoErrorCode } from './errors';
 
 /**
  * 32 Zeichen, Crockfords Base32 ohne die verwechselbaren.
  * Diese Reihenfolge darf NIE geändert werden — sonst lassen sich bereits
  * ausgedruckte Schlüssel nicht mehr einlesen.
  */
-const ZEICHEN = '23456789ABCDEFGHJKMNPQRSTVWXYZ*+';
+const ALPHABET = '23456789ABCDEFGHJKMNPQRSTVWXYZ*+';
 
 /**
  * Verwechselbare Eingaben und das Zeichen, das gemeint war.
  * Wer von einem Ausdruck abtippt, verliest sich hier am häufigsten.
  */
-const VERWECHSLUNGEN: Record<string, string> = {
+const CONFUSABLES: Record<string, string> = {
   O: '0',
   I: '1',
   L: '1',
 };
 
 /** Zeichen, die es im Vorrat nicht gibt und die daher nie gemeint sein können. */
-const NICHT_IM_VORRAT = new Set(['0', '1']);
+const NOT_IN_ALPHABET = new Set(['0', '1']);
 
 /** Gesamtlänge ohne Bindestriche. */
-const LAENGE = 28;
+const LENGTH = 28;
 
 /** Zeichen je Gruppe in der Anzeige. */
-const GRUPPE = 4;
+const GROUP_SIZE = 4;
 
 /**
  * Erzeugt einen neuen Sicherheitsschlüssel in der Anzeigeform mit
  * Bindestrichen. Genau so wird er dem Nutzer gezeigt und ausgedruckt.
  */
-export function sicherheitsschluesselErzeugen(): string {
-  const zufall = zufallsBytes(LAENGE - 1);
-  let roh = '';
-  for (const byte of zufall) {
+export function generateRecoveryKey(): string {
+  const random = secureRandomBytes(LENGTH - 1);
+  let raw = '';
+  for (const byte of random) {
     // Rest bei Division durch 32 wählt ein Zeichen aus dem Vorrat.
     // 256 ist durch 32 teilbar, deshalb ist jedes Zeichen gleich wahrscheinlich.
-    roh += ZEICHEN[byte % ZEICHEN.length];
+    raw += ALPHABET[byte % ALPHABET.length];
   }
-  return formatieren(roh + pruefzeichen(roh));
+  return formatRecoveryKey(raw + checkCharacter(raw));
 }
 
 /**
@@ -73,18 +73,18 @@ export function sicherheitsschluesselErzeugen(): string {
  * Das Prüfzeichen schützt gegen Tippfehler, nicht gegen Angreifer — es ist
  * aus dem Rest berechenbar und trägt nichts zur Sicherheit bei.
  */
-function pruefzeichen(roh: string): string {
-  const hash = sha256(textNachUtf8(roh));
-  return ZEICHEN[hash[0]! % ZEICHEN.length]!;
+function checkCharacter(raw: string): string {
+  const hash = sha256(textToUtf8(raw));
+  return ALPHABET[hash[0]! % ALPHABET.length]!;
 }
 
 /** Setzt die Bindestriche für die Anzeige. */
-function formatieren(roh: string): string {
-  const gruppen: string[] = [];
-  for (let i = 0; i < roh.length; i += GRUPPE) {
-    gruppen.push(roh.slice(i, i + GRUPPE));
+function formatRecoveryKey(raw: string): string {
+  const groups: string[] = [];
+  for (let i = 0; i < raw.length; i += GROUP_SIZE) {
+    groups.push(raw.slice(i, i + GROUP_SIZE));
   }
-  return gruppen.join('-');
+  return groups.join('-');
 }
 
 /**
@@ -99,16 +99,16 @@ function formatieren(roh: string): string {
  * es aber ebenfalls nicht gibt. Beides fällt weg, und die Längenprüfung
  * weiter unten meldet dann eine zu kurze Eingabe.
  */
-function bereinigen(eingabe: string): string {
-  const ohneTrenner = eingabe.toUpperCase().replace(/[\s-]/g, '');
+function normalizeRecoveryKey(input: string): string {
+  const withoutSeparators = input.toUpperCase().replace(/[\s-]/g, '');
 
-  let bereinigt = '';
-  for (const zeichen of ohneTrenner) {
-    const gemeint = VERWECHSLUNGEN[zeichen] ?? zeichen;
-    if (NICHT_IM_VORRAT.has(gemeint)) continue;
-    bereinigt += gemeint;
+  let cleaned = '';
+  for (const char of withoutSeparators) {
+    const intended = CONFUSABLES[char] ?? char;
+    if (NOT_IN_ALPHABET.has(intended)) continue;
+    cleaned += intended;
   }
-  return bereinigt;
+  return cleaned;
 }
 
 /**
@@ -119,34 +119,34 @@ function bereinigen(eingabe: string): string {
  * Oberfläche sollte darauf mit "Bitte nochmal prüfen" reagieren, nicht mit
  * "Schlüssel ungültig".
  */
-export function sicherheitsschluesselPruefen(eingabe: string): string {
-  const roh = bereinigen(eingabe);
+export function validateRecoveryKey(input: string): string {
+  const raw = normalizeRecoveryKey(input);
 
-  if (roh.length !== LAENGE) {
+  if (raw.length !== LENGTH) {
     throw new CryptoError(
-      KryptoFehlerCode.SICHERHEITSSCHLUESSEL_FORM,
-      `Eingabe hat ${roh.length} Zeichen, erwartet werden ${LAENGE}.`,
+      CryptoErrorCode.RECOVERY_KEY_FORMAT,
+      `Eingabe hat ${raw.length} Zeichen, erwartet werden ${LENGTH}.`,
     );
   }
 
-  for (const zeichen of roh) {
-    if (!ZEICHEN.includes(zeichen)) {
+  for (const char of raw) {
+    if (!ALPHABET.includes(char)) {
       throw new CryptoError(
-        KryptoFehlerCode.SICHERHEITSSCHLUESSEL_FORM,
+        CryptoErrorCode.RECOVERY_KEY_FORMAT,
         'Eingabe enthält ein Zeichen, das nicht zum Vorrat gehört.',
       );
     }
   }
 
-  const inhalt = roh.slice(0, LAENGE - 1);
-  if (roh[LAENGE - 1] !== pruefzeichen(inhalt)) {
+  const body = raw.slice(0, LENGTH - 1);
+  if (raw[LENGTH - 1] !== checkCharacter(body)) {
     throw new CryptoError(
-      KryptoFehlerCode.SICHERHEITSSCHLUESSEL_PRUEFZIFFER,
+      CryptoErrorCode.RECOVERY_KEY_CHECKSUM,
       'Prüfzeichen stimmt nicht — vermutlich ein Tippfehler.',
     );
   }
 
-  return roh;
+  return raw;
 }
 
 /**
@@ -159,6 +159,6 @@ export function sicherheitsschluesselPruefen(eingabe: string): string {
  * von Menschen gewählter Passwörter. Ein einfacher Hash genügt und spart
  * dem Nutzer eine Sekunde Wartezeit.
  */
-export function sicherheitsschluesselAbleiten(geprueft: string): Uint8Array {
-  return sha256(textNachUtf8('elefin/sicherheitsschluessel/v1' + geprueft));
+export function deriveFromRecoveryKey(checked: string): Uint8Array {
+  return sha256(textToUtf8('elefin/sicherheitsschluessel/v1' + checked));
 }

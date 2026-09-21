@@ -27,15 +27,15 @@
  * ersetzbar.
  */
 export type Validator<T> = {
-  safeParse(wert: unknown): { success: true; data: T } | { success: false };
+  safeParse(value: unknown): { success: true; data: T } | { success: false };
 };
 
-import { textNachUtf8, utf8NachText } from './bytes';
-import { CryptoError, KryptoFehlerCode } from './errors';
+import { textToUtf8, utf8ToText } from './bytes';
+import { CryptoError, CryptoErrorCode } from './errors';
 import {
-  symEntschluesseln,
-  symVerschluesseln,
-  type VerpackterSchluessel,
+  symDecrypt,
+  symEncrypt,
+  type WrappedKey,
 } from './keys';
 
 /**
@@ -44,13 +44,13 @@ import {
  * Erhöhen, sobald sich die Struktur eines Inhalts ändert. Alte Datensätze
  * behalten ihre alte Nummer, bis das Gerät sie migriert hat.
  */
-export const AKTUELLE_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 1;
 
 /** Schema-Versionen, die diese App-Fassung lesen kann. */
-const LESBARE_SCHEMA_VERSIONEN = new Set([1]);
+const READABLE_SCHEMA_VERSIONS = new Set([1]);
 
 /** Jeder verschlüsselte Inhalt hat mindestens dieses Feld. */
-export type MitSchemaVersion = {
+export type WithSchemaVersion = {
   readonly schemaVersion: number;
 };
 
@@ -61,19 +61,19 @@ export type MitSchemaVersion = {
  * unverschlüsselt in der Datenbank. Der Nutzen liegt allein darin, dass das
  * Chiffrat an diese Zeile gebunden ist.
  */
-export function inhaltVerschluesseln(
-  datenschluessel: Uint8Array,
-  eintragId: string,
-  inhalt: Record<string, unknown>,
-): VerpackterSchluessel {
-  const mitVersion = {
-    ...inhalt,
-    schemaVersion: AKTUELLE_SCHEMA_VERSION,
+export function encryptContent(
+  dataKey: Uint8Array,
+  entryId: string,
+  content: Record<string, unknown>,
+): WrappedKey {
+  const withVersion = {
+    ...content,
+    schemaVersion: CURRENT_SCHEMA_VERSION,
   };
-  return symVerschluesseln(
-    datenschluessel,
-    textNachUtf8(JSON.stringify(mitVersion)),
-    textNachUtf8(eintragId),
+  return symEncrypt(
+    dataKey,
+    textToUtf8(JSON.stringify(withVersion)),
+    textToUtf8(entryId),
   );
 }
 
@@ -90,24 +90,24 @@ export function inhaltVerschluesseln(
  * E-CR06 bei unbekannter Schema-Version,
  * E-CR07 wenn die Struktur nicht zum Muster passt.
  */
-export function inhaltEntschluesseln<T extends MitSchemaVersion>(
-  datenschluessel: Uint8Array,
-  eintragId: string,
-  verpackt: VerpackterSchluessel,
-  muster: Validator<T>,
+export function decryptContent<T extends WithSchemaVersion>(
+  dataKey: Uint8Array,
+  entryId: string,
+  wrapped: WrappedKey,
+  validator: Validator<T>,
 ): T {
-  const bytes = symEntschluesseln(
-    datenschluessel,
-    verpackt,
-    textNachUtf8(eintragId),
+  const bytes = symDecrypt(
+    dataKey,
+    wrapped,
+    textToUtf8(entryId),
   );
 
-  let roh: unknown;
+  let raw: unknown;
   try {
-    roh = JSON.parse(utf8NachText(bytes));
+    raw = JSON.parse(utf8ToText(bytes));
   } catch {
     throw new CryptoError(
-      KryptoFehlerCode.INHALT_UNGUELTIG,
+      CryptoErrorCode.CONTENT_INVALID,
       'Entschlüsselter Inhalt ist kein gültiges JSON.',
     );
   }
@@ -115,21 +115,21 @@ export function inhaltEntschluesseln<T extends MitSchemaVersion>(
   // Erst die Version prüfen: Bei einem Datensatz aus einer neueren
   // App-Fassung wäre die Musterprüfung irreführend — nicht die Daten sind
   // kaputt, die App ist zu alt.
-  const version = (roh as MitSchemaVersion | null)?.schemaVersion;
-  if (typeof version !== 'number' || !LESBARE_SCHEMA_VERSIONEN.has(version)) {
+  const version = (raw as WithSchemaVersion | null)?.schemaVersion;
+  if (typeof version !== 'number' || !READABLE_SCHEMA_VERSIONS.has(version)) {
     throw new CryptoError(
-      KryptoFehlerCode.UNBEKANNTE_SCHEMA_VERSION,
-      `Datensatz hat Schema-Version ${String(version)}, lesbar sind ${[...LESBARE_SCHEMA_VERSIONEN].join(', ')}.`,
+      CryptoErrorCode.UNKNOWN_SCHEMA_VERSION,
+      `Datensatz hat Schema-Version ${String(version)}, lesbar sind ${[...READABLE_SCHEMA_VERSIONS].join(', ')}.`,
     );
   }
 
-  const ergebnis = muster.safeParse(roh);
-  if (!ergebnis.success) {
+  const result = validator.safeParse(raw);
+  if (!result.success) {
     throw new CryptoError(
-      KryptoFehlerCode.INHALT_UNGUELTIG,
+      CryptoErrorCode.CONTENT_INVALID,
       'Entschlüsselter Inhalt passt nicht zum erwarteten Muster.',
     );
   }
 
-  return ergebnis.data;
+  return result.data;
 }

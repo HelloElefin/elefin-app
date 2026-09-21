@@ -24,30 +24,30 @@
  */
 import * as SecureStore from 'expo-secure-store';
 
-import { bytesNachText, textNachBytes, zufallsBytes } from '@/crypto';
+import { bytesToText, textToBytes, secureRandomBytes } from '@/crypto';
 
-import { DataError, DatenFehlerCode } from './errors';
+import { DataError, DataErrorCode } from './errors';
 
-const GERAETESCHLUESSEL = 'elefin.geraeteschluessel';
-const GENERALSCHLUESSEL = 'elefin.generalschluessel';
-const PRIVATER_SCHLUESSEL = 'elefin.privatschluessel';
-const NUTZER_ID = 'elefin.nutzerid';
+const DEVICE_KEY = 'elefin.geraeteschluessel';
+const MASTER_KEY = 'elefin.generalschluessel';
+const PRIVATE_KEY = 'elefin.privatschluessel';
+const USER_ID = 'elefin.nutzerid';
 
 /** Der lokale Zustand: kein Konto, nur ein Geräteschlüssel. */
-export type LokaleSitzung = {
-  readonly art: 'lokal';
-  readonly geraeteschluessel: Uint8Array;
+export type LocalSession = {
+  readonly kind: 'lokal';
+  readonly deviceKey: Uint8Array;
 };
 
 /** Der angemeldete Zustand. */
-export type KontoSitzung = {
-  readonly art: 'konto';
-  readonly nutzerId: string;
-  readonly generalschluessel: Uint8Array;
-  readonly privatSchluessel: Uint8Array;
+export type AccountSession = {
+  readonly kind: 'konto';
+  readonly userId: string;
+  readonly masterKey: Uint8Array;
+  readonly privateKey: Uint8Array;
 };
 
-export type Sitzung = LokaleSitzung | KontoSitzung;
+export type AppSession = LocalSession | AccountSession;
 
 /**
  * Holt den Geräteschlüssel und legt ihn beim ersten Aufruf an.
@@ -55,29 +55,29 @@ export type Sitzung = LokaleSitzung | KontoSitzung;
  * Wird beim allerersten App-Start aufgerufen, noch vor jedem Onboarding.
  * Ab diesem Moment kann die App lokal verschlüsselt speichern.
  */
-export async function geraeteschluesselHolen(): Promise<Uint8Array> {
-  const vorhanden = await SecureStore.getItemAsync(GERAETESCHLUESSEL);
-  if (vorhanden !== null) {
-    return textNachBytes(vorhanden);
+export async function getDeviceKey(): Promise<Uint8Array> {
+  const existing = await SecureStore.getItemAsync(DEVICE_KEY);
+  if (existing !== null) {
+    return textToBytes(existing);
   }
 
-  const neu = zufallsBytes(32);
-  await SecureStore.setItemAsync(GERAETESCHLUESSEL, bytesNachText(neu));
-  return neu;
+  const created = secureRandomBytes(32);
+  await SecureStore.setItemAsync(DEVICE_KEY, bytesToText(created));
+  return created;
 }
 
 /** Legt die Kontodaten ab. Nach jedem erfolgreichen Entsperren. */
-export async function kontoSitzungSpeichern(
-  sitzung: Omit<KontoSitzung, 'art'>,
+export async function saveAccountSession(
+  session: Omit<AccountSession, 'art'>,
 ): Promise<void> {
-  await SecureStore.setItemAsync(NUTZER_ID, sitzung.nutzerId);
+  await SecureStore.setItemAsync(USER_ID, session.userId);
   await SecureStore.setItemAsync(
-    GENERALSCHLUESSEL,
-    bytesNachText(sitzung.generalschluessel),
+    MASTER_KEY,
+    bytesToText(session.masterKey),
   );
   await SecureStore.setItemAsync(
-    PRIVATER_SCHLUESSEL,
-    bytesNachText(sitzung.privatSchluessel),
+    PRIVATE_KEY,
+    bytesToText(session.privateKey),
   );
 }
 
@@ -88,23 +88,23 @@ export async function kontoSitzungSpeichern(
  * Geräteschlüssel wird dabei bei Bedarf angelegt. Diese Funktion gibt also
  * immer eine Sitzung zurück, nie null.
  */
-export async function sitzungLaden(): Promise<Sitzung> {
-  const nutzerId = await SecureStore.getItemAsync(NUTZER_ID);
-  const general = await SecureStore.getItemAsync(GENERALSCHLUESSEL);
-  const privat = await SecureStore.getItemAsync(PRIVATER_SCHLUESSEL);
+export async function loadSession(): Promise<AppSession> {
+  const userId = await SecureStore.getItemAsync(USER_ID);
+  const masterKey = await SecureStore.getItemAsync(MASTER_KEY);
+  const privateKey = await SecureStore.getItemAsync(PRIVATE_KEY);
 
-  if (nutzerId !== null && general !== null && privat !== null) {
+  if (userId !== null && masterKey !== null && privateKey !== null) {
     return {
-      art: 'konto',
-      nutzerId,
-      generalschluessel: textNachBytes(general),
-      privatSchluessel: textNachBytes(privat),
+      kind: 'konto',
+      userId: userId,
+      masterKey: textToBytes(masterKey),
+      privateKey: textToBytes(privateKey),
     };
   }
 
   return {
-    art: 'lokal',
-    geraeteschluessel: await geraeteschluesselHolen(),
+    kind: 'lokal',
+    deviceKey: await getDeviceKey(),
   };
 }
 
@@ -116,10 +116,10 @@ export async function sitzungLaden(): Promise<Sitzung> {
  * dem, was sie hier bekommt.
  */
 export async function getWrappingKey(): Promise<Uint8Array> {
-  const sitzung = await sitzungLaden();
-  return sitzung.art === 'konto'
-    ? sitzung.generalschluessel
-    : sitzung.geraeteschluessel;
+  const session = await loadSession();
+  return session.kind === 'konto'
+    ? session.masterKey
+    : session.deviceKey;
 }
 
 /**
@@ -127,20 +127,20 @@ export async function getWrappingKey(): Promise<Uint8Array> {
  * vorliegt. Für alles, was ohne Konto nicht geht: Freigaben, Umschläge,
  * Serverzugriff.
  */
-export async function kontoSitzungFordern(): Promise<KontoSitzung> {
-  const sitzung = await sitzungLaden();
-  if (sitzung.art !== 'konto') {
+export async function requireAccountSession(): Promise<AccountSession> {
+  const session = await loadSession();
+  if (session.kind !== 'konto') {
     throw new DataError(
-      DatenFehlerCode.NICHT_ANGEMELDET,
+      DataErrorCode.NOT_SIGNED_IN,
       'Dieser Vorgang benötigt ein Konto.',
     );
   }
-  return sitzung;
+  return session;
 }
 
 /** Ob ein Konto eingerichtet und entsperrt ist. */
-export async function hatKonto(): Promise<boolean> {
-  return (await SecureStore.getItemAsync(GENERALSCHLUESSEL)) !== null;
+export async function hasAccount(): Promise<boolean> {
+  return (await SecureStore.getItemAsync(MASTER_KEY)) !== null;
 }
 
 /**
@@ -150,9 +150,9 @@ export async function hatKonto(): Promise<boolean> {
  * Abmelden ist nicht dasselbe wie Alles-Löschen.
  */
 export async function signOut(): Promise<void> {
-  await SecureStore.deleteItemAsync(NUTZER_ID);
-  await SecureStore.deleteItemAsync(GENERALSCHLUESSEL);
-  await SecureStore.deleteItemAsync(PRIVATER_SCHLUESSEL);
+  await SecureStore.deleteItemAsync(USER_ID);
+  await SecureStore.deleteItemAsync(MASTER_KEY);
+  await SecureStore.deleteItemAsync(PRIVATE_KEY);
 }
 
 /**
@@ -163,5 +163,5 @@ export async function signOut(): Promise<void> {
  */
 export async function deleteAll(): Promise<void> {
   await signOut();
-  await SecureStore.deleteItemAsync(GERAETESCHLUESSEL);
+  await SecureStore.deleteItemAsync(DEVICE_KEY);
 }

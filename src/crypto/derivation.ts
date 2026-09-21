@@ -14,7 +14,7 @@
  */
 import { scrypt } from 'react-native-quick-crypto';
 
-import { SCHLUESSEL_LAENGE, type ScryptKosten } from './keys';
+import { KEY_LENGTH, type ScryptCost } from './keys';
 
 /**
  * Leitet aus Passwort und Salt einen 32-Byte-Schlüssel ab.
@@ -28,33 +28,33 @@ import { SCHLUESSEL_LAENGE, type ScryptKosten } from './keys';
  * nicht ein, weil die Rechnung auf einem eigenen Thread läuft — trotzdem
  * gehört an jede Aufrufstelle eine Fortschrittsanzeige.
  */
-export function passwortSchluesselAbleiten(
-  passwort: string,
+export function derivePasswordKey(
+  password: string,
   salt: Uint8Array,
-  kosten: ScryptKosten,
+  cost: ScryptCost,
 ): Promise<Uint8Array> {
-  return new Promise((aufloesen, ablehnen) => {
+  return new Promise((resolve, reject) => {
     scrypt(
-      passwort,
+      password,
       salt,
-      SCHLUESSEL_LAENGE,
+      KEY_LENGTH,
       {
-        N: kosten.N,
-        r: kosten.r,
-        p: kosten.p,
+        N: cost.N,
+        r: cost.r,
+        p: cost.p,
         // Muss über dem tatsächlichen Bedarf liegen, sonst bricht scrypt ab.
         maxmem: 512 * 1024 * 1024,
       },
-      (fehler, ergebnis) => {
-        if (fehler) {
-          ablehnen(fehler);
+      (error, result) => {
+        if (error) {
+          reject(error);
           return;
         }
-        if (!ergebnis) {
-          ablehnen(new Error('scrypt lieferte kein Ergebnis.'));
+        if (!result) {
+          reject(new Error('scrypt lieferte kein Ergebnis.'));
           return;
         }
-        aufloesen(new Uint8Array(ergebnis));
+        resolve(new Uint8Array(result));
       },
     );
   });

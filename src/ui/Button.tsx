@@ -9,27 +9,27 @@ import { Pressable, Text } from 'react-native';
 import { colors, fontSize, radius, spacing } from '@/design';
 
 type Props = {
-  beschriftung: string;
-  aufDruck: () => void;
-  art?: 'primary' | 'quiet';
-  gesperrt?: boolean;
+  label: string;
+  onPress: () => void;
+  variant?: 'primary' | 'quiet';
+  disabled?: boolean;
 };
 
 export function Button({
-  beschriftung,
-  aufDruck,
-  art = 'primary',
-  gesperrt = false,
+  label,
+  onPress,
+  variant = 'primary',
+  disabled = false,
 }: Props) {
-  const gefuellt = art === 'primary';
+  const filled = variant === 'primary';
 
   return (
     <Pressable
-      onPress={aufDruck}
-      disabled={gesperrt}
+      onPress={onPress}
+      disabled={disabled}
       style={({ pressed }) => ({
-        backgroundColor: gefuellt
-          ? gesperrt
+        backgroundColor: filled
+          ? disabled
             ? colors.surfaceMuted
             : pressed
               ? colors.accentPressed
@@ -45,14 +45,14 @@ export function Button({
       <Text
         style={{
           fontSize: fontSize.md,
-          color: gefuellt
-            ? gesperrt
+          color: filled
+            ? disabled
               ? colors.textSecondary
               : colors.textOnAccent
             : colors.textSecondary,
         }}
       >
-        {beschriftung}
+        {label}
       </Text>
     </Pressable>
   );

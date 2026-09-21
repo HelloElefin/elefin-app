@@ -10,37 +10,37 @@
  */
 
 /** Fehlercodes der Datenschicht. Bereich DB. */
-export const DatenFehlerCode = {
+export const DataErrorCode = {
   /** Die .env fehlt oder ist unvollständig. */
-  KONFIGURATION_FEHLT: 'E-DB01',
+  CONFIG_MISSING: 'E-DB01',
   /** Keine Verbindung zum Server. */
-  NETZWERK: 'E-DB02',
+  NETWORK: 'E-DB02',
   /** Niemand angemeldet, oder die Sitzung ist abgelaufen. */
-  NICHT_ANGEMELDET: 'E-DB03',
+  NOT_SIGNED_IN: 'E-DB03',
   /** Zugriff verweigert — die Zeile gehört jemand anderem. */
-  KEIN_ZUGRIFF: 'E-DB04',
+  ACCESS_DENIED: 'E-DB04',
   /** Der gesuchte Datensatz existiert nicht. */
-  NICHT_GEFUNDEN: 'E-DB05',
+  NOT_FOUND: 'E-DB05',
   /** Anmeldung fehlgeschlagen: E-Mail oder Passwort falsch. */
-  ANMELDUNG_FEHLGESCHLAGEN: 'E-DB06',
+  SIGN_IN_FAILED: 'E-DB06',
   /** Diese E-Mail-Adresse ist bereits vergeben. */
-  KONTO_EXISTIERT: 'E-DB07',
+  ACCOUNT_EXISTS: 'E-DB07',
   /** Das Gerät hat keine gespeicherte Sitzung. */
-  KEINE_SITZUNG: 'E-DB08',
+  NO_SESSION: 'E-DB08',
   /** Der Empfänger hat noch kein Konto — es gibt keinen Schlüssel für ihn. */
-  EMPFAENGER_OHNE_KONTO: 'E-DB09',
+  RECIPIENT_WITHOUT_ACCOUNT: 'E-DB09',
   /** Etwas ist schiefgegangen, das wir nicht zuordnen können. */
-  UNBEKANNT: 'E-DB99',
+  UNKNOWN: 'E-DB99',
 } as const;
 
-export type DatenFehlerCodeWert =
-  (typeof DatenFehlerCode)[keyof typeof DatenFehlerCode];
+export type DataErrorCodeValue =
+  (typeof DataErrorCode)[keyof typeof DataErrorCode];
 
 export class DataError extends Error {
-  readonly code: DatenFehlerCodeWert;
+  readonly code: DataErrorCodeValue;
 
-  constructor(code: DatenFehlerCodeWert, hinweis: string) {
-    super(`${code}: ${hinweis}`);
+  constructor(code: DataErrorCodeValue, hint: string) {
+    super(`${code}: ${hint}`);
     this.name = 'DatenFehler';
     this.code = code;
   }
@@ -53,27 +53,27 @@ export class DataError extends Error {
  * Spaltennamen und Werte enthalten, und was nicht mitgeschleppt wird, kann
  * auch nicht versehentlich protokolliert werden.
  */
-export function toDataError(fehler: { code?: string; message?: string }): DataError {
+export function toDataError(error: { code?: string; message?: string }): DataError {
   // Postgres-Fehlercodes, soweit für uns aussagekräftig.
-  switch (fehler.code) {
+  switch (error.code) {
     case '42501': // insufficient_privilege — RLS hat abgelehnt
       return new DataError(
-        DatenFehlerCode.KEIN_ZUGRIFF,
+        DataErrorCode.ACCESS_DENIED,
         'Zugriff durch Row Level Security verweigert.',
       );
     case '23505': // unique_violation
       return new DataError(
-        DatenFehlerCode.KONTO_EXISTIERT,
+        DataErrorCode.ACCOUNT_EXISTS,
         'Ein Datensatz mit diesem eindeutigen Merkmal existiert bereits.',
       );
     case 'PGRST116': // kein Ergebnis bei .single()
       return new DataError(
-        DatenFehlerCode.NICHT_GEFUNDEN,
+        DataErrorCode.NOT_FOUND,
         'Kein passender Datensatz gefunden.',
       );
     default:
       return new DataError(
-        DatenFehlerCode.UNBEKANNT,
+        DataErrorCode.UNKNOWN,
         'Unerwarteter Datenbankfehler.',
       );
   }

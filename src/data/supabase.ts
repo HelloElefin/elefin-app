@@ -11,7 +11,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 
-import { DataError, DatenFehlerCode } from './errors';
+import { DataError, DataErrorCode } from './errors';
 
 const URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
@@ -28,14 +28,14 @@ export const ENVIRONMENT = process.env.EXPO_PUBLIC_UMGEBUNG ?? 'unbekannt';
  * ACHTUNG: Das ist NUR die Anmeldesitzung, nicht der Generalschlüssel. Der
  * wird getrennt verwaltet, in sitzung.ts.
  */
-const SicherAblegen = {
-  getItem: (schluessel: string) => SecureStore.getItemAsync(schluessel),
-  setItem: (schluessel: string, wert: string) =>
-    SecureStore.setItemAsync(schluessel, wert),
-  removeItem: (schluessel: string) => SecureStore.deleteItemAsync(schluessel),
+const SecureStoreAdapter = {
+  getItem: (key: string) => SecureStore.getItemAsync(key),
+  setItem: (key: string, value: string) =>
+    SecureStore.setItemAsync(key, value),
+  removeItem: (key: string) => SecureStore.deleteItemAsync(key),
 };
 
-let klient: SupabaseClient | null = null;
+let client: SupabaseClient | null = null;
 
 /**
  * Gibt den Supabase-Klienten zurück und legt ihn beim ersten Aufruf an.
@@ -44,19 +44,19 @@ let klient: SupabaseClient | null = null;
  * hilft, aber keine Zugangsdaten enthält.
  */
 export function supabase(): SupabaseClient {
-  if (klient !== null) return klient;
+  if (client !== null) return client;
 
   if (URL === undefined || URL === '' || ANON_KEY === undefined || ANON_KEY === '') {
     throw new DataError(
-      DatenFehlerCode.KONFIGURATION_FEHLT,
+      DataErrorCode.CONFIG_MISSING,
       'EXPO_PUBLIC_SUPABASE_URL oder EXPO_PUBLIC_SUPABASE_ANON_KEY fehlt. ' +
         '.env prüfen und die App mit "npx expo start --dev-client --clear" neu starten.',
     );
   }
 
-  klient = createClient(URL, ANON_KEY, {
+  client = createClient(URL, ANON_KEY, {
     auth: {
-      storage: SicherAblegen,
+      storage: SecureStoreAdapter,
       autoRefreshToken: true,
       persistSession: true,
       // In einer nativen App gibt es keine URL, aus der eine Sitzung käme.
@@ -64,7 +64,7 @@ export function supabase(): SupabaseClient {
     },
   });
 
-  return klient;
+  return client;
 }
 
 /**
@@ -75,16 +75,16 @@ export function supabase(): SupabaseClient {
  * gedauert hat.
  */
 export async function testConnection(): Promise<{
-  erreichbar: boolean;
-  dauerMs: number;
+  reachable: boolean;
+  durationMs: number;
 }> {
   const start = Date.now();
   try {
     // Eine Abfrage, die immer erlaubt ist und nichts zurückgibt: RLS lässt
     // ohne Anmeldung keine Zeile durch, aber der Server antwortet.
     await supabase().from('profile').select('id').limit(1);
-    return { erreichbar: true, dauerMs: Date.now() - start };
+    return { reachable: true, durationMs: Date.now() - start };
   } catch {
-    return { erreichbar: false, dauerMs: Date.now() - start };
+    return { reachable: false, durationMs: Date.now() - start };
   }
 }

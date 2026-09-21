@@ -17,21 +17,21 @@
 import * as SQLite from 'expo-sqlite';
 
 import {
-  datenschluesselErzeugen,
-  generalschluesselAuspacken,
-  generalschluesselVerpacken,
-  inhaltEntschluesseln,
-  inhaltVerschluesseln,
-  zufallsBytes,
-  type VerpackterSchluessel,
+  generateDataKey,
+  unwrapMasterKey,
+  wrapMasterKey,
+  decryptContent,
+  encryptContent,
+  secureRandomBytes,
+  type WrappedKey,
 } from '@/crypto';
-import { isCategory, type Kategorie } from '@/domain';
+import { isCategory, type Category } from '@/domain';
 
-import type { Store, Entry, MusterFuer, NewEntry } from './store';
-import { DataError, DatenFehlerCode } from './errors';
+import type { Store, Entry, ValidatorFor, NewEntry } from './store';
+import { DataError, DataErrorCode } from './errors';
 import { getWrappingKey } from './session';
 
-const DATENBANK = 'elefin.db';
+const DATABASE_NAME = 'elefin.db';
 
 let db: SQLite.SQLiteDatabase | null = null;
 
@@ -42,10 +42,10 @@ let db: SQLite.SQLiteDatabase | null = null;
  * Sinnvolle: keine Freigaben, keine Verbindungen, kein Ernstfall — die
  * setzen alle ein Konto voraus.
  */
-async function datenbank(): Promise<SQLite.SQLiteDatabase> {
+async function getDatabase(): Promise<SQLite.SQLiteDatabase> {
   if (db !== null) return db;
 
-  db = await SQLite.openDatabaseAsync(DATENBANK);
+  db = await SQLite.openDatabaseAsync(DATABASE_NAME);
 
   await db.execAsync(`
     pragma journal_mode = WAL;
@@ -71,8 +71,8 @@ async function datenbank(): Promise<SQLite.SQLiteDatabase> {
 }
 
 /** Erzeugt eine zufällige ID im selben Format wie der Server. */
-function idErzeugen(): string {
-  const b = zufallsBytes(16);
+function generateId(): string {
+  const b = secureRandomBytes(16);
   const hex = [...b].map((x) => x.toString(16).padStart(2, '0')).join('');
   return [
     hex.slice(0, 8),
@@ -84,7 +84,7 @@ function idErzeugen(): string {
 }
 
 /** Eine Zeile aus der Tabelle entries, so wie SQLite sie liefert. */
-type Zeile = {
+type Row = {
   id: string;
   kategorie: string;
   inhalt_chiffre: string;
@@ -96,172 +96,172 @@ type Zeile = {
 };
 
 /** Packt den Datenschlüssel einer Zeile aus. */
-async function datenschluesselVon(zeile: Zeile): Promise<Uint8Array> {
-  const verpackung: VerpackterSchluessel = {
-    chiffre: zeile.schluessel_chiffre,
-    nonce: zeile.schluessel_nonce,
+async function dataKeyOf(row: Row): Promise<Uint8Array> {
+  const wrapping: WrappedKey = {
+    chiffre: row.schluessel_chiffre,
+    nonce: row.schluessel_nonce,
   };
-  return generalschluesselAuspacken(
-    verpackung,
+  return unwrapMasterKey(
+    wrapping,
     await getWrappingKey(),
   );
 }
 
 /** Wandelt eine Zeile in einen entschlüsselten Eintrag. */
-async function zeileEntschluesseln<T extends { schemaVersion: number }>(
-  zeile: Zeile,
-  muster: MusterFuer<T>,
+async function decryptRow<T extends { schemaVersion: number }>(
+  row: Row,
+  validator: ValidatorFor<T>,
 ): Promise<Entry<T>> {
-  const datenschluessel = await datenschluesselVon(zeile);
+  const dataKey = await dataKeyOf(row);
 
-  const inhalt = inhaltEntschluesseln(
-    datenschluessel,
-    zeile.id,
-    { chiffre: zeile.inhalt_chiffre, nonce: zeile.inhalt_nonce },
-    muster,
+  const content = decryptContent(
+    dataKey,
+    row.id,
+    { chiffre: row.inhalt_chiffre, nonce: row.inhalt_nonce },
+    validator,
   );
 
-  if (!isCategory(zeile.kategorie)) {
+  if (!isCategory(row.kategorie)) {
     throw new DataError(
-      DatenFehlerCode.UNBEKANNT,
+      DataErrorCode.UNKNOWN,
       'Datensatz trägt eine Kategorie, die diese App-Fassung nicht kennt.',
     );
   }
 
   return {
-    id: zeile.id,
-    kategorie: zeile.kategorie,
-    inhalt,
-    angelegtAm: zeile.angelegt_am,
-    geaendertAm: zeile.geaendert_am,
+    id: row.id,
+    category: row.kategorie,
+    content: content,
+    createdAt: row.angelegt_am,
+    updatedAt: row.geaendert_am,
   };
 }
 
-export const lokaleAblage: Store = {
-  async eintragAnlegen(eintrag: NewEntry): Promise<string> {
-    const datenbankVerbindung = await datenbank();
-    const id = idErzeugen();
-    const jetzt = new Date().toISOString();
+export const localStore: Store = {
+  async createEntry(entry: NewEntry): Promise<string> {
+    const dbConnection = await getDatabase();
+    const id = generateId();
+    const now = new Date().toISOString();
 
     // Eigener Datenschlüssel je Eintrag — dieselbe Zweistufigkeit wie auf
     // dem Server, damit der Umzug später ein Kopiervorgang bleibt.
-    const datenschluessel = datenschluesselErzeugen();
-    const inhalt = inhaltVerschluesseln(datenschluessel, id, eintrag.inhalt);
-    const verpackt = generalschluesselVerpacken(
-      datenschluessel,
+    const dataKey = generateDataKey();
+    const content = encryptContent(dataKey, id, entry.content);
+    const wrapped = wrapMasterKey(
+      dataKey,
       await getWrappingKey(),
     );
 
-    await datenbankVerbindung.runAsync(
+    await dbConnection.runAsync(
       `insert into entries
          (id, kategorie, inhalt_chiffre, inhalt_nonce,
           schluessel_chiffre, schluessel_nonce, angelegt_am, geaendert_am)
        values (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
-        eintrag.kategorie,
-        inhalt.chiffre,
-        inhalt.nonce,
-        verpackt.chiffre,
-        verpackt.nonce,
-        jetzt,
-        jetzt,
+        entry.category,
+        content.chiffre,
+        content.nonce,
+        wrapped.chiffre,
+        wrapped.nonce,
+        now,
+        now,
       ],
     );
 
     return id;
   },
 
-  async eintraegeLaden<T extends { schemaVersion: number }>(
-    kategorie: Kategorie,
-    muster: MusterFuer<T>,
+  async loadEntries<T extends { schemaVersion: number }>(
+    category: Category,
+    validator: ValidatorFor<T>,
   ): Promise<Entry<T>[]> {
-    const datenbankVerbindung = await datenbank();
-    const zeilen = await datenbankVerbindung.getAllAsync<Zeile>(
+    const dbConnection = await getDatabase();
+    const rows = await dbConnection.getAllAsync<Row>(
       `select * from entries
        where kategorie = ?
        order by angelegt_am desc`,
-      [kategorie],
+      [category],
     );
 
-    const ergebnis: Entry<T>[] = [];
-    for (const zeile of zeilen) {
-      ergebnis.push(await zeileEntschluesseln(zeile, muster));
+    const result: Entry<T>[] = [];
+    for (const row of rows) {
+      result.push(await decryptRow(row, validator));
     }
-    return ergebnis;
+    return result;
   },
 
-  async eintragLaden<T extends { schemaVersion: number }>(
+  async loadEntry<T extends { schemaVersion: number }>(
     id: string,
-    muster: MusterFuer<T>,
+    validator: ValidatorFor<T>,
   ): Promise<Entry<T>> {
-    const datenbankVerbindung = await datenbank();
-    const zeile = await datenbankVerbindung.getFirstAsync<Zeile>(
+    const dbConnection = await getDatabase();
+    const row = await dbConnection.getFirstAsync<Row>(
       'select * from entries where id = ?',
       [id],
     );
 
-    if (zeile === null) {
+    if (row === null) {
       throw new DataError(
-        DatenFehlerCode.NICHT_GEFUNDEN,
+        DataErrorCode.NOT_FOUND,
         'Kein Eintrag mit dieser Kennung.',
       );
     }
 
-    return zeileEntschluesseln(zeile, muster);
+    return decryptRow(row, validator);
   },
 
-  async eintragAendern(
+  async updateEntry(
     id: string,
-    inhalt: Record<string, unknown>,
+    content: Record<string, unknown>,
   ): Promise<void> {
-    const datenbankVerbindung = await datenbank();
-    const zeile = await datenbankVerbindung.getFirstAsync<Zeile>(
+    const dbConnection = await getDatabase();
+    const row = await dbConnection.getFirstAsync<Row>(
       'select * from entries where id = ?',
       [id],
     );
 
-    if (zeile === null) {
+    if (row === null) {
       throw new DataError(
-        DatenFehlerCode.NICHT_GEFUNDEN,
+        DataErrorCode.NOT_FOUND,
         'Kein Eintrag mit dieser Kennung.',
       );
     }
 
     // Der Datenschlüssel bleibt derselbe — nur der Inhalt wird neu
     // verschlüsselt. Sonst müssten später alle Umschläge erneuert werden.
-    const datenschluessel = await datenschluesselVon(zeile);
-    const neu = inhaltVerschluesseln(datenschluessel, id, inhalt);
+    const dataKey = await dataKeyOf(row);
+    const created = encryptContent(dataKey, id, content);
 
-    await datenbankVerbindung.runAsync(
+    await dbConnection.runAsync(
       `update entries
          set inhalt_chiffre = ?, inhalt_nonce = ?, geaendert_am = ?
        where id = ?`,
-      [neu.chiffre, neu.nonce, new Date().toISOString(), id],
+      [created.chiffre, created.nonce, new Date().toISOString(), id],
     );
   },
 
-  async eintragLoeschen(id: string): Promise<void> {
-    const datenbankVerbindung = await datenbank();
-    await datenbankVerbindung.runAsync('delete from entries where id = ?', [id]);
+  async deleteEntry(id: string): Promise<void> {
+    const dbConnection = await getDatabase();
+    await dbConnection.runAsync('delete from entries where id = ?', [id]);
   },
 
-  async anzahlJeKategorie(): Promise<Partial<Record<Kategorie, number>>> {
-    const datenbankVerbindung = await datenbank();
-    const zeilen = await datenbankVerbindung.getAllAsync<{
+  async countByCategory(): Promise<Partial<Record<Category, number>>> {
+    const dbConnection = await getDatabase();
+    const rows = await dbConnection.getAllAsync<{
       kategorie: string;
       anzahl: number;
     }>('select kategorie, count(*) as anzahl from entries group by kategorie');
 
-    const ergebnis: Partial<Record<Kategorie, number>> = {};
-    for (const zeile of zeilen) {
+    const result: Partial<Record<Category, number>> = {};
+    for (const row of rows) {
       // Kategorien, die diese App-Fassung nicht kennt, werden übergangen —
       // eine Zählung ist kein Ort für einen Abbruch.
-      if (isCategory(zeile.kategorie)) {
-        ergebnis[zeile.kategorie] = zeile.anzahl;
+      if (isCategory(row.kategorie)) {
+        result[row.kategorie] = row.anzahl;
       }
     }
-    return ergebnis;
+    return result;
   },
 };
 
@@ -271,9 +271,9 @@ export const lokaleAblage: Store = {
  * Für "Alle Daten löschen" und für den Abschluss des Umzugs ins Konto —
  * dort erst, NACHDEM der Server den Empfang bestätigt hat.
  */
-export async function lokaleDatenLoeschen(): Promise<void> {
-  const datenbankVerbindung = await datenbank();
-  await datenbankVerbindung.execAsync('delete from entries;');
+export async function deleteLocalData(): Promise<void> {
+  const dbConnection = await getDatabase();
+  await dbConnection.execAsync('delete from entries;');
 }
 
 /**
@@ -282,7 +282,7 @@ export async function lokaleDatenLoeschen(): Promise<void> {
  * Nur für den Umzug ins Konto. Die Inhalte bleiben verschlüsselt wie sie
  * sind; neu verpackt wird ausschließlich der Datenschlüssel.
  */
-export async function getAllRawRows(): Promise<Zeile[]> {
-  const datenbankVerbindung = await datenbank();
-  return datenbankVerbindung.getAllAsync<Zeile>('select * from entries');
+export async function getAllRawRows(): Promise<Row[]> {
+  const dbConnection = await getDatabase();
+  return dbConnection.getAllAsync<Row>('select * from entries');
 }

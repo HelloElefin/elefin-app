@@ -12,32 +12,32 @@
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
-import { zufallsBytes } from './bytes';
-import { CryptoError, KryptoFehlerCode } from './errors';
+import { secureRandomBytes } from './bytes';
+import { CryptoError, CryptoErrorCode } from './errors';
 import {
-  AKTUELLE_SCHEMA_VERSION,
-  inhaltEntschluesseln,
-  inhaltVerschluesseln,
+  CURRENT_SCHEMA_VERSION,
+  decryptContent,
+  encryptContent,
 } from './content';
 import {
-  datenschluesselErzeugen,
-  generalschluesselAuspacken,
-  generalschluesselErzeugen,
-  generalschluesselVerpacken,
+  generateDataKey,
+  unwrapMasterKey,
+  generateMasterKey,
+  wrapMasterKey,
 } from './keys';
 import {
-  sicherheitsschluesselAbleiten,
-  sicherheitsschluesselErzeugen,
-  sicherheitsschluesselPruefen,
+  deriveFromRecoveryKey,
+  generateRecoveryKey,
+  validateRecoveryKey,
 } from './recovery-key';
 import {
-  schluesselpaarErzeugen,
-  umschlagAuspacken,
-  umschlagVerpacken,
+  generateKeyPair,
+  openEnvelope,
+  sealEnvelope,
 } from './envelope';
 
 /** Muster für die Testinhalte. In der echten App kommen die aus src/domain. */
-const TestInhalt = z.object({
+const TestContent = z.object({
   schemaVersion: z.number(),
   titel: z.string(),
   text: z.string(),
@@ -45,83 +45,83 @@ const TestInhalt = z.object({
 
 describe('Verschlüsseln und Entschlüsseln', () => {
   it('ergibt wieder das Original', () => {
-    const schluessel = datenschluesselErzeugen();
-    const eintragId = 'eintrag-1';
+    const key = generateDataKey();
+    const entryId = 'eintrag-1';
     const original = { titel: 'Sparkonto', text: 'AT12 3456 7890' };
 
-    const verpackt = inhaltVerschluesseln(schluessel, eintragId, original);
-    const zurueck = inhaltEntschluesseln(
-      schluessel,
-      eintragId,
-      verpackt,
-      TestInhalt,
+    const wrapped = encryptContent(key, entryId, original);
+    const decrypted = decryptContent(
+      key,
+      entryId,
+      wrapped,
+      TestContent,
     );
 
-    expect(zurueck.titel).toBe(original.titel);
-    expect(zurueck.text).toBe(original.text);
-    expect(zurueck.schemaVersion).toBe(AKTUELLE_SCHEMA_VERSION);
+    expect(decrypted.titel).toBe(original.titel);
+    expect(decrypted.text).toBe(original.text);
+    expect(decrypted.schemaVersion).toBe(CURRENT_SCHEMA_VERSION);
   });
 
   it('schlägt mit einem falschen Schlüssel fehl', () => {
-    const richtig = datenschluesselErzeugen();
-    const falsch = datenschluesselErzeugen();
-    const eintragId = 'eintrag-1';
+    const correct = generateDataKey();
+    const wrong = generateDataKey();
+    const entryId = 'eintrag-1';
 
-    const verpackt = inhaltVerschluesseln(richtig, eintragId, {
+    const wrapped = encryptContent(correct, entryId, {
       titel: 'Sparkonto',
       text: 'AT12 3456 7890',
     });
 
     expect(() =>
-      inhaltEntschluesseln(falsch, eintragId, verpackt, TestInhalt),
+      decryptContent(wrong, entryId, wrapped, TestContent),
     ).toThrow(CryptoError);
   });
 
   it('schlägt fehl, wenn das Chiffrat in eine andere Zeile verschoben wird', () => {
-    const schluessel = datenschluesselErzeugen();
+    const key = generateDataKey();
 
-    const verpackt = inhaltVerschluesseln(schluessel, 'eintrag-1', {
+    const wrapped = encryptContent(key, 'eintrag-1', {
       titel: 'Sparkonto',
       text: 'AT12 3456 7890',
     });
 
     // Derselbe Schlüssel, aber eine fremde Eintrags-ID.
     expect(() =>
-      inhaltEntschluesseln(schluessel, 'eintrag-2', verpackt, TestInhalt),
+      decryptContent(key, 'eintrag-2', wrapped, TestContent),
     ).toThrow(CryptoError);
   });
 });
 
 describe('Umschläge', () => {
   it('lassen sich vom Empfänger öffnen', () => {
-    const anna = schluesselpaarErzeugen();
-    const datenschluessel = datenschluesselErzeugen();
+    const anna = generateKeyPair();
+    const dataKey = generateDataKey();
 
-    const umschlag = umschlagVerpacken(datenschluessel, anna.oeffentlich);
-    const ausgepackt = umschlagAuspacken(umschlag, anna.privat);
+    const envelope = sealEnvelope(dataKey, anna.oeffentlich);
+    const unwrapped = openEnvelope(envelope, anna.privat);
 
-    expect(ausgepackt).toEqual(datenschluessel);
+    expect(unwrapped).toEqual(dataKey);
   });
 
   it('sind für Dritte nicht lesbar', () => {
-    const anna = schluesselpaarErzeugen();
-    const schwester = schluesselpaarErzeugen();
-    const datenschluessel = datenschluesselErzeugen();
+    const anna = generateKeyPair();
+    const sister = generateKeyPair();
+    const dataKey = generateDataKey();
 
     // Für Anna verpackt — die Schwester darf nicht herankommen.
-    const umschlag = umschlagVerpacken(datenschluessel, anna.oeffentlich);
+    const envelope = sealEnvelope(dataKey, anna.oeffentlich);
 
-    expect(() => umschlagAuspacken(umschlag, schwester.privat)).toThrow(
+    expect(() => openEnvelope(envelope, sister.privat)).toThrow(
       CryptoError,
     );
   });
 
   it('erzeugen für denselben Inhalt jedes Mal ein anderes Ergebnis', () => {
-    const anna = schluesselpaarErzeugen();
-    const datenschluessel = datenschluesselErzeugen();
+    const anna = generateKeyPair();
+    const dataKey = generateDataKey();
 
-    const a = umschlagVerpacken(datenschluessel, anna.oeffentlich);
-    const b = umschlagVerpacken(datenschluessel, anna.oeffentlich);
+    const a = sealEnvelope(dataKey, anna.oeffentlich);
+    const b = sealEnvelope(dataKey, anna.oeffentlich);
 
     // Zwei gleiche Umschläge würden verraten, dass derselbe Schlüssel
     // zweimal verpackt wurde — also dass zwei Einträge zusammengehören.
@@ -131,94 +131,94 @@ describe('Umschläge', () => {
 
 describe('Generalschlüssel', () => {
   it('öffnet sich mit jeder seiner Verpackungen gleichermaßen', () => {
-    const generalschluessel = generalschluesselErzeugen();
+    const masterKey = generateMasterKey();
 
     // Zwei verschiedene Kisten, in der echten App: Passwort und
     // Sicherheitsschlüssel. Hier stehen zwei Zufallsschlüssel dafür,
     // weil die Ableitung selbst nicht Gegenstand dieses Tests ist.
-    const ausPasswort = zufallsBytes(32);
-    const ausSicherheitsschluessel = zufallsBytes(32);
+    const fromPassword = secureRandomBytes(32);
+    const fromRecoveryKey = secureRandomBytes(32);
 
-    const kiste1 = generalschluesselVerpacken(generalschluessel, ausPasswort);
-    const kiste2 = generalschluesselVerpacken(
-      generalschluessel,
-      ausSicherheitsschluessel,
+    const box1 = wrapMasterKey(masterKey, fromPassword);
+    const box2 = wrapMasterKey(
+      masterKey,
+      fromRecoveryKey,
     );
 
-    expect(generalschluesselAuspacken(kiste1, ausPasswort)).toEqual(
-      generalschluessel,
+    expect(unwrapMasterKey(box1, fromPassword)).toEqual(
+      masterKey,
     );
     expect(
-      generalschluesselAuspacken(kiste2, ausSicherheitsschluessel),
-    ).toEqual(generalschluessel);
+      unwrapMasterKey(box2, fromRecoveryKey),
+    ).toEqual(masterKey);
   });
 
   it('bleibt bei einem Passwortwechsel derselbe', () => {
-    const generalschluessel = generalschluesselErzeugen();
-    const altesPasswort = zufallsBytes(32);
-    const neuesPasswort = zufallsBytes(32);
+    const masterKey = generateMasterKey();
+    const oldPassword = secureRandomBytes(32);
+    const newPassword = secureRandomBytes(32);
 
-    const alteKiste = generalschluesselVerpacken(
-      generalschluessel,
-      altesPasswort,
+    const oldBox = wrapMasterKey(
+      masterKey,
+      oldPassword,
     );
 
     // Passwortwechsel: auspacken, mit dem neuen Schlüssel neu verpacken.
-    const ausgepackt = generalschluesselAuspacken(alteKiste, altesPasswort);
-    const neueKiste = generalschluesselVerpacken(ausgepackt, neuesPasswort);
+    const unwrapped = unwrapMasterKey(oldBox, oldPassword);
+    const newBox = wrapMasterKey(unwrapped, newPassword);
 
     // Entscheidend: Es ist derselbe Generalschlüssel. Deshalb bleiben alle
     // bestehenden Freigaben gültig und nichts muss neu verschlüsselt werden.
-    expect(generalschluesselAuspacken(neueKiste, neuesPasswort)).toEqual(
-      generalschluessel,
+    expect(unwrapMasterKey(newBox, newPassword)).toEqual(
+      masterKey,
     );
   });
 });
 
 describe('Sicherheitsschlüssel', () => {
   it('hat die vereinbarte Form', () => {
-    const schluessel = sicherheitsschluesselErzeugen();
+    const key = generateRecoveryKey();
 
-    expect(schluessel).toMatch(/^[2-9A-HJ-NP-Z*+]{4}(-[2-9A-HJ-NP-Z*+]{4}){6}$/);
+    expect(key).toMatch(/^[2-9A-HJ-NP-Z*+]{4}(-[2-9A-HJ-NP-Z*+]{4}){6}$/);
   });
 
   it('wird trotz Bindestrichen und Kleinschreibung erkannt', () => {
-    const schluessel = sicherheitsschluesselErzeugen();
+    const key = generateRecoveryKey();
 
-    const geprueft = sicherheitsschluesselPruefen(schluessel);
-    const gleichwertig = sicherheitsschluesselPruefen(
-      schluessel.toLowerCase().replace(/-/g, ' '),
+    const checked = validateRecoveryKey(key);
+    const equivalent = validateRecoveryKey(
+      key.toLowerCase().replace(/-/g, ' '),
     );
 
-    expect(gleichwertig).toBe(geprueft);
+    expect(equivalent).toBe(checked);
   });
 
   it('erkennt einen Tippfehler an der Prüfziffer', () => {
-    const schluessel = sicherheitsschluesselErzeugen();
+    const key = generateRecoveryKey();
 
     // Erstes Zeichen verändern, aber im gültigen Vorrat bleiben.
-    const ersteZeichen = schluessel[0] === '2' ? '3' : '2';
-    const vertippt = ersteZeichen + schluessel.slice(1);
+    const firstChars = key[0] === '2' ? '3' : '2';
+    const mistyped = firstChars + key.slice(1);
 
     try {
-      sicherheitsschluesselPruefen(vertippt);
+      validateRecoveryKey(mistyped);
       expect.unreachable('Hätte einen Fehler werfen müssen.');
-    } catch (fehler) {
-      expect(fehler).toBeInstanceOf(CryptoError);
-      expect((fehler as CryptoError).code).toBe(
-        KryptoFehlerCode.SICHERHEITSSCHLUESSEL_PRUEFZIFFER,
+    } catch (error) {
+      expect(error).toBeInstanceOf(CryptoError);
+      expect((error as CryptoError).code).toBe(
+        CryptoErrorCode.RECOVERY_KEY_CHECKSUM,
       );
     }
   });
 
   it('ergibt für denselben Schlüssel immer dieselbe Ableitung', () => {
-    const schluessel = sicherheitsschluesselErzeugen();
-    const geprueft = sicherheitsschluesselPruefen(schluessel);
+    const key = generateRecoveryKey();
+    const checked = validateRecoveryKey(key);
 
     // Das ist die Grundlage dafür, dass der Ausdruck auf einem beliebigen
     // Gerät funktioniert — auch Jahre später.
-    expect(sicherheitsschluesselAbleiten(geprueft)).toEqual(
-      sicherheitsschluesselAbleiten(geprueft),
+    expect(deriveFromRecoveryKey(checked)).toEqual(
+      deriveFromRecoveryKey(checked),
     );
   });
 });

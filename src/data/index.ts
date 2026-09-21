@@ -2,29 +2,29 @@
  * Fassade der Datenschicht. Der Rest der App greift über '@/data' zu.
  */
 export {
-  anzahlJeKategorie,
-  eintraegeLaden,
-  eintragAendern,
-  eintragAnlegen,
-  eintragLaden,
-  eintragLoeschen,
+  countByCategory,
+  loadEntries,
+  updateEntry,
+  createEntry,
+  loadEntry,
+  deleteEntry,
 } from './entries';
 
 export type { Entry, NewEntry } from './store';
 
 export {
   DataError,
-  DatenFehlerCode,
-  type DatenFehlerCodeWert,
+  DataErrorCode,
+  type DataErrorCodeValue,
 } from './errors';
 
 export {
   signOut,
   deleteAll,
-  hatKonto,
-  type KontoSitzung,
-  type LokaleSitzung,
-  type Sitzung,
+  hasAccount,
+  type AccountSession,
+  type LocalSession,
+  type AppSession,
 } from './session';
 
 export { ENVIRONMENT } from './supabase';

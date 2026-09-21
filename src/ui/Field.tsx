@@ -9,23 +9,23 @@ import { Text, TextInput, View } from 'react-native';
 import { colors, fontSize, radius, spacing } from '@/design';
 
 type Props = {
-  beschriftung: string;
-  wert: string;
-  aufAenderung: (wert: string) => void;
-  platzhalter?: string;
-  hinweis?: string;
-  hinweisArt?: 'neutral' | 'warnung';
-  aufVerlassen?: () => void;
+  label: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+  hint?: string;
+  hintType?: 'neutral' | 'warnung';
+  onBlur?: () => void;
 };
 
 export function Field({
-  beschriftung,
-  wert,
-  aufAenderung,
-  platzhalter,
-  hinweis,
-  hinweisArt = 'neutral',
-  aufVerlassen,
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  hint,
+  hintType = 'neutral',
+  onBlur,
 }: Props) {
   return (
     <View style={{ marginBottom: spacing.md }}>
@@ -36,20 +36,20 @@ export function Field({
           marginBottom: spacing.xs,
         }}
       >
-        {beschriftung}
+        {label}
       </Text>
 
       <TextInput
-        value={wert}
-        onChangeText={aufAenderung}
-        onBlur={aufVerlassen}
-        placeholder={platzhalter}
+        value={value}
+        onChangeText={onChangeText}
+        onBlur={onBlur}
+        placeholder={placeholder}
         placeholderTextColor={colors.border}
         style={{
           backgroundColor: colors.surface,
           borderWidth: 1,
           borderColor:
-            hinweisArt === 'warnung' ? colors.warning : colors.border,
+            hintType === 'warnung' ? colors.warning : colors.border,
           borderRadius: radius.md,
           paddingHorizontal: spacing.md,
           paddingVertical: spacing.md,
@@ -59,16 +59,16 @@ export function Field({
         }}
       />
 
-      {hinweis !== undefined && (
+      {hint !== undefined && (
         <Text
           style={{
             fontSize: fontSize.sm,
             color:
-              hinweisArt === 'warnung' ? colors.warning : colors.textSecondary,
+              hintType === 'warnung' ? colors.warning : colors.textSecondary,
             marginTop: spacing.xs,
           }}
         >
-          {hinweis}
+          {hint}
         </Text>
       )}
     </View>
