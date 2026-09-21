@@ -18,7 +18,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, relative } from 'node:path';
 
-const { Project, SyntaxKind, Node } = tsMorph;
+const { Project, SyntaxKind, Node, NewLineKind } = tsMorph;
 
 const ROOT = process.cwd();
 const MAP_FILE = join(ROOT, 'scripts', 'rename-map.json');
@@ -43,7 +43,26 @@ const KINDS = {
   [SyntaxKind.Parameter]: 'param',
   [SyntaxKind.MethodDeclaration]: 'method',
   [SyntaxKind.TypeParameter]: 'tparam',
+  [SyntaxKind.MethodSignature]: 'msig',
 };
+
+/** Nur fuer Eintraege mit "property": true — ausdruecklich freigegebene Felder. */
+const PROPERTY_KINDS = {
+  [SyntaxKind.PropertySignature]: 'feld',
+  [SyntaxKind.PropertyDeclaration]: 'feld',
+  [SyntaxKind.PropertyAssignment]: 'feld',
+};
+
+/**
+ * Lokale Variablen und Parameter werden mit Alias umbenannt, damit aus
+ * { nutzerId } ein { nutzerId: userId } wird statt eines kaputten Feldnamens.
+ * Alles andere ohne Alias, damit Exporte wirklich den neuen Namen tragen.
+ */
+function mitAlias(d) {
+  if (Node.isParameterDeclaration(d)) return true;
+  if (Node.isVariableDeclaration(d)) return !(d.getVariableStatement()?.isExported() ?? false);
+  return false;
+}
 
 /**
  * Werden NICHT automatisch umbenannt: Objektfelder koennen in der
@@ -58,7 +77,10 @@ const NUR_ANSICHT = {
 
 // --- Projekt laden ---------------------------------------------------------
 
-const project = new Project({ tsConfigFilePath: join(ROOT, 'tsconfig.json') });
+const project = new Project({
+  tsConfigFilePath: join(ROOT, 'tsconfig.json'),
+  manipulationSettings: { newLineKind: NewLineKind.LineFeed },
+});
 const quellen = project
   .getSourceFiles()
   .filter((sf) => rel(sf.getFilePath()).startsWith('src/'));
@@ -166,7 +188,8 @@ for (const e of eintraege) {
     continue;
   }
 
-  const decls = deklarationen(sf, e.from);
+  const arten = e.property ? PROPERTY_KINDS : KINDS;
+  const decls = deklarationen(sf, e.from, arten);
   if (!decls.length) {
     console.warn(`WARNUNG  ${e.from} nicht deklariert in ${e.file}`);
     warnungen++;
@@ -181,7 +204,7 @@ for (const e of eintraege) {
   );
 
   console.log(
-    `${MODE === 'apply' ? 'umbenannt' : 'wuerde   '} ${e.from} -> ${e.to}  ${e.file}  (${refs.length + decls.length} Stellen)`,
+    `${MODE === 'apply' ? 'umbenannt' : 'wuerde   '} ${e.property ? '[feld] ' : ''}${e.from} -> ${e.to}  ${e.file}  (${refs.length + decls.length} Stellen)`,
   );
   for (const f of kollision) {
     console.warn(`  WARNUNG  "${e.to}" existiert schon in ${rel(f.getFilePath())}`);
@@ -191,11 +214,11 @@ for (const e of eintraege) {
   if (MODE === 'apply') {
     let schutz = 0;
     let offen;
-    while ((offen = deklarationen(sf, e.from)).length && schutz++ < 50) {
+    while ((offen = deklarationen(sf, e.from, arten)).length && schutz++ < 50) {
       offen[0].getNameNode().rename(e.to, {
         renameInComments: false,
         renameInStrings: false,
-        usePrefixAndSuffixText: false,
+        usePrefixAndSuffixText: e.property ? false : mitAlias(offen[0]),
       });
     }
   }
