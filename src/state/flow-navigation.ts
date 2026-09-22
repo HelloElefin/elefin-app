@@ -6,7 +6,7 @@
  * Zurück-Knopf des Geräts funktioniert und man einen Screen direkt aufrufen
  * kann.
  */
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 
 import { loadCatalog } from '@/catalog';
 import { nextStep, previousStep, progress, steps, stepIndex, type Step } from '@/domain';
@@ -14,30 +14,40 @@ import { nextStep, previousStep, progress, steps, stepIndex, type Step } from '@
 import { useSession } from './session';
 
 /**
- * Welche Adressen der Router annimmt, leiten wir direkt von ihm ab.
+ * Rahmenscreens haben eigene Dateien und damit eigene Adressen. Alle
+ * Frage-Screens teilen sich question/[screen].tsx.
  *
- * Grund: In app.json steht typedRoutes: true. Expo Router prüft damit jede
- * Adresse gegen die Dateien, die es unter src/app wirklich gibt — und die
- * Rahmenscreens aus Schritt 6b fehlen noch. Bis sie da sind, brauchen wir
- * diese Umtypung. Danach kann sie ersatzlos weg.
+ * as const ist wichtig: Ohne das wären die Werte einfach Text, und mit
+ * typedRoutes in app.json nimmt der Router nur bekannte Adressen an.
  */
-type Router = ReturnType<typeof useRouter>;
-type PushRoute = Parameters<Router['push']>[0];
-type ReplaceRoute = Parameters<Router['replace']>[0];
-
-/** Rahmenscreens haben eigene Adressen, Frage-Screens eine gemeinsame. */
-const FRAME_ROUTES: Record<string, string> = {
+const FRAME_ROUTES = {
   start: '/',
   principles: '/principles',
   situation: '/situation',
   inventory: '/inventory',
   summary: '/summary',
   finish: '/finish',
-};
+} as const;
 
-export function hrefFor(step: Step): string {
-  const frame = FRAME_ROUTES[step.screenId];
-  return frame ?? `/question/${step.screenId}?pass=${step.pass}`;
+type FrameId = keyof typeof FRAME_ROUTES;
+
+function isFrame(screenId: string): screenId is FrameId {
+  return screenId in FRAME_ROUTES;
+}
+
+/**
+ * Die Adresse zu einem Schritt.
+ *
+ * Der Frage-Screen wird als Objekt adressiert statt als fertige Zeile: Der
+ * Router setzt die Adresse dann selbst zusammen und kann sie prüfen. Eine
+ * zusammengebaute Zeichenkette könnte er nicht einordnen.
+ */
+export function hrefFor(step: Step): Href {
+  if (isFrame(step.screenId)) return FRAME_ROUTES[step.screenId];
+  return {
+    pathname: '/question/[screen]',
+    params: { screen: step.screenId, pass: String(step.pass) },
+  };
 }
 
 export function useFlow(current: Step) {
@@ -57,12 +67,15 @@ export function useFlow(current: Step) {
     hasNext: next !== null,
     hasBack: back !== null,
     goNext: () => {
-      if (next) router.push(hrefFor(next) as PushRoute);
+      if (next) router.push(hrefFor(next));
     },
     goBack: () => {
+      // Der Verlauf des Geräts hat Vorrang, damit der Zurück-Knopf sich
+      // erwartbar verhält. Nur beim Direktaufruf einer Adresse gibt es
+      // keinen Verlauf — dann springen wir zum vorherigen Schritt.
       if (router.canGoBack()) router.back();
-      else if (back) router.replace(hrefFor(back) as ReplaceRoute);
+      else if (back) router.replace(hrefFor(back));
     },
-    goTo: (step: Step) => router.push(hrefFor(step) as PushRoute),
+    goTo: (step: Step) => router.push(hrefFor(step)),
   };
 }
