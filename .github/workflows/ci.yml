@@ -1,0 +1,34 @@
+# Läuft bei jedem Push und bei jedem Pull Request.
+# Genau die drei Befehle, die du auch lokal ausführst.
+name: Prüfen
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typen
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm test
+
+      # expo lint richtet seine Konfiguration beim ersten Lauf selbst ein und
+      # scheitert deshalb hier gerne. Darf vorerst fehlschlagen — sobald eine
+      # eslint-Konfiguration im Repository liegt, diese Zeile entfernen.
+      - name: Linter
+        run: npm run lint
+        continue-on-error: true
