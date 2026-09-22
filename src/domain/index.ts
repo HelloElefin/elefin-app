@@ -6,6 +6,26 @@ export { CATEGORIES, isCategory, type Category } from './categories';
 
 export type { Answer, AnswerState } from './answer-state';
 
+export { answerKey, getAnswer, hasValue, setAnswer, type AnswerValue, type Answers } from './answers';
+
+export {
+  activeScreens,
+  applies,
+  declaredFor,
+  nextStep,
+  openSteps,
+  passesFor,
+  passHasContent,
+  previousStep,
+  progress,
+  stepIndex,
+  steps,
+  type ExtraPasses,
+  type Step,
+} from './flow';
+
+export { summaryRows, type SummaryRow } from './summary';
+
 export type {
   CaseFile,
   ChildrenStatus,
