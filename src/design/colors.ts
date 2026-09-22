@@ -23,6 +23,8 @@ export const colors = {
   textSecondary: '#5A6663',
   /** Text auf farbigem Grund, z. B. auf dem Hauptknopf. */
   textOnAccent: '#FFFFFF',
+    /** Beispieltext in leeren Eingabefeldern. Kontrast auf weiß: 4,7:1 */
+  textPlaceholder: '#6B7673',
 
   // --- Hauptfarbe ---
   /** Knöpfe, aktive Zustände, Akzente. Kontrast auf weiß: 7,4:1 */
