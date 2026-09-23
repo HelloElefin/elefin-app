@@ -11,3 +11,4 @@ export { MultiChoice } from './MultiChoice';
 export { Progress } from './Progress';
 export { TestBanner } from './TestBanner';
 export { useLineHeight } from './typography';
+export { DangerButton } from './DangerButton';

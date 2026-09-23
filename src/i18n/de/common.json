@@ -10,7 +10,10 @@
       "bereavement": {
         "question": "Ist gerade jemand gestorben?",
         "link": "Was jetzt zu tun ist"
-      }
+      },
+      "resume": "Weitermachen",
+      "resume_hint": "Du hast schon etwas festgehalten. Deine Angaben bleiben {{days}} Tage in diesem Browser und werden dann gelöscht.",
+      "expired": "Deine Angaben von letztem Mal sind nach {{days}} Tagen abgelaufen und wurden gelöscht. Wir fangen neu an."
     },
     "principles": {
       "title": "So gehen wir mit deinen Angaben um",
@@ -957,7 +960,11 @@
       "unknown": "Später klären",
       "open": "Nächster Schritt"
     },
-    "test_banner": "Test-App — deine Angaben werden nicht verschlüsselt und beim Schließen gelöscht."
+    "test_banner": "Test-App — deine Angaben liegen unverschlüsselt in diesem Browser und werden nach 7 Tagen gelöscht.",
+    "delete_all": "Alles löschen",
+    "delete_question": "Wirklich alles löschen? Das lässt sich nicht rückgängig machen.",
+    "delete_confirm": "Ja, alles löschen",
+    "delete_cancel": "Abbrechen"
   },
   "app": {
     "name": "Elefin"
