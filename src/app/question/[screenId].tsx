@@ -5,6 +5,9 @@
  * heißt, in den Sprachdateien; was danach kommt, rechnet die Flussmaschine
  * aus. Eine neue Frage entsteht deshalb durch einen Katalogeintrag und nicht
  * durch eine neue Datei (Regel 14).
+ *
+ * Der Parameter heißt screenId und nicht screen: "screen" ist im Browser ein
+ * belegter Name (window.screen), und der Router füllt ihn dann nicht.
  */
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, Text, View } from 'react-native';
@@ -35,8 +38,8 @@ import {
 } from '@/ui';
 
 export default function QuestionScreen() {
-  const params = useLocalSearchParams<{ screen?: string; pass?: string }>();
-  const screenId = params.screen ?? '';
+  const params = useLocalSearchParams<{ screenId?: string; pass?: string }>();
+  const screenId = params.screenId ?? '';
   const pass = Math.max(1, Number(params.pass ?? '1') || 1);
 
   const catalog = loadCatalog();
@@ -47,16 +50,24 @@ export default function QuestionScreen() {
   const flow = useFlow({ screenId, pass });
   const lineHeight = useLineHeight();
 
-  // Kann vorkommen, wenn jemand eine alte Adresse offen hat.
+  // Kann vorkommen, wenn jemand eine alte Adresse offen hat. Die Texte hier
+  // sind absichtlich nicht übersetzt: Sie sollen nie jemand sehen, und wenn
+  // doch, dann mit der ID darin — sonst sucht man lange.
   if (!screen || !screen.category) {
     return (
-      <View style={{ flex: 1, padding: screenPadding, justifyContent: 'center' }}>
-        <Text style={{ fontSize: fontSize.md, color: colors.textSecondary }}>{text('common.unknown')}</Text>
+      <View style={{ flex: 1, padding: screenPadding, gap: spacing.md, justifyContent: 'center' }}>
+        <Text style={{ fontSize: fontSize.lg, color: colors.textPrimary }}>
+          Diese Frage gibt es nicht.
+        </Text>
+        <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary }}>
+          Screen-ID: {screenId === '' ? '(leer)' : screenId}
+        </Text>
+        <Button label={text('common.back')} onPress={flow.goBack} />
       </View>
     );
   }
 
-    // Festhalten, dass screen hier sicher vorhanden ist — innerhalb von
+  // Festhalten, dass screen hier sicher vorhanden ist — innerhalb von
   // skipUnknown weiß TypeScript das sonst nicht mehr.
   const current = screen;
   const category: Category = screen.category;
@@ -103,8 +114,11 @@ export default function QuestionScreen() {
           key={field.id}
           label={label}
           value={answer.state === 'answered' ? String(answer.value) : ''}
-          onChangeText={(t) =>
-            setAnswer(field, t.trim() === '' ? { state: 'open' } : { state: 'answered', value: t })
+          onChangeText={(eingabe) =>
+            setAnswer(
+              field,
+              eingabe.trim() === '' ? { state: 'open' } : { state: 'answered', value: eingabe },
+            )
           }
           placeholder={exists(placeholderKey) ? text(placeholderKey) : undefined}
           multiline={field.id.includes('location') || field.id.includes('notes')}

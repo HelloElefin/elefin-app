@@ -44,10 +44,9 @@ function isFrame(screenId: string): screenId is FrameId {
  */
 export function hrefFor(step: Step): Href {
   if (isFrame(step.screenId)) return FRAME_ROUTES[step.screenId];
-  return {
-    pathname: '/question/[screen]',
-    params: { screen: step.screenId, pass: String(step.pass) },
-  };
+  // Als fertige Adresszeile statt als Objekt: Die Objektform hat den
+  // Parameter nicht übernommen, die Adresse landete bei "undefined".
+  return `/question/${step.screenId}?pass=${step.pass}` as Href;
 }
 
 export function useFlow(current: Step) {
@@ -67,7 +66,9 @@ export function useFlow(current: Step) {
     hasNext: next !== null,
     hasBack: back !== null,
     goNext: () => {
-      if (next) router.push(hrefFor(next));
+      if (!next) return;
+      console.log('nächster Schritt:', JSON.stringify(next), '→', hrefFor(next));
+      router.push(hrefFor(next));
     },
     goBack: () => {
       // Der Verlauf des Geräts hat Vorrang, damit der Zurück-Knopf sich
