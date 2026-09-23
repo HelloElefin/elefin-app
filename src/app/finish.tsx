@@ -1,21 +1,39 @@
 /**
- * Der Abschluss: PDF oder Konto.
+ * Der Abschluss: Blatt drucken oder Konto.
  *
- * Der PDF-Knopf führt in Phase 1 zur Druckansicht des Browsers. Die kommt in
- * Schritt 8 — bis dahin ist er absichtlich ausgegraut, statt so zu tun, als
- * gäbe es sie schon. Das Konto beginnt erst in Phase 3.
+ * Das Konto beginnt erst in Phase 3, der Knopf bleibt deshalb aus. Das Blatt
+ * geht im Browser über den Druckdialog — daraus wird auf dem Handy ein PDF.
  */
 import { ScrollView, Text, View } from 'react-native';
 
+import { loadCatalog } from '@/catalog';
 import { colors, fontSize, radius, screenPadding, spacing } from '@/design';
 import { useText } from '@/i18n/dynamic';
+import { buildPrintHtml } from '@/print/document';
+import { canPrint, printHtml } from '@/print/print';
 import { useFlow } from '@/state/flow-navigation';
-import { Button, Callout, useLineHeight } from '@/ui';
+import { useSession } from '@/state/session';
+import { Button, Callout, DangerButton, useLineHeight } from '@/ui';
 
 export default function FinishScreen() {
-  const { text } = useText();
+  const { text, exists } = useText();
+  const session = useSession();
   const flow = useFlow({ screenId: 'finish', pass: 1 });
   const lineHeight = useLineHeight();
+
+  function drucken() {
+    printHtml(
+      buildPrintHtml({
+        catalog: loadCatalog(),
+        caseFile: session.caseFile,
+        answers: session.answers,
+        extraPasses: session.extraPasses,
+        text,
+        exists,
+        now: new Date(),
+      }),
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
@@ -30,58 +48,83 @@ export default function FinishScreen() {
         {text('flow.finish.title')}
       </Text>
 
-      {[
-        { key: 'pdf', disabled: true },
-        { key: 'account', disabled: true },
-      ].map(({ key, disabled }) => (
-        <View
-          key={key}
+      <View
+        style={{
+          backgroundColor: colors.surface,
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderRadius: radius.md,
+          padding: spacing.md,
+          marginBottom: spacing.md,
+        }}
+      >
+        <Text
           style={{
-            backgroundColor: colors.surface,
-            borderWidth: 1,
-            borderColor: colors.border,
-            borderRadius: radius.md,
-            padding: spacing.md,
+            fontSize: fontSize.md,
+            lineHeight: lineHeight(fontSize.md),
+            color: colors.textPrimary,
+            marginBottom: spacing.xs,
+          }}
+        >
+          {text('flow.finish.pdf.title')}
+        </Text>
+        <Text
+          style={{
+            fontSize: fontSize.sm,
+            lineHeight: lineHeight(fontSize.sm),
+            color: colors.textSecondary,
             marginBottom: spacing.md,
           }}
         >
-          <Text
-            style={{
-              fontSize: fontSize.md,
-              lineHeight: lineHeight(fontSize.md),
-              color: colors.textPrimary,
-              marginBottom: spacing.xs,
-            }}
-          >
-            {text(`flow.finish.${key}.title`)}
-          </Text>
-          <Text
-            style={{
-              fontSize: fontSize.sm,
-              lineHeight: lineHeight(fontSize.sm),
-              color: colors.textSecondary,
-              marginBottom: spacing.md,
-            }}
-          >
-            {text(`flow.finish.${key}.hint`)}
-          </Text>
-          <Button
-            label={text(`flow.finish.${key}.title`)}
-            variant={key === 'pdf' ? 'primary' : 'quiet'}
-            disabled={disabled}
-            onPress={() => {}}
-          />
-        </View>
-      ))}
+          {canPrint() ? text('flow.finish.pdf.hint') : text('print.only_browser')}
+        </Text>
+        <Button label={text('print.action')} onPress={drucken} disabled={!canPrint()} />
+      </View>
 
-      <Callout
-        title={text('flow.finish.note.title')}
-        text={text('flow.finish.note.text')}
-        tone="warning"
-      />
+      <View
+        style={{
+          backgroundColor: colors.surface,
+          borderWidth: 1,
+          borderColor: colors.border,
+          borderRadius: radius.md,
+          padding: spacing.md,
+          marginBottom: spacing.md,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: fontSize.md,
+            lineHeight: lineHeight(fontSize.md),
+            color: colors.textPrimary,
+            marginBottom: spacing.xs,
+          }}
+        >
+          {text('flow.finish.account.title')}
+        </Text>
+        <Text
+          style={{
+            fontSize: fontSize.sm,
+            lineHeight: lineHeight(fontSize.sm),
+            color: colors.textSecondary,
+            marginBottom: spacing.md,
+          }}
+        >
+          {text('flow.finish.account.hint')}
+        </Text>
+        <Button label={text('flow.finish.account.title')} variant="quiet" disabled onPress={() => {}} />
+      </View>
 
-      <View style={{ marginTop: spacing.xl }}>
+      <Callout title={text('flow.finish.note.title')} text={text('flow.finish.note.text')} tone="warning" />
+
+      <View style={{ marginTop: spacing.xl, gap: spacing.sm }}>
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
+        <DangerButton
+          label={text('common.delete_all')}
+          question={text('common.delete_question')}
+          confirmLabel={text('common.delete_confirm')}
+          cancelLabel={text('common.delete_cancel')}
+          onConfirm={session.deleteAll}
+        />
       </View>
     </ScrollView>
   );

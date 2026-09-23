@@ -2,62 +2,62 @@
   "flow": {
     "start": {
       "title": "Alles Wichtige an einem Ort",
-      "subtitle": "Beantworte ein paar Fragen. Am Ende hast du eine Übersicht, die deinen Angehörigen im Ernstfall das Suchen erspart.",
+      "subtitle": "Ein paar Fragen — am Ende steht eine Übersicht, die Angehörigen im Ernstfall das Suchen erspart.",
       "next": "Jetzt starten",
-      "point_1": "Du brauchst keine Unterlagen",
-      "point_2": "Wir fragen keine Passwörter ab",
-      "point_3": "Alles bleibt auf deinem Gerät",
+      "point_1": "Keine Unterlagen nötig",
+      "point_2": "Keine Passwörter, keine Kontonummern",
+      "point_3": "Alles bleibt auf dem Gerät",
       "bereavement": {
         "question": "Ist gerade jemand gestorben?",
         "link": "Was jetzt zu tun ist"
       },
       "resume": "Weitermachen",
-      "resume_hint": "Du hast schon etwas festgehalten. Deine Angaben bleiben {{days}} Tage in diesem Browser und werden dann gelöscht.",
-      "expired": "Deine Angaben von letztem Mal sind nach {{days}} Tagen abgelaufen und wurden gelöscht. Wir fangen neu an."
+      "resume_hint": "Es ist schon etwas festgehalten. Die Angaben bleiben {{days}} Tage in diesem Browser und werden dann gelöscht.",
+      "expired": "Die Angaben vom letzten Mal sind nach {{days}} Tagen abgelaufen und wurden gelöscht. Der Fragebogen beginnt wieder von vorn."
     },
     "principles": {
-      "title": "So gehen wir mit deinen Angaben um",
-      "subtitle": "Du schreibst hier auf, wo Dinge liegen, die dir wichtig sind. Deshalb sagen wir vorher, was damit passiert — und was nicht.",
-      "next": "Verstanden, los geht’s",
+      "title": "So geht Elefin mit den Angaben um",
+      "subtitle": "Hier geht es um Dinge, die persönlich sind. Deshalb vorab, was mit den Angaben passiert — und was nicht.",
+      "next": "Verstanden, weiter",
       "item_1": {
-        "title": "Es bleibt zuerst auf deinem Gerät",
-        "text": "Was du eingibst, wird sofort auf deinem Handy verschlüsselt. Ohne Konto verlässt es das Gerät überhaupt nicht."
+        "title": "Es bleibt zuerst auf dem Gerät",
+        "text": "Eingaben werden sofort auf dem Handy verschlüsselt. Ohne Konto verlassen sie das Gerät überhaupt nicht."
       },
       "item_2": {
-        "title": "Wir können es nicht lesen",
-        "text": "Der Schlüssel liegt bei dir, nicht bei uns. Auch wenn du später bei uns speicherst, sehen wir nur unlesbare Zeichen. Das ist keine Zusage, die wir brechen könnten — wir haben schlicht keinen Weg dorthin."
+        "title": "Elefin kann es nicht lesen",
+        "text": "Der Schlüssel bleibt beim Nutzer. Auch bei späterer Speicherung im Konto sind für Elefin nur unlesbare Zeichen sichtbar. Das ist keine Zusage, die sich brechen ließe — es gibt schlicht keinen Weg dorthin."
       },
       "item_3": {
-        "title": "Wenn du speicherst, dann in Frankfurt",
-        "text": "Unsere Server stehen in Frankfurt. Es gilt europäisches Datenschutzrecht. [Noch nicht juristisch geprüft]"
+        "title": "Gespeichert wird in Frankfurt",
+        "text": "Die Server stehen in Frankfurt. Es gilt europäisches Datenschutzrecht. [Noch nicht juristisch geprüft]"
       },
       "item_4": {
-        "title": "Wir fragen nie nach Passwörtern",
+        "title": "Nie eine Frage nach Passwörtern",
         "text": "Keine PIN, keine Zugangsdaten, keine Kontonummer. Es geht immer nur darum, wo etwas zu finden ist."
       },
       "item_5": {
-        "title": "Nichts davon musst du beantworten",
-        "text": "Es gibt kein Pflichtfeld. Was du nicht weißt oder nicht angeben willst, überspringst du und ergänzt es später — oder nie."
+        "title": "Nichts davon ist Pflicht",
+        "text": "Es gibt kein Pflichtfeld. Was gerade nicht bekannt ist oder privat bleiben soll, lässt sich überspringen und später ergänzen — oder nie."
       }
     },
     "situation": {
-      "title": "Erzähl uns kurz, wie du lebst",
+      "title": "Ein paar Angaben zur Lebenssituation",
       "subtitle": "Das steuert nur, welche Fragen später überhaupt kommen.",
       "note": {
-        "title": "Warum wir das fragen",
+        "title": "Warum diese Frage",
         "text": "Ohne Testament entscheidet die gesetzliche Erbfolge. Wie die aussieht, hängt genau an diesen zwei Angaben."
       }
     },
     "inventory": {
-      "title": "Was davon trifft auf dich zu?",
-      "subtitle": "Tipp einfach an, was es gibt. Danach fragen wir nur noch zu dem nach, was du angetippt hast."
+      "title": "Was davon trifft zu?",
+      "subtitle": "Einfach antippen, was es gibt. Danach kommen nur noch Fragen zu den angetippten Punkten."
     },
     "emergency-contact": {
-      "title": "Wen sollen deine Angehörigen zuerst anrufen?",
-      "subtitle": "Diese Nummer steht später in deiner Übersicht. Damit jemand, der vor deinem Aktenordner steht, weiß, bei wem er anfangen soll.",
+      "title": "Wen sollten Angehörige zuerst anrufen?",
+      "subtitle": "Diese Nummer steht später in der Übersicht — damit jemand, der vor dem Aktenordner steht, weiß, wo er anfangen soll.",
       "note": {
-        "title": "Wir rufen hier niemanden an",
-        "text": "Elefin verschickt keine Nachrichten und wählt keine Nummern. Die Angabe steht nur in deiner eigenen Übersicht — für Menschen, nicht für uns."
+        "title": "Hier ruft niemand an",
+        "text": "Elefin verschickt keine Nachrichten und wählt keine Nummern. Die Angabe steht nur in der eigenen Übersicht — für Menschen, nicht für die App."
       },
       "summary": {
         "title": "Wer zuerst informiert wird",
@@ -65,7 +65,7 @@
       }
     },
     "funeral": {
-      "title": "Wie möchtest du bestattet werden?",
+      "title": "Wie soll die Bestattung aussehen?",
       "note": {
         "title": "Ein klarer Wunsch entlastet",
         "text": "Angehörige müssen dann nicht raten, während sie ohnehin überfordert sind."
@@ -79,7 +79,7 @@
       }
     },
     "organ-donation": {
-      "title": "Hast du etwas zur Organspende festgelegt?",
+      "title": "Ist etwas zur Organspende festgelegt?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Ohne Erklärung werden im Ernstfall die Angehörigen gefragt. Seit 2024 gibt es dafür ein bundesweites Register. [Noch nicht juristisch geprüft]"
@@ -93,7 +93,7 @@
       }
     },
     "documents": {
-      "title": "Wo liegen deine wichtigen Unterlagen?",
+      "title": "Wo liegen die wichtigen Unterlagen?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Ausweis, Verträge und Policen sollten an einem Ort liegen, den jemand kennt."
@@ -107,11 +107,11 @@
       }
     },
     "home-access": {
-      "title": "Wie kommt jemand in deine Wohnung?",
+      "title": "Wie kommt jemand in die Wohnung?",
       "subtitle": "Damit in den ersten Tagen jemand nach dem Rechten sehen kann — Post, Heizung, Blumen.",
       "note": {
         "title": "Bitte keine Codes",
-        "text": "Trag hier keine Codes für Tür oder Alarmanlage ein. Schreib auf, wer sie kennt — das genügt."
+        "text": "Codes für Tür oder Alarmanlage gehören nicht hierher. Es genügt zu notieren, wer sie kennt."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -122,7 +122,7 @@
       }
     },
     "employment-pension": {
-      "title": "Arbeitest du noch, oder bist du schon in Pension bzw. Rente?",
+      "title": "Arbeit, oder schon in Pension bzw. Rente?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Arbeitgeber und Pensionsversicherung sollten früh Bescheid wissen. Zu viel Ausgezahltes wird sonst später zurückgefordert. [Noch nicht juristisch geprüft]"
@@ -136,7 +136,7 @@
       }
     },
     "bank-account": {
-      "title": "Bei welcher Bank liegt dein Konto?",
+      "title": "Bei welcher Bank liegt das Konto?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Banken sperren Konten im Todesfall automatisch. Wer weiß, wo welches Konto liegt, kommt schneller an Geld für laufende Kosten."
@@ -150,7 +150,7 @@
       }
     },
     "securities": {
-      "title": "Wo liegt dein Depot?",
+      "title": "Wo liegt das Depot?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Wertpapiere gehen nicht verloren. Sie werden nur oft lange nicht gefunden."
@@ -161,7 +161,7 @@
       }
     },
     "safe-deposit": {
-      "title": "Wo ist dein Schließfach?",
+      "title": "Wo ist das Schließfach?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Der Zugang endet mit dem Tod. Erben brauchen einen Erbschein oder ein Testament, um es öffnen zu lassen."
@@ -172,7 +172,7 @@
       }
     },
     "valuables": {
-      "title": "Was gibt es an Wertsachen und wo liegt es?",
+      "title": "Welche Wertsachen gibt es, und wo liegen sie?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Was niemand kennt, wird beim Räumen der Wohnung übersehen."
@@ -205,7 +205,7 @@
       }
     },
     "pet": {
-      "title": "Wer kümmert sich um dein Tier?",
+      "title": "Wer kümmert sich um das Tier?",
       "note": {
         "title": "Gut zu wissen",
         "text": "In den ersten Tagen ist das oft die dringendste Frage überhaupt."
@@ -216,7 +216,7 @@
       }
     },
     "insurances": {
-      "title": "Welche Versicherungen hast du?",
+      "title": "Welche Versicherungen gibt es?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Eine Lebensversicherung zahlt erst, wenn jemand sie kennt und meldet."
@@ -230,11 +230,11 @@
       }
     },
     "subscriptions": {
-      "title": "Welche Abos laufen auf deinen Namen?",
-      "subtitle": "Gemeint ist alles, was monatlich abgebucht wird und was man kündigen kann.",
+      "title": "Welche Abos gibt es?",
+      "subtitle": "Gemeint ist alles, was monatlich abgebucht wird und sich kündigen lässt.",
       "note": {
         "title": "Warum die E-Mail-Adresse hilft",
-        "text": "Fast jedes Abo lässt sich über die Anmeldeadresse kündigen — das Passwort kann man sich darüber neu setzen lassen. Deshalb fragen wir danach und nie nach dem Passwort selbst."
+        "text": "Fast jedes Abo lässt sich über die Anmeldeadresse kündigen — das Passwort kann man sich darüber neu setzen lassen. Deshalb fragt Elefin danach und nie nach dem Passwort selbst."
       },
       "disclosure": {
         "title": "Haupt-E-Mail-Adresse"
@@ -246,7 +246,7 @@
     },
     "contracts": {
       "title": "Welche laufenden Verträge gibt es?",
-      "subtitle": "Gemeint sind Verträge für Dinge, die du täglich brauchst — die läuft man nicht einfach aus.",
+      "subtitle": "Gemeint sind Verträge für Dinge des Alltags — die lässt man nicht einfach auslaufen.",
       "note": {
         "title": "Warum getrennt von den Abos",
         "text": "Verträge für Strom oder Miete müssen übernommen oder umgemeldet werden. Abos kündigt man einfach. Das sind zwei ganz verschiedene Aufgaben."
@@ -257,7 +257,7 @@
       }
     },
     "memberships": {
-      "title": "Wo bist du Mitglied?",
+      "title": "Wo gibt es Mitgliedschaften?",
       "subtitle": "Mitgliedsbeiträge laufen weiter, bis jemand kündigt.",
       "note": {
         "title": "Gut zu wissen",
@@ -272,10 +272,10 @@
       }
     },
     "medical": {
-      "title": "Wer ist deine Hausärztin oder dein Hausarzt?",
+      "title": "Wer ist die Hausärztin oder der Hausarzt?",
       "note": {
-        "title": "Wir fragen nicht nach Diagnosen",
-        "text": "Es geht nur darum, wer dich kennt und wo die Unterlagen liegen. Was darin steht, bleibt deine Sache."
+        "title": "Keine Frage nach Diagnosen",
+        "text": "Es geht nur darum, wer die Person kennt und wo die Unterlagen liegen. Was darin steht, bleibt privat."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -286,10 +286,10 @@
       }
     },
     "power-of-attorney": {
-      "title": "Wo liegt deine Vorsorgevollmacht?",
+      "title": "Wo liegt die Vorsorgevollmacht?",
       "note": {
         "title": "Gut zu wissen",
-        "text": "Damit darf eine Person für dich entscheiden, wenn du es selbst nicht mehr kannst. [Noch nicht juristisch geprüft]"
+        "text": "Damit darf eine benannte Person entscheiden, wenn das selbst nicht mehr möglich ist. [Noch nicht juristisch geprüft]"
       },
       "summary": {
         "title": "Vorsorgevollmacht",
@@ -297,7 +297,7 @@
       }
     },
     "living-will": {
-      "title": "Wo liegt deine Patientenverfügung?",
+      "title": "Wo liegt die Patientenverfügung?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Ärzte fragen im Ernstfall zuerst die Angehörigen danach, nicht die Schublade."
@@ -308,7 +308,7 @@
       }
     },
     "last-will": {
-      "title": "Wo liegt dein Testament?",
+      "title": "Wo liegt das Testament?",
       "note": {
         "title": "Gut zu wissen",
         "text": "Ein Testament in der Wohnung kann übersehen werden. Beim Nachlassgericht wird es sicher gefunden. [Noch nicht juristisch geprüft]"
@@ -319,22 +319,22 @@
       }
     },
     "summary": {
-      "title": "Das hast du festgehalten",
+      "title": "Das ist festgehalten",
       "subtitle": "Was offen ist, ist kein Versäumnis. Es ist einfach der nächste Schritt."
     },
     "finish": {
-      "title": "Wie möchtest du das sichern?",
+      "title": "Wie soll das gesichert werden?",
       "note": {
         "title": "Was das PDF nicht kann",
-        "text": "Es liegt dort, wo du es hinlegst. Geht das Gerät verloren, ist auch die Übersicht weg."
+        "text": "Es liegt dort, wo es abgelegt wird. Geht das Gerät verloren, ist auch die Übersicht weg."
       },
       "pdf": {
         "title": "Als PDF speichern",
-        "hint": "Kostenlos, auch ohne Konto. Das Blatt für den Ordner — unverschlüsselt, also nichts, was du offen herumliegen lassen solltest."
+        "hint": "Kostenlos, auch ohne Konto. Das Blatt für den Ordner — unverschlüsselt, also nichts, was offen herumliegen sollte."
       },
       "account": {
-        "title": "Für dich aufbewahren lassen",
-        "hint": "Verschlüsselt, auf allen deinen Geräten, im Ernstfall für die benannte Person erreichbar. Ab hier beginnt das Konto."
+        "title": "Bei Elefin aufbewahren lassen",
+        "hint": "Verschlüsselt, auf allen Geräten, im Ernstfall für die benannte Person erreichbar. Ab hier beginnt das Konto."
       }
     }
   },
@@ -347,7 +347,7 @@
         "label": "Kinder"
       },
       "inventory": {
-        "unknown_hint": "Wir überspringen diesen Teil und du kannst später ergänzen"
+        "unknown_hint": "Dieser Teil wird übersprungen und lässt sich später ergänzen"
       }
     },
     "emergency_contacts": {
@@ -356,7 +356,7 @@
         "placeholder": "z. B. Maria Musterfrau"
       },
       "relationship": {
-        "label": "Beziehung zu dir"
+        "label": "Beziehung"
       },
       "phone": {
         "label": "Telefon",
@@ -365,7 +365,7 @@
     },
     "funeral_wishes": {
       "burial_type": {
-        "unknown_hint": "Möchte ich später festlegen"
+        "unknown_hint": "Soll später festgelegt werden"
       },
       "preferred_place": {
         "label": "Wunschort",
@@ -490,7 +490,7 @@
     },
     "insurances": {
       "types": {
-        "unknown_hint": "Steht alles in den Unterlagen, die wir vorhin notiert haben"
+        "unknown_hint": "Steht in den Unterlagen, die vorhin notiert wurden"
       },
       "policies_location": {
         "label": "Ort",
@@ -502,7 +502,7 @@
         "unknown_hint": "Wer den Zugang zum Postfach hat, findet sie"
       },
       "main_email": {
-        "label": "Adresse, mit der du dich bei Abos anmeldest",
+        "label": "Adresse für Abo-Anmeldungen",
         "placeholder": "z. B. name@web.de"
       }
     },
@@ -887,19 +887,19 @@
   },
   "block": {
     "before-start": {
-      "title": "Bevor wir anfangen"
+      "title": "Vorab"
     },
     "situation": {
-      "title": "Deine Situation"
+      "title": "Lebenssituation"
     },
     "your-list": {
-      "title": "Deine Liste"
+      "title": "Die eigene Liste"
     },
     "who-knows": {
       "title": "Wer Bescheid weiß"
     },
     "your-wishes": {
-      "title": "Dein Wunsch"
+      "title": "Wünsche"
     },
     "findability": {
       "title": "Auffindbarkeit"
@@ -940,7 +940,7 @@
     "multi_hint": "Mehrfachauswahl möglich",
     "select_all": "Alles auswählen",
     "deselect_all": "Auswahl aufheben",
-    "disclosure_later": "Kannst du auch später ergänzen",
+    "disclosure_later": "Lässt sich auch später ergänzen",
     "add_another": "Weitere hinzufügen",
     "pass": "{{current}} von {{total}}",
     "count_question": "Wie viele?",
@@ -953,14 +953,14 @@
     },
     "trust": {
       "title": "Wie am Anfang gesagt",
-      "text": "Wir fragen nie nach Kontonummer, PIN oder Passwort. Es geht nur darum, wo etwas liegt — damit niemand suchen muss."
+      "text": "Elefin fragt nie nach Kontonummer, PIN oder Passwort. Es geht nur darum, wo etwas liegt — damit niemand suchen muss."
     },
     "summary_state": {
       "answered": "Steht fest",
       "unknown": "Später klären",
       "open": "Nächster Schritt"
     },
-    "test_banner": "Test-App — deine Angaben liegen unverschlüsselt in diesem Browser und werden nach 7 Tagen gelöscht.",
+    "test_banner": "Test-App — die Angaben liegen unverschlüsselt in diesem Browser und werden nach 7 Tagen gelöscht.",
     "delete_all": "Alles löschen",
     "delete_question": "Wirklich alles löschen? Das lässt sich nicht rückgängig machen.",
     "delete_confirm": "Ja, alles löschen",
@@ -987,9 +987,9 @@
     "counter": "Schritt {{aktuell}} von {{gesamt}}"
   },
   "bankAccount": {
-    "title": "Deine Bankverbindung",
+    "title": "Bankverbindung",
     "why": "Banken sperren Konten im Todesfall automatisch. Wer weiß, wo welches Konto liegt, kommt schneller an Geld für laufende Kosten.",
-    "bezeichnung": "Wie nennst du das Konto?",
+    "bezeichnung": "Wie soll das Konto heißen?",
     "bezeichnungPlatzhalter": "Gehaltskonto",
     "institut": "Bei welcher Bank?",
     "institutPlatzhalter": "Erste Bank",
@@ -997,7 +997,7 @@
     "iban": "IBAN",
     "ibanPlatzhalter": "AT00 0000 0000 0000 0000",
     "kontoinhaber": "Kontoinhaber",
-    "kontoinhaberPlatzhalter": "Leer lassen, wenn es dein eigenes ist",
+    "kontoinhaberPlatzhalter": "Leer lassen, wenn es das eigene ist",
     "gespeichert_one": "{{count}} Konto erfasst",
     "gespeichert_other": "{{count}} Konten erfasst"
   },
@@ -1006,6 +1006,6 @@
     "falsche_laenge": "Diese IBAN hat nicht die erwartete Länge.",
     "ungueltige_zeichen": "Eine IBAN enthält nur Buchstaben und Ziffern.",
     "zu_kurz": "Da fehlt noch etwas.",
-    "unbekanntes_land": "Dieses Länderkürzel kennen wir nicht."
+    "unbekanntes_land": "Dieses Länderkürzel ist nicht bekannt."
   }
 }
