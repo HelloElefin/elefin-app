@@ -965,6 +965,16 @@
     "delete_question": "Wirklich alles löschen? Das lässt sich nicht rückgängig machen.",
     "delete_confirm": "Ja, alles löschen",
     "delete_cancel": "Abbrechen"
+  },  
+  "print": {
+    "title": "Übersicht für den Ernstfall",
+    "created": "Erstellt am {{date}}",
+    "action": "Blatt drucken oder als PDF sichern",
+    "unknown": "noch nicht bekannt",
+    "missing": "noch nicht notiert",
+    "count": "{{filled}} von {{declared}} notiert",
+    "only_browser": "Das Blatt lässt sich in dieser Fassung nur im Browser erzeugen.",
+    "footer": "Testfassung von Elefin. Dieses Blatt ist nicht verschlüsselt — bitte entsprechend aufbewahren."
   },
   "app": {
     "name": "Elefin"
