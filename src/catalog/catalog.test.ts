@@ -214,6 +214,11 @@ describe('Katalog: Textschlüssel auf Deutsch', () => {
 
 describe('Katalog: keine verwaisten Texte', () => {
   const screenIds = new Set(catalog.screens.map((s) => s.id));
+    /**
+   * Screens außerhalb des Fragenflusses. Sie stehen nicht im Katalog, weil
+   * sie keine Fragen stellen — aber ihre Texte liegen in derselben Datei.
+   */
+  const AUSSERHALB = ['bereavement'];
   const felder = new Set(alleFelder.map(({ screen, field }) => `${screen.category}.${field.id}`));
   const optionen = new Set(
     alleFelder.flatMap(({ screen, field }) =>
@@ -226,6 +231,7 @@ describe('Katalog: keine verwaisten Texte', () => {
     for (const k of keys) {
       if (!k.startsWith('flow.')) continue;
       const id = k.split('.')[1] ?? '';
+      if (AUSSERHALB.includes(id)) continue;
       if (!screenIds.has(id)) throw new Error(`Text ${k} gehört zu keinem Screen`);
     }
   });

@@ -1,8 +1,9 @@
 /**
  * Der Abschluss: Blatt drucken oder Konto.
  *
- * Das Konto beginnt erst in Phase 3, der Knopf bleibt deshalb aus. Das Blatt
- * geht im Browser über den Druckdialog — daraus wird auf dem Handy ein PDF.
+ * Das Konto beginnt erst in Phase 3, der Knopf bleibt deshalb aus — aber
+ * sichtbar und beschriftet, damit klar ist, dass es weitergeht. Das Blatt
+ * geht im Browser über den Druckdialog; daraus wird auf dem Handy ein PDF.
  */
 import { ScrollView, Text, View } from 'react-native';
 
@@ -13,7 +14,7 @@ import { buildPrintHtml } from '@/print/document';
 import { canPrint, printHtml } from '@/print/print';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Button, Callout, DangerButton, useLineHeight } from '@/ui';
+import { Button, Callout, DangerButton, Wordmark, useLineHeight } from '@/ui';
 
 export default function FinishScreen() {
   const { text, exists } = useText();
@@ -37,12 +38,17 @@ export default function FinishScreen() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+      <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+        <Wordmark centered />
+      </View>
+
       <Text
         style={{
           fontSize: fontSize.xl,
           lineHeight: lineHeight(fontSize.xl, 1.25),
           color: colors.textPrimary,
           marginBottom: spacing.lg,
+          textAlign: 'center',
         }}
       >
         {text('flow.finish.title')}
@@ -91,6 +97,22 @@ export default function FinishScreen() {
           marginBottom: spacing.md,
         }}
       >
+        <Text
+          style={{
+            fontSize: fontSize.xs,
+            lineHeight: lineHeight(fontSize.xs),
+            color: colors.warning,
+            backgroundColor: colors.warningSubtle,
+            borderRadius: radius.full,
+            paddingHorizontal: spacing.sm,
+            paddingVertical: 2,
+            alignSelf: 'flex-start',
+            marginBottom: spacing.sm,
+          }}
+        >
+          {text('common.coming_soon')}
+        </Text>
+
         <Text
           style={{
             fontSize: fontSize.md,

@@ -2,24 +2,29 @@
  * Der Startscreen.
  *
  * Erster Eindruck und zugleich das Versprechen, worauf man sich einlässt.
- * Ist schon etwas gespeichert, wird daraus ein Wiedereinstieg: weitermachen,
- * wo man aufgehört hat — oder alles löschen.
+ * Ist schon etwas gespeichert, wird daraus ein Wiedereinstieg.
+ *
+ * Unten, abgetrennt, die Ecke für den Ernstfall. Bewusst kein eigener
+ * Entscheidungsscreen davor: Fast jeder kommt hier an, um vorzusorgen, und
+ * müsste sonst einen Schritt für eine Minderheit mitgehen.
  */
-import { ScrollView, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
-import { colors, fontSize, radius, screenPadding, spacing } from '@/design';
+import { colors, fontSize, minTouchTarget, radius, screenPadding, spacing } from '@/design';
 import { openSteps } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
 import { MAX_AGE_DAYS } from '@/state/storage';
-import { Button, DangerButton, useLineHeight } from '@/ui';
+import { Art, Button, DangerButton, Wordmark, useLineHeight } from '@/ui';
 
 export default function StartScreen() {
   const { text } = useText();
   const session = useSession();
   const flow = useFlow({ screenId: 'start', pass: 1 });
+  const router = useRouter();
   const lineHeight = useLineHeight();
 
   const weitermachen = session.hasContent;
@@ -31,39 +36,40 @@ export default function StartScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl, flexGrow: 1 }}>
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text
-          style={{
-            fontSize: fontSize.xxl,
-            lineHeight: lineHeight(fontSize.xxl, 1.25),
-            color: colors.textPrimary,
-            marginBottom: spacing.md,
-          }}
-        >
-          {text('flow.start.title')}
-        </Text>
+    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xl, flexGrow: 1 }}>
+      <View style={{ flex: 1, justifyContent: 'center', gap: spacing.lg }}>
+        <Wordmark centered />
 
-        <Text
-          style={{
-            fontSize: fontSize.md,
-            lineHeight: lineHeight(fontSize.md),
-            color: colors.textSecondary,
-            marginBottom: spacing.xl,
-          }}
-        >
-          {text('flow.start.subtitle')}
-        </Text>
+        <View style={{ alignItems: 'center' }}>
+          <Art id="schublade" size="large" />
+        </View>
 
-        {session.startMode === 'expired' && (
-          <View
+        <View>
+          <Text
             style={{
-              backgroundColor: colors.surfaceMuted,
-              borderRadius: radius.md,
-              padding: spacing.md,
-              marginBottom: spacing.lg,
+              fontSize: fontSize.xxl,
+              lineHeight: lineHeight(fontSize.xxl, 1.25),
+              color: colors.textPrimary,
+              textAlign: 'center',
+              marginBottom: spacing.sm,
             }}
           >
+            {text('flow.start.title')}
+          </Text>
+          <Text
+            style={{
+              fontSize: fontSize.md,
+              lineHeight: lineHeight(fontSize.md),
+              color: colors.textSecondary,
+              textAlign: 'center',
+            }}
+          >
+            {text('flow.start.subtitle')}
+          </Text>
+        </View>
+
+        {session.startMode === 'expired' && (
+          <View style={{ backgroundColor: colors.surfaceMuted, borderRadius: radius.md, padding: spacing.md }}>
             <Text
               style={{
                 fontSize: fontSize.sm,
@@ -77,7 +83,7 @@ export default function StartScreen() {
         )}
 
         {!weitermachen && (
-          <View style={{ gap: spacing.sm, marginBottom: spacing.xl }}>
+          <View style={{ gap: spacing.sm }}>
             {['flow.start.point_1', 'flow.start.point_2', 'flow.start.point_3'].map((key) => (
               <View key={key} style={{ flexDirection: 'row', gap: spacing.sm }}>
                 <Text style={{ fontSize: fontSize.md, color: colors.accent }}>✓</Text>
@@ -103,7 +109,7 @@ export default function StartScreen() {
                 fontSize: fontSize.sm,
                 lineHeight: lineHeight(fontSize.sm),
                 color: colors.textSecondary,
-                marginBottom: spacing.xs,
+                textAlign: 'center',
               }}
             >
               {text('flow.start.resume_hint', { days: MAX_AGE_DAYS })}
@@ -120,13 +126,43 @@ export default function StartScreen() {
         ) : (
           <Button label={text('flow.start.next')} onPress={flow.goNext} />
         )}
+      </View>
 
-        {/*
-          Die Ecke „Ist gerade jemand gestorben?" aus dem Klickdummy fehlt hier
-          bewusst. Der Todesfall-Einstieg ist für den MVP geparkt, und ein Link,
-          der nirgends hinführt, wäre genau an dieser Stelle das falsche
-          Versprechen. Die Texte bleiben in der Sprachdatei stehen.
-        */}
+      {/* Der Nebeneingang. Kein eigener Screen davor, aber auch nicht versteckt. */}
+      <View
+        style={{
+          marginTop: spacing.xl,
+          paddingTop: spacing.md,
+          borderTopWidth: 1,
+          borderTopColor: colors.border,
+          alignItems: 'center',
+        }}
+      >
+        <Text
+          style={{
+            fontSize: fontSize.sm,
+            lineHeight: lineHeight(fontSize.sm),
+            color: colors.textSecondary,
+          }}
+        >
+          {text('flow.start.bereavement.question')}
+        </Text>
+        <Pressable
+          onPress={() => router.push('/bereavement')}
+          accessibilityRole="link"
+          style={{ minHeight: minTouchTarget, justifyContent: 'center', paddingHorizontal: spacing.sm }}
+        >
+          <Text
+            style={{
+              fontSize: fontSize.md,
+              lineHeight: lineHeight(fontSize.md),
+              color: colors.accent,
+              textDecorationLine: 'underline',
+            }}
+          >
+            {text('flow.start.bereavement.link')}
+          </Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
