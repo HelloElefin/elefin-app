@@ -1,5 +1,23 @@
 {
   "schemaVersion": 1,
+    "blocks": {
+    "intro": { "icon": "schublade" },
+    "before-start": { "icon": "schliessfach" },
+    "situation": { "icon": "zettel" },
+    "your-list": { "icon": "zettel" },
+    "who-knows": { "icon": "zettel" },
+    "your-wishes": { "icon": "zettel" },
+    "findability": { "icon": "ordner" },
+    "work": { "icon": "briefkasten" },
+    "money": { "icon": "dose" },
+    "property": { "icon": "haus" },
+    "home": { "icon": "napf" },
+    "protection": { "icon": "ordner" },
+    "recurring": { "icon": "briefkasten" },
+    "estate": { "icon": "fueller" },
+    "done": { "icon": "checkliste" },
+    "finish": { "icon": "checkliste" }
+  },
   "screens": [
     {
       "id": "start",

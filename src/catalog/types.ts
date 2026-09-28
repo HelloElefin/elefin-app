@@ -99,9 +99,21 @@ export type CatalogScreen = {
   fields: CatalogField[];
 };
 
+/** Ein Block des Flows — die Klammer über mehreren Screens. */
+export type CatalogBlock = {
+  /** Symbol aus src/ui/art, z. B. 'dose'. */
+  icon: string;
+};
+
 /** Der ganze Katalog. */
 export type Catalog = {
   schemaVersion: number;
+  /**
+   * Die Blöcke mit ihrem Symbol, unter ihrer Block-ID.
+   * Das Symbol steht hier und nicht im Code, damit eine neue Gruppe ohne
+   * Codeänderung entstehen kann.
+   */
+  blocks: Record<string, CatalogBlock>;
   /** In der Reihenfolge des Flows. */
   screens: CatalogScreen[];
 };

@@ -26,6 +26,7 @@ import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
 import {
+  Art,
   Button,
   Callout,
   Choice,
@@ -178,17 +179,19 @@ export default function QuestionScreen() {
       />
 
       {exists(`block.${screen.block}.title`) && (
-        <Text
-          style={{
-            fontSize: fontSize.xs,
-            lineHeight: lineHeight(fontSize.xs),
-            letterSpacing: 1,
-            color: colors.textSecondary,
-            marginBottom: spacing.sm,
-          }}
-        >
-          {text(`block.${screen.block}.title`).toUpperCase()}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
+          <Art id={catalog.blocks[screen.block]?.icon ?? ''} size="symbol" />
+          <Text
+            style={{
+              fontSize: fontSize.xs,
+              lineHeight: lineHeight(fontSize.xs),
+              letterSpacing: 1,
+              color: colors.textSecondary,
+            }}
+          >
+            {text(`block.${screen.block}.title`).toUpperCase()}
+          </Text>
+        </View>
       )}
 
       <Text

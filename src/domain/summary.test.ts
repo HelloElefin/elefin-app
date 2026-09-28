@@ -10,6 +10,7 @@ import { summaryRows } from './summary';
 
 const mini = parseCatalog({
   schemaVersion: 1,
+    blocks: { intro: { icon: 'zettel' }, b: { icon: 'dose' }, done: { icon: 'checkliste' } },
   screens: [
     { id: 'summary', kind: 'frame', block: 'done', repeatable: false, fields: [] },
     {

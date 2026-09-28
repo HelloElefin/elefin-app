@@ -21,8 +21,9 @@ import {
   Zettel,
   type DrawingProps,
 } from './drawings';
+import type { ArtId } from './ids';
 
-export const DRAWINGS = {
+export const DRAWINGS: Record<ArtId, ComponentType<DrawingProps>> = {
   dose: Dose,
   haus: Haus,
   napf: Napf,
@@ -33,10 +34,4 @@ export const DRAWINGS = {
   schublade: Schublade,
   schliessfach: Schliessfach,
   checkliste: Checkliste,
-} satisfies Record<string, ComponentType<DrawingProps>>;
-
-export type ArtId = keyof typeof DRAWINGS;
-
-export function isArtId(value: unknown): value is ArtId {
-  return typeof value === 'string' && value in DRAWINGS;
-}
+};

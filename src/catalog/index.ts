@@ -6,6 +6,7 @@ export { CatalogError, loadCatalog, parseCatalog, screenById } from './load';
 
 export type {
   Catalog,
+  CatalogBlock,
   CatalogField,
   CatalogOption,
   CatalogScreen,

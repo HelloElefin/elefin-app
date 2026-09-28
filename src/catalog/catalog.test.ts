@@ -16,6 +16,7 @@ import { CATEGORIES, isCategory } from '@/domain';
 import de from '../i18n/de/common.json';
 import { loadCatalog, parseCatalog } from './load';
 import type { CatalogScreen } from './types';
+import { isArtId } from '@/ui/art/ids';
 
 const catalog = loadCatalog();
 
@@ -120,8 +121,17 @@ describe('Katalog: Aufbau', () => {
       if (!hat) throw new Error(`Kategorie ${c} hat keinen Screen`);
     }
   });
-});
 
+    it('kennt zu jedem benutzten Block ein Symbol', () => {
+    for (const s of catalog.screens) {
+      const block = catalog.blocks[s.block];
+      if (!block) throw new Error(`Block "${s.block}" fehlt im Abschnitt blocks (benutzt von ${s.id})`);
+      if (!isArtId(block.icon)) {
+        throw new Error(`Block "${s.block}": Symbol "${block.icon}" gibt es in src/ui/art nicht`);
+      }
+    }
+  });
+});
 describe('Katalog: Inventar', () => {
   const inventar = catalog.screens.find((s) => s.id === 'inventory');
   const feld = inventar?.fields.find((f) => f.id === 'inventory');

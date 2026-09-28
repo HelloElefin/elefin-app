@@ -45,6 +45,7 @@ function caseFile(inventar: Partial<Record<Category, DeclaredCount | true>> = {}
 
 const mini = parseCatalog({
   schemaVersion: 1,
+    blocks: { intro: { icon: 'zettel' }, b: { icon: 'dose' }, done: { icon: 'checkliste' } },
   screens: [
     { id: 'start', kind: 'frame', block: 'intro', repeatable: false, fields: [] },
     {

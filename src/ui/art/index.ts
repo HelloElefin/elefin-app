@@ -1,4 +1,4 @@
 export { Art } from './Art';
 export { Wordmark } from './Wordmark';
-export { isArtId, type ArtId } from './registry';
+export { ART_IDS, isArtId, type ArtId } from './ids';
 export { useArtSize, type ArtSize } from './sizes';

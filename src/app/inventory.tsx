@@ -5,6 +5,11 @@
  * kommen. Und die erklärte Anzahl ist für Angehörige die wertvollste Angabe
  * überhaupt — sie verrät, dass es ein drittes Konto gibt, auch wenn nichts
  * dazu eingetragen wurde.
+ *
+ * Die Punkte stehen in Gruppen, mit dem Symbol des jeweiligen Blocks als
+ * Überschrift. Die Zuordnung ergibt sich aus dem Katalog: Zu welcher Gruppe
+ * eine Kategorie gehört, sagt der Block ihres Screens. Eine zweite Tabelle
+ * dafür gibt es bewusst nicht.
  */
 import { ScrollView, Text, View } from 'react-native';
 
@@ -14,7 +19,7 @@ import { declaredFor, isCategory, type Category, type DeclaredCount } from '@/do
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Button, Choice, MultiChoice, Progress, useLineHeight, type ChoiceOption } from '@/ui';
+import { Art, Button, Choice, MultiChoice, Progress, useLineHeight, type ChoiceOption } from '@/ui';
 
 const COUNTS: DeclaredCount[] = [1, 2, 3, 'more', 'unknown'];
 
@@ -28,19 +33,32 @@ export default function InventoryScreen() {
   const screen = catalog.screens.find((s) => s.id === 'inventory');
   const field = screen?.fields.find((f) => f.id === 'inventory');
 
-  /** Bei welchen Kategorien lohnt die Frage nach der Anzahl? */
-  const wiederholbar = new Set(
-    catalog.screens.filter((s) => s.repeatable && s.showIf).map((s) => s.showIf as Category),
+  /** Zu welchem Block gehört eine Kategorie, und ist sie wiederholbar? */
+  const zuKategorie = new Map(
+    catalog.screens
+      .filter((s) => s.showIf)
+      .map((s) => [s.showIf as Category, { block: s.block, repeatable: s.repeatable }]),
   );
 
-  const optionen: ChoiceOption[] = (field?.options ?? []).map((o) => {
-    const base = `option.case_profile.inventory.${o.value}`;
+  /** Die Punkte, nach Blöcken gruppiert, in der Reihenfolge des Katalogs. */
+  const gruppen: { block: string; werte: Category[] }[] = [];
+  for (const option of field?.options ?? []) {
+    if (!isCategory(option.value)) continue;
+    const block = zuKategorie.get(option.value)?.block;
+    if (!block) continue;
+    const vorhanden = gruppen.find((g) => g.block === block);
+    if (vorhanden) vorhanden.werte.push(option.value);
+    else gruppen.push({ block, werte: [option.value] });
+  }
+
+  function optionFor(value: Category): ChoiceOption {
+    const base = `option.case_profile.inventory.${value}`;
     return {
-      value: o.value,
+      value,
       label: text(`${base}.label`),
       ...(exists(`${base}.hint`) ? { hint: text(`${base}.hint`) } : {}),
     };
-  });
+  }
 
   const angetippt = (field?.options ?? [])
     .map((o) => o.value)
@@ -75,7 +93,7 @@ export default function InventoryScreen() {
     return Number(value) as DeclaredCount;
   }
 
-  const mitAnzahl = angetippt.filter((v) => isCategory(v) && wiederholbar.has(v));
+  const mitAnzahl = angetippt.filter((v) => isCategory(v) && zuKategorie.get(v)?.repeatable === true);
 
   return (
     <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
@@ -116,10 +134,34 @@ export default function InventoryScreen() {
         {text('common.multi_hint')}
       </Text>
 
-      <MultiChoice options={optionen} values={angetippt} onToggle={toggle} />
+      {gruppen.map((gruppe) => (
+        <View key={gruppe.block} style={{ marginBottom: spacing.lg }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: spacing.sm,
+              marginBottom: spacing.sm,
+            }}
+          >
+            <Art id={catalog.blocks[gruppe.block]?.icon ?? ''} size="symbol" />
+            <Text
+              style={{
+                fontSize: fontSize.sm,
+                lineHeight: lineHeight(fontSize.sm),
+                color: colors.textPrimary,
+              }}
+            >
+              {text(`block.${gruppe.block}.title`)}
+            </Text>
+          </View>
+
+          <MultiChoice options={gruppe.werte.map(optionFor)} values={angetippt} onToggle={toggle} />
+        </View>
+      ))}
 
       {mitAnzahl.length > 0 && (
-        <View style={{ marginTop: spacing.xl }}>
+        <View style={{ marginTop: spacing.lg }}>
           <Text
             style={{
               fontSize: fontSize.lg,

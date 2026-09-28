@@ -12,7 +12,8 @@ import { View } from 'react-native';
 
 import { colors, radius } from '@/design';
 
-import { DRAWINGS, type ArtId } from './registry';
+import { DRAWINGS } from './registry';
+import type { ArtId } from './ids';
 import { useArtSize, type ArtSize } from './sizes';
 
 type Props = {
@@ -26,7 +27,7 @@ export function Art({ id, size, color = colors.accent }: Props) {
   const breite = useArtSize(size);
   if (breite === null) return null;
 
-  const Zeichnung = (DRAWINGS as Record<string, (typeof DRAWINGS)['dose'] | undefined>)[id];
+  const Zeichnung = (DRAWINGS as Record<string, (typeof DRAWINGS)[ArtId] | undefined>)[id];
 
   return (
     <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">

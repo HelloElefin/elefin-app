@@ -52,8 +52,13 @@ const screenSchema = z.object({
   fields: z.array(fieldSchema),
 });
 
+const blockSchema = z.object({
+  icon: z.string().min(1),
+});
+
 const catalogSchema = z.object({
   schemaVersion: z.number(),
+  blocks: z.record(z.string(), blockSchema),
   screens: z.array(screenSchema).min(1),
 });
 
