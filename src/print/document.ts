@@ -26,6 +26,8 @@ import {
   type ExtraPasses,
 } from '@/domain';
 
+import { schubladeSvg, wordmarkHtml } from './art';
+
 export type PrintInput = {
   catalog: Catalog;
   caseFile: CaseFile;
@@ -147,6 +149,7 @@ export function buildPrintHtml(input: PrintInput): string {
   }
 
   const datum = input.now.toLocaleDateString('de-AT', { day: '2-digit', month: 'long', year: 'numeric' });
+  const AKZENT = '#1F5F5B';
 
   return `<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><title>${escape(input.text('print.title'))}</title>
@@ -159,7 +162,9 @@ export function buildPrintHtml(input: PrintInput): string {
        margin: 8mm 0 2mm; border-bottom: .3mm solid #E2E0DB; padding-bottom: 1mm; }
   h3 { font-size: 11pt; margin: 0 0 1mm; }
   .datum { color: #5A6663; font-size: 9pt; margin-bottom: 6mm; }
-  .kopf { border: .4mm solid #1F5F5B; border-radius: 2mm; padding: 4mm; margin-bottom: 6mm; }
+  .marke { display: flex; align-items: flex-start; justify-content: space-between; gap: 6mm; margin-bottom: 4mm; }
+  .kopf { border: .4mm solid #1F5F5B; border-radius: 2mm; padding: 4mm; margin-bottom: 4mm; }
+  .finder { color: #5A6663; font-size: 9pt; margin-bottom: 6mm; padding-left: 1mm; }
   .kopf-teil + .kopf-teil { margin-top: 3mm; }
   .thema { margin-bottom: 4mm; page-break-inside: avoid; }
   .durchgang { margin-bottom: 1.5mm; padding-left: 4mm; position: relative; }
@@ -172,9 +177,18 @@ export function buildPrintHtml(input: PrintInput): string {
   @media screen { body { padding: 10mm; max-width: 190mm; margin: 0 auto; } }
 </style></head>
 <body>
-  <h1>${escape(input.text('print.title'))}</h1>
-  <div class="datum">${escape(input.text('print.created', { date: datum }))}</div>
+  <div class="marke">
+    <div>
+      <h1>${escape(input.text('print.title'))}</h1>
+      <div class="datum">${escape(input.text('print.created', { date: datum }))}</div>
+    </div>
+    <div style="text-align: right">
+      ${schubladeSvg(38, AKZENT)}
+      <div>${wordmarkHtml(AKZENT)}</div>
+    </div>
+  </div>
   ${headBlock(input)}
+  <div class="finder">${escape(input.text('print.finder_note'))}</div>
   ${abschnitte.join('\n  ')}
   <div class="fuss">${escape(input.text('print.footer'))}</div>
 </body></html>`;
