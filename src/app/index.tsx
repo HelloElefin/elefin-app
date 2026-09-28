@@ -9,16 +9,16 @@
  * müsste sonst einen Schritt für eine Minderheit mitgehen.
  */
 import { useRouter } from 'expo-router';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
-import { colors, fontSize, minTouchTarget, radius, screenPadding, spacing } from '@/design';
+import { colors, fontSize, minTouchTarget, radius, spacing } from '@/design';
 import { openSteps } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
 import { MAX_AGE_DAYS } from '@/state/storage';
-import { Art, Button, DangerButton, Wordmark, useLineHeight } from '@/ui';
+import { Art, Button, DangerButton, Screen, Wordmark, useLineHeight } from '@/ui';
 
 export default function StartScreen() {
   const { text } = useText();
@@ -36,8 +36,8 @@ export default function StartScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xl, flexGrow: 1 }}>
-      <View style={{ flex: 1, justifyContent: 'center', gap: spacing.lg }}>
+    <Screen centered>
+      <View style={{ gap: spacing.lg }}>
         <Wordmark centered />
 
         <View style={{ alignItems: 'center' }}>
@@ -164,6 +164,6 @@ export default function StartScreen() {
           </Text>
         </Pressable>
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

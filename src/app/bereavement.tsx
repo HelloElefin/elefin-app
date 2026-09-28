@@ -10,11 +10,11 @@
  * Österreich und Deutschland verschieden.
  */
 import { useRouter } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
-import { colors, fontSize, radius, screenPadding, spacing } from '@/design';
+import { colors, fontSize, radius, spacing } from '@/design';
 import { useText } from '@/i18n/dynamic';
-import { Art, Button, useLineHeight } from '@/ui';
+import { Art, Button, Screen, useLineHeight } from '@/ui';
 
 const SCHRITTE = ['step_1', 'step_2', 'step_3', 'step_4', 'step_5', 'step_6', 'step_7'];
 
@@ -24,7 +24,7 @@ export default function BereavementScreen() {
   const lineHeight = useLineHeight();
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+    <Screen>
       <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
         <Art id="checkliste" size="medium" />
       </View>
@@ -107,6 +107,6 @@ export default function BereavementScreen() {
       <View style={{ marginTop: spacing.xl }}>
         <Button label={text('common.back')} variant="quiet" onPress={() => router.back()} />
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

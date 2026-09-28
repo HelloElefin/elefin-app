@@ -5,12 +5,12 @@
  * Fantasiewerte einträgt. Deshalb Zeichnung und Leitsatz oben — und darunter
  * kurze Punkte statt fünf gleich schwerer Kästen.
  */
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
-import { colors, fontSize, screenPadding, spacing } from '@/design';
+import { colors, fontSize, spacing } from '@/design';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
-import { Art, Button, useLineHeight } from '@/ui';
+import { Art, Button, Screen, useLineHeight } from '@/ui';
 
 const ITEMS = ['item_1', 'item_2', 'item_3', 'item_4', 'item_5'];
 
@@ -20,7 +20,7 @@ export default function PrinciplesScreen() {
   const lineHeight = useLineHeight();
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+    <Screen>
       <Text
         style={{
           fontSize: fontSize.xs,
@@ -87,6 +87,6 @@ export default function PrinciplesScreen() {
         <Button label={text('flow.principles.next')} onPress={flow.goNext} />
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

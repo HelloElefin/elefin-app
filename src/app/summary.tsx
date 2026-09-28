@@ -8,15 +8,15 @@
  * Offene Punkte sind kein Vorwurf, sondern der nächste Schritt. Deshalb
  * drei Zustände statt zwei, und jede Zeile führt zurück zu ihrem Screen.
  */
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
-import { colors, fontSize, minTouchTarget, radius, screenPadding, spacing } from '@/design';
+import { colors, fontSize, minTouchTarget, radius, spacing } from '@/design';
 import { joinGerman, phraseScreens, summaryRows } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Art, Button, useLineHeight } from '@/ui';
+import { Art, Button, Screen, useLineHeight } from '@/ui';
 
 export default function SummaryScreen() {
   const { text, exists } = useText();
@@ -38,7 +38,7 @@ export default function SummaryScreen() {
       : text('flow.summary.fallback');
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+    <Screen>
       <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
         <Art id="checkliste" size="medium" />
       </View>
@@ -131,6 +131,6 @@ export default function SummaryScreen() {
         <Button label={text('common.next')} onPress={flow.goNext} disabled={!flow.hasNext} />
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

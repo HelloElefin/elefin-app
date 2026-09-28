@@ -11,15 +11,24 @@
  * eine Kategorie gehört, sagt der Block ihres Screens. Eine zweite Tabelle
  * dafür gibt es bewusst nicht.
  */
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
-import { colors, fontSize, screenPadding, spacing } from '@/design';
+import { colors, fontSize, spacing } from '@/design';
 import { declaredFor, isCategory, type Category, type DeclaredCount } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Art, Button, Choice, MultiChoice, Progress, useLineHeight, type ChoiceOption } from '@/ui';
+import {
+  Art,
+  Button,
+  Choice,
+  MultiChoice,
+  Progress,
+  Screen,
+  useLineHeight,
+  type ChoiceOption,
+} from '@/ui';
 
 const COUNTS: DeclaredCount[] = [1, 2, 3, 'more', 'unknown'];
 
@@ -96,7 +105,7 @@ export default function InventoryScreen() {
   const mitAnzahl = angetippt.filter((v) => isCategory(v) && zuKategorie.get(v)?.repeatable === true);
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+    <Screen>
       <Progress
         position={flow.position}
         total={flow.total}
@@ -202,6 +211,6 @@ export default function InventoryScreen() {
         <Button label={text('common.next')} onPress={flow.goNext} />
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

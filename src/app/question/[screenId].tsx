@@ -10,10 +10,10 @@
  * belegter Name (window.screen), und der Router füllt ihn dann nicht.
  */
 import { useLocalSearchParams } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { loadCatalog, type CatalogField } from '@/catalog';
-import { colors, fontSize, screenPadding, spacing } from '@/design';
+import { colors, fontSize, spacing } from '@/design';
 import {
   getAnswer,
   answerKey,
@@ -34,6 +34,7 @@ import {
   Field,
   MultiChoice,
   Progress,
+  Screen,
   useLineHeight,
   type ChoiceOption,
 } from '@/ui';
@@ -56,15 +57,17 @@ export default function QuestionScreen() {
   // doch, dann mit der ID darin — sonst sucht man lange.
   if (!screen || !screen.category) {
     return (
-      <View style={{ flex: 1, padding: screenPadding, gap: spacing.md, justifyContent: 'center' }}>
-        <Text style={{ fontSize: fontSize.lg, color: colors.textPrimary }}>
-          Diese Frage gibt es nicht.
-        </Text>
-        <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary }}>
-          Screen-ID: {screenId === '' ? '(leer)' : screenId}
-        </Text>
-        <Button label={text('common.back')} onPress={flow.goBack} />
-      </View>
+      <Screen centered>
+        <View style={{ gap: spacing.md }}>
+          <Text style={{ fontSize: fontSize.lg, color: colors.textPrimary }}>
+            Diese Frage gibt es nicht.
+          </Text>
+          <Text style={{ fontSize: fontSize.sm, color: colors.textSecondary }}>
+            Screen-ID: {screenId === '' ? '(leer)' : screenId}
+          </Text>
+          <Button label={text('common.back')} onPress={flow.goBack} />
+        </View>
+      </Screen>
     );
   }
 
@@ -168,10 +171,7 @@ export default function QuestionScreen() {
   const kannUeberspringen = screen.fields.some((f) => f.allowUnknown);
 
   return (
-    <ScrollView
-      contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}
-      keyboardShouldPersistTaps="handled"
-    >
+    <Screen>
       <Progress
         position={flow.position}
         total={flow.total}
@@ -277,6 +277,6 @@ export default function QuestionScreen() {
 
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

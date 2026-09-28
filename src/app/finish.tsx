@@ -5,16 +5,16 @@
  * sichtbar und beschriftet, damit klar ist, dass es weitergeht. Das Blatt
  * geht im Browser über den Druckdialog; daraus wird auf dem Handy ein PDF.
  */
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
-import { colors, fontSize, radius, screenPadding, spacing } from '@/design';
+import { colors, fontSize, radius, spacing } from '@/design';
 import { useText } from '@/i18n/dynamic';
 import { buildPrintHtml } from '@/print/document';
 import { canPrint, printHtml } from '@/print/print';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Button, Callout, DangerButton, Wordmark, useLineHeight } from '@/ui';
+import { Button, Callout, DangerButton, Screen, Wordmark, useLineHeight } from '@/ui';
 
 export default function FinishScreen() {
   const { text, exists } = useText();
@@ -37,7 +37,7 @@ export default function FinishScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+    <Screen>
       <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
         <Wordmark centered />
       </View>
@@ -148,6 +148,6 @@ export default function FinishScreen() {
           onConfirm={session.deleteAll}
         />
       </View>
-    </ScrollView>
+    </Screen>
   );
 }

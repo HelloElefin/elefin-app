@@ -5,15 +5,15 @@
  * nicht zu einem Eintrag. An diesen beiden Angaben hängt die gesetzliche
  * Erbfolge — und in Phase 3 wandern sie als Erstes mit ins Konto.
  */
-import { ScrollView, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { loadCatalog, type CatalogField } from '@/catalog';
-import { colors, fontSize, screenPadding, spacing } from '@/design';
+import { colors, fontSize, spacing } from '@/design';
 import type { Answer, ChildrenStatus, MaritalStatus } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Button, Callout, Choice, Progress, useLineHeight, type ChoiceOption } from '@/ui';
+import { Button, Callout, Choice, Progress, Screen, useLineHeight, type ChoiceOption } from '@/ui';
 
 export default function SituationScreen() {
   const { text, exists } = useText();
@@ -40,7 +40,7 @@ export default function SituationScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+    <Screen>
       <Progress
         position={flow.position}
         total={flow.total}
@@ -108,6 +108,6 @@ export default function SituationScreen() {
         <Button label={text('common.next')} onPress={flow.goNext} />
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
       </View>
-    </ScrollView>
+    </Screen>
   );
 }
