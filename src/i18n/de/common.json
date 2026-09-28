@@ -62,7 +62,8 @@
       "summary": {
         "title": "Wer zuerst informiert wird",
         "empty": "Name und Telefon fehlen noch"
-      }
+      },
+      "phrase": "wer zuerst angerufen wird"
     },
     "funeral": {
       "title": "Wie soll die Bestattung aussehen?",
@@ -76,7 +77,8 @@
       "summary": {
         "title": "Bestattungswunsch",
         "empty": "Noch nicht festgelegt"
-      }
+      },
+      "phrase": "wie die Bestattung aussehen soll"
     },
     "organ-donation": {
       "title": "Ist etwas zur Organspende festgelegt?",
@@ -90,7 +92,8 @@
       "summary": {
         "title": "Organspende",
         "empty": "Noch nichts hinterlegt"
-      }
+      },
+      "phrase": "was zur Organspende gilt"
     },
     "documents": {
       "title": "Wo liegen die wichtigen Unterlagen?",
@@ -104,7 +107,8 @@
       "summary": {
         "title": "Fundort der Unterlagen",
         "empty": "Noch kein Ort notiert"
-      }
+      },
+      "phrase": "wo die Unterlagen liegen"
     },
     "home-access": {
       "title": "Wie kommt jemand in die Wohnung?",
@@ -119,7 +123,8 @@
       "summary": {
         "title": "Zugang zur Wohnung",
         "empty": "Noch niemand benannt"
-      }
+      },
+      "phrase": "wie jemand in die Wohnung kommt"
     },
     "employment-pension": {
       "title": "Arbeit, oder schon in Pension bzw. Rente?",
@@ -133,7 +138,8 @@
       "summary": {
         "title": "Arbeitgeber oder Pension",
         "empty": "Noch keine Stelle notiert"
-      }
+      },
+      "phrase": "woher das Einkommen kommt"
     },
     "bank-account": {
       "title": "Bei welcher Bank liegt das Konto?",
@@ -147,7 +153,8 @@
       "summary": {
         "title": "Konten",
         "empty": "Bank fehlt noch"
-      }
+      },
+      "phrase": "bei welcher Bank das Konto liegt"
     },
     "securities": {
       "title": "Wo liegt das Depot?",
@@ -158,7 +165,8 @@
       "summary": {
         "title": "Depot",
         "empty": "Bank fehlt noch"
-      }
+      },
+      "phrase": "wo das Depot liegt"
     },
     "safe-deposit": {
       "title": "Wo ist das Schließfach?",
@@ -169,7 +177,8 @@
       "summary": {
         "title": "Schließfach",
         "empty": "Filiale fehlt noch"
-      }
+      },
+      "phrase": "wo das Schließfach ist"
     },
     "valuables": {
       "title": "Welche Wertsachen gibt es, und wo liegen sie?",
@@ -180,7 +189,8 @@
       "summary": {
         "title": "Wertsachen",
         "empty": "Noch nichts notiert"
-      }
+      },
+      "phrase": "wo die Wertsachen liegen"
     },
     "real-estate": {
       "title": "Was für eine Immobilie ist das?",
@@ -191,7 +201,8 @@
       "summary": {
         "title": "Immobilie",
         "empty": "Noch nichts notiert"
-      }
+      },
+      "phrase": "was mit der Immobilie ist"
     },
     "vehicle": {
       "title": "Welches Fahrzeug ist das?",
@@ -202,7 +213,8 @@
       "summary": {
         "title": "Fahrzeug",
         "empty": "Noch nichts notiert"
-      }
+      },
+      "phrase": "wo Fahrzeugschlüssel und Papiere liegen"
     },
     "pet": {
       "title": "Wer kümmert sich um das Tier?",
@@ -213,7 +225,8 @@
       "summary": {
         "title": "Betreuung des Tieres",
         "empty": "Noch niemand benannt"
-      }
+      },
+      "phrase": "wer sich um das Tier kümmert"
     },
     "insurances": {
       "title": "Welche Versicherungen gibt es?",
@@ -227,7 +240,8 @@
       "summary": {
         "title": "Versicherungen",
         "empty": "Noch nichts angekreuzt"
-      }
+      },
+      "phrase": "welche Versicherungen es gibt"
     },
     "subscriptions": {
       "title": "Welche Abos gibt es?",
@@ -242,7 +256,8 @@
       "summary": {
         "title": "Abos",
         "empty": "Noch nichts angekreuzt"
-      }
+      },
+      "phrase": "welche Abos laufen"
     },
     "contracts": {
       "title": "Welche laufenden Verträge gibt es?",
@@ -254,7 +269,8 @@
       "summary": {
         "title": "Laufende Verträge",
         "empty": "Noch nichts angekreuzt"
-      }
+      },
+      "phrase": "welche Verträge laufen"
     },
     "memberships": {
       "title": "Wo gibt es Mitgliedschaften?",
@@ -269,7 +285,8 @@
       "summary": {
         "title": "Mitgliedschaften",
         "empty": "Noch nichts angekreuzt"
-      }
+      },
+      "phrase": "wo Mitgliedschaften bestehen"
     },
     "medical": {
       "title": "Wer ist die Hausärztin oder der Hausarzt?",
@@ -283,7 +300,8 @@
       "summary": {
         "title": "Hausärztin oder Hausarzt",
         "empty": "Noch niemand notiert"
-      }
+      },
+      "phrase": "wer die Hausärztin oder der Hausarzt ist"
     },
     "power-of-attorney": {
       "title": "Wo liegt die Vorsorgevollmacht?",
@@ -294,7 +312,8 @@
       "summary": {
         "title": "Vorsorgevollmacht",
         "empty": "Fundort fehlt noch"
-      }
+      },
+      "phrase": "wo die Vorsorgevollmacht liegt"
     },
     "living-will": {
       "title": "Wo liegt die Patientenverfügung?",
@@ -305,7 +324,8 @@
       "summary": {
         "title": "Patientenverfügung",
         "empty": "Fundort fehlt noch"
-      }
+      },
+      "phrase": "wo die Patientenverfügung liegt"
     },
     "last-will": {
       "title": "Wo liegt das Testament?",
@@ -316,11 +336,14 @@
       "summary": {
         "title": "Testament",
         "empty": "Fundort fehlt noch"
-      }
+      },
+      "phrase": "wo das Testament liegt"
     },
     "summary": {
       "title": "Das ist festgehalten",
-      "subtitle": "Was offen ist, ist kein Versäumnis. Es ist einfach der nächste Schritt."
+      "subtitle": "Was offen ist, ist kein Versäumnis. Es ist einfach der nächste Schritt.",
+      "sentence": "Damit ist festgehalten, {{list}}.",
+      "fallback": "Noch ist nichts festgehalten. Jeder offene Punkt unten ist ein möglicher nächster Schritt."
     },
     "finish": {
       "title": "Wie soll das gesichert werden?",
@@ -964,8 +987,9 @@
     "delete_all": "Alles löschen",
     "delete_question": "Wirklich alles löschen? Das lässt sich nicht rückgängig machen.",
     "delete_confirm": "Ja, alles löschen",
-    "delete_cancel": "Abbrechen"
-  },  
+    "delete_cancel": "Abbrechen",
+    "list_and": "und"
+  },
   "print": {
     "title": "Übersicht für den Ernstfall",
     "created": "Erstellt am {{date}}",

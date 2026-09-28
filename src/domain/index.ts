@@ -24,7 +24,7 @@ export {
   type Step,
 } from './flow';
 
-export { summaryRows, type SummaryRow } from './summary';
+export { joinGerman, phraseScreens, summaryRows, MAX_PHRASES, type SummaryRow } from './summary';
 
 export type {
   CaseFile,

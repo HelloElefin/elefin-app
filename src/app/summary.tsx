@@ -1,45 +1,79 @@
 /**
- * Die Übersicht.
+ * Die Übersicht — aus einer Liste wird ein Ergebnis.
  *
- * Jede Zeile führt zurück zu ihrem Screen. Offene Punkte sind kein Vorwurf,
- * sondern der nächste Schritt — deshalb drei Zustände statt zwei.
+ * Oben die Zeichnung und ein Satz, der benennt, was jetzt festgehalten ist.
+ * Erst darunter die Liste. Der Satz nennt höchstens drei Themen, sortiert
+ * nach Dringlichkeit — nicht nach der Reihenfolge, in der gefragt wurde.
+ *
+ * Offene Punkte sind kein Vorwurf, sondern der nächste Schritt. Deshalb
+ * drei Zustände statt zwei, und jede Zeile führt zurück zu ihrem Screen.
  */
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
 import { colors, fontSize, minTouchTarget, radius, screenPadding, spacing } from '@/design';
-import { summaryRows } from '@/domain';
+import { joinGerman, phraseScreens, summaryRows } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Button, useLineHeight } from '@/ui';
+import { Art, Button, useLineHeight } from '@/ui';
 
 export default function SummaryScreen() {
-  const { text } = useText();
+  const { text, exists } = useText();
   const session = useSession();
   const flow = useFlow({ screenId: 'summary', pass: 1 });
   const lineHeight = useLineHeight();
 
-  const rows = summaryRows(loadCatalog(), session.caseFile, session.answers, session.extraPasses);
+  const catalog = loadCatalog();
+  const rows = summaryRows(catalog, session.caseFile, session.answers, session.extraPasses);
+
+  const bausteine = phraseScreens(catalog, session.caseFile, session.answers, session.extraPasses)
+    .map((id) => `flow.${id}.phrase`)
+    .filter(exists)
+    .map((key) => text(key));
+
+  const satz =
+    bausteine.length > 0
+      ? text('flow.summary.sentence', { list: joinGerman(bausteine, text('common.list_and')) })
+      : text('flow.summary.fallback');
 
   return (
     <ScrollView contentContainerStyle={{ padding: screenPadding, paddingBottom: spacing.xxl }}>
+      <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+        <Art id="checkliste" size="medium" />
+      </View>
+
       <Text
         style={{
           fontSize: fontSize.xl,
           lineHeight: lineHeight(fontSize.xl, 1.25),
           color: colors.textPrimary,
           marginBottom: spacing.sm,
+          textAlign: 'center',
         }}
       >
         {text('flow.summary.title')}
       </Text>
+
       <Text
         style={{
           fontSize: fontSize.md,
           lineHeight: lineHeight(fontSize.md),
+          color: colors.textPrimary,
+          marginBottom: spacing.sm,
+          textAlign: 'center',
+        }}
+      >
+        {satz}
+      </Text>
+
+      <Text
+        style={{
+          fontSize: fontSize.sm,
+          lineHeight: lineHeight(fontSize.sm),
           color: colors.textSecondary,
           marginBottom: spacing.lg,
+          textAlign: 'center',
         }}
       >
         {text('flow.summary.subtitle')}

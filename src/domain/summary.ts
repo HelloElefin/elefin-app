@@ -64,3 +64,73 @@ export function summaryRows(
   }
   return rows;
 }
+
+/**
+ * Reihenfolge nach Dringlichkeit im Ernstfall, aus PM-02.
+ *
+ * Steuert, welche drei Themen im Abschlusssatz genannt werden, wenn jemand
+ * mehr als drei beantwortet hat. Was in den ersten Stunden zählt, steht oben.
+ * Kategorien, die hier fehlen, kommen zuletzt — in der Reihenfolge des
+ * Katalogs.
+ */
+const URGENCY: readonly Category[] = [
+  'funeral_wishes',
+  'emergency_contacts',
+  'home_access',
+  'pets',
+  'document_locations',
+  'bank_accounts',
+  'insurances',
+  'power_of_attorney',
+  'living_will',
+  'last_will',
+  'medical',
+  'digital_accounts',
+  'contracts',
+  'real_estate',
+  'vehicles',
+  'employment_pension',
+  'memberships',
+];
+
+/** Wie viele Bausteine der Abschlusssatz höchstens nennt. */
+export const MAX_PHRASES = 3;
+
+/**
+ * Die Screens für den Abschlusssatz: beantwortet, nach Dringlichkeit
+ * sortiert, höchstens drei.
+ *
+ * Nur 'answered' zählt. Ein „Weiß ich gerade nicht" ist kein Ergebnis, das
+ * man jemandem als Erfolg vorhält.
+ *
+ * Mehrere Screens derselben Kategorie (Bestattung und Organspende) können
+ * beide vorkommen — sie sind für Angehörige zwei verschiedene Auskünfte.
+ */
+export function phraseScreens(
+  catalog: Catalog,
+  caseFile: CaseFile,
+  answers: Answers,
+  extra: ExtraPasses = {},
+): string[] {
+  const rang = (c: Category) => {
+    const i = URGENCY.indexOf(c);
+    return i === -1 ? URGENCY.length : i;
+  };
+
+  return summaryRows(catalog, caseFile, answers, extra)
+    .filter((r) => r.state === 'answered')
+    .map((r, reihenfolge) => ({ ...r, reihenfolge }))
+    .sort((a, b) => rang(a.category) - rang(b.category) || a.reihenfolge - b.reihenfolge)
+    .slice(0, MAX_PHRASES)
+    .map((r) => r.screenId);
+}
+
+/**
+ * Eine Aufzählung auf Deutsch: „A", „A und B", „A, B und C".
+ * Das Wort für „und" kommt von außen, damit hier kein Text steht.
+ */
+export function joinGerman(parts: string[], und: string): string {
+  if (parts.length === 0) return '';
+  if (parts.length === 1) return parts[0] as string;
+  return `${parts.slice(0, -1).join(', ')} ${und} ${parts.at(-1)}`;
+}

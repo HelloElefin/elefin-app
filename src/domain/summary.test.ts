@@ -1,12 +1,12 @@
 /** Tests der Übersicht: drei Zustände und die Zählung „2 von 3". */
 import { describe, expect, it } from 'vitest';
 
-import { parseCatalog } from '@/catalog';
+import { loadCatalog, parseCatalog } from '@/catalog';
 
 import { answerKey, setAnswer, type Answers } from './answers';
 import type { Category } from './categories';
 import type { CaseFile, DeclaredCount } from './case-file';
-import { summaryRows } from './summary';
+import { joinGerman, phraseScreens, summaryRows } from './summary';
 
 const mini = parseCatalog({
   schemaVersion: 1,
@@ -89,5 +89,56 @@ describe('Übersicht', () => {
     const row = summaryRows(mini, caseFile({ pets: 1 }), answers)[0];
     expect(row?.filled).toBe(0);
     expect(row?.state).toBe('open');
+  });
+});
+
+/** Ein Akten-Kopf gegen den echten Katalog, mit allem angetippt. */
+function echterFall(): CaseFile {
+  const inventory: CaseFile['inventory'] = {};
+  for (const c of ['bank_accounts', 'pets', 'document_locations'] as Category[]) {
+    inventory[c] = { state: 'answered', value: { applies: true, count: 1 } };
+  }
+  return { ...caseFile({}), inventory };
+}
+
+describe('Abschlusssatz', () => {
+  function beantwortet(...paare: [Category, string][]): Answers {
+    let a: Answers = {};
+    for (const [cat, feld] of paare) a = setAnswer(a, answerKey(cat, 1, feld), { state: 'answered', value: 'x' });
+    return a;
+  }
+
+  it('nennt höchstens drei Themen', () => {
+    const answers = beantwortet(
+      ['bank_accounts', 'institution'],
+      ['pets', 'animal'],
+      ['emergency_contacts', 'name'],
+      ['document_locations', 'location'],
+    );
+    const ids = phraseScreens(loadCatalog(), echterFall(), answers);
+    expect(ids).toHaveLength(3);
+  });
+
+  it('sortiert nach Dringlichkeit, nicht nach Katalogreihenfolge', () => {
+    const answers = beantwortet(
+      ['bank_accounts', 'institution'],
+      ['pets', 'animal'],
+      ['emergency_contacts', 'name'],
+    );
+    const ids = phraseScreens(loadCatalog(), echterFall(), answers);
+    expect(ids).toEqual(['emergency-contact', 'pet', 'bank-account']);
+  });
+
+  it('zählt „weiß nicht" nicht als Ergebnis', () => {
+    let a: Answers = {};
+    a = setAnswer(a, answerKey('pets', 1, 'animal'), { state: 'unknown' });
+    expect(phraseScreens(loadCatalog(), echterFall(), a)).toEqual([]);
+  });
+
+  it('setzt die Aufzählung nach deutschen Regeln zusammen', () => {
+    expect(joinGerman([], 'und')).toBe('');
+    expect(joinGerman(['A'], 'und')).toBe('A');
+    expect(joinGerman(['A', 'B'], 'und')).toBe('A und B');
+    expect(joinGerman(['A', 'B', 'C'], 'und')).toBe('A, B und C');
   });
 });

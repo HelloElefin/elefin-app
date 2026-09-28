@@ -10,10 +10,10 @@
     "ios": {
       "icon": "./assets/expo.icon"
     },
-    "android": {
-      "package": "com.helloelefin.elefin",
+        "android": {
+      "package": "de.elefin.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#1F5F5B",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -34,10 +34,7 @@
           "imageWidth": 76
         }
       ],
-      "expo-localization",
-      "react-native-quick-crypto",
-      "expo-secure-store",
-      "expo-sqlite"
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true,
