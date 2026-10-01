@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors } from '@/design';
 import { SessionProvider } from '@/state/session';
-import { TestBanner } from '@/ui';
+import { Splash, TestBanner } from '@/ui';
 
 export default function RootLayout() {
   const { t, i18n } = useTranslation();
@@ -18,6 +18,8 @@ export default function RootLayout() {
         {/* Nur Phase 1. Fällt weg, sobald nativ und verschlüsselt gespeichert wird. */}
         <TestBanner text={t('common.test_banner')} />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }} />
+        {/* Liegt als Ebene darüber und blendet sich nach kurzer Zeit weg. */}
+        <Splash title={t('flow.splash.title')} claim={t('flow.splash.claim')} />
       </SafeAreaView>
     </SessionProvider>
   );

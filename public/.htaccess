@@ -1,0 +1,21 @@
+# Adressen ohne .html auf die passende Datei leiten.
+#
+# Der Webserver findet Dateien nur unter ihrem vollen Namen, die App erzeugt
+# Adressen aber ohne Endung. Diese Regel schlägt die Brücke: Gibt es zur
+# Adresse eine .html-Datei, wird sie ausgeliefert — sonst die Startseite,
+# damit die App selbst entscheiden kann.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Vorhandene Dateien und Ordner unverändert ausliefern
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Gibt es die Adresse als .html-Datei? Dann diese nehmen.
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.*)$ $1.html [L]
+
+  # Alles Übrige an die Startseite, die App übernimmt.
+  RewriteRule ^ index.html [L]
+</IfModule>

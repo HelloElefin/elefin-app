@@ -280,3 +280,18 @@ export default function QuestionScreen() {
     </Screen>
   );
 }
+
+/**
+ * Welche Frage-Screens beim Bauen als eigene Seite entstehen sollen.
+ *
+ * Ohne das wüsste Expo nicht, welche Werte hinter [screenId] stehen können,
+ * und erzeugte nur eine Datei mit eckigen Klammern im Namen. Die kennt kein
+ * Webspace — ein Neuladen auf /question/bank-account endete dann im Nichts.
+ *
+ * Die Liste kommt aus dem Katalog. Neue Fragen erscheinen also von selbst.
+ */
+export async function generateStaticParams() {
+  return loadCatalog()
+    .screens.filter((s) => s.kind === 'question')
+    .map((s) => ({ screenId: s.id }));
+}

@@ -1,5 +1,9 @@
 {
   "flow": {
+    "splash": {
+      "title": "Herzlich willkommen bei Elefin",
+      "claim": "[Claim aus dem Marke-Chat]"
+    },
     "start": {
       "title": "Alles Wichtige an einem Ort",
       "subtitle": "Ein paar Fragen — am Ende steht eine Übersicht, die Angehörigen im Ernstfall das Suchen erspart.",
@@ -84,7 +88,9 @@
     },
     "inventory": {
       "title": "Was davon trifft zu?",
-      "subtitle": "Einfach antippen, was es gibt. Danach kommen nur noch Fragen zu den angetippten Punkten."
+      "subtitle": "Einfach antippen, was es gibt. Danach kommen nur noch Fragen zu den angetippten Punkten.",
+      "counts_title": "Wie viele sind es jeweils?",
+      "counts_subtitle": "Eine grobe Zahl genügt. Sie hilft später beim Suchen, auch wenn nicht alles notiert ist."
     },
     "emergency-contact": {
       "title": "Wen sollten Angehörige zuerst anrufen?",

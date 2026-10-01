@@ -73,6 +73,12 @@ export function Screen({ children, centered = false, style }: Props) {
       <ScrollView
         contentContainerStyle={{
           padding: screenPadding,
+                    // Am breiten Bildschirm mittig statt über die ganze Breite. Die
+          // App ist für das Handy gebaut, und eine Zeile über 1400 Punkt
+          // liest niemand gern.
+          width: '100%',
+          maxWidth: 520,
+          alignSelf: 'center',
           paddingBottom: spacing.xxl,
           ...(centered ? { flexGrow: 1, justifyContent: 'center' } : {}),
           ...style,

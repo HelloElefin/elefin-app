@@ -10,11 +10,11 @@
 export const colors = {
   // --- Hintergründe ---
   /** Hintergrund des gesamten Bildschirms. Warmes Off-White, nicht grell. */
-  background: '#FBFAF8',
+  background: '#FBF5E9',
   /** Karten, Listeneinträge, alles was auf dem Hintergrund "liegt". */
   surface: '#FFFFFF',
   /** Dezent hervorgehobener Bereich, z. B. Hinweisbox. */
-  surfaceMuted: '#F2F0EC',
+  surfaceMuted: '#F2EDE2',
 
   // --- Text ---
   /** Überschriften und Fließtext. Kontrast auf background: 15,8:1 */
