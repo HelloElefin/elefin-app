@@ -1,10 +1,16 @@
 /**
- * Der Abschluss: Blatt drucken oder Konto.
+ * Der Abschluss: der Weg ins Schließfach.
  *
- * Das Konto beginnt erst in Phase 3, der Knopf bleibt deshalb aus — aber
- * sichtbar und beschriftet, damit klar ist, dass es weitergeht. Das Blatt
- * geht im Browser über den Druckdialog; daraus wird auf dem Handy ein PDF.
+ * Das Blatt zum Ausdrucken bleibt erreichbar, aber als kleiner Knopf oben
+ * rechts — es ist ein Zwischenschritt, nicht das Ziel. Der Screen selbst
+ * zeigt, was das Schließfach von Elefin mehr kann als ein Blatt Papier, und
+ * was danach kommt.
+ *
+ * Der Hauptknopf führt in Phase 1 auf einen ehrlichen Hinweis, dass das
+ * Schließfach in Arbeit ist. In der Testrunde zeigt sich daran, wer es
+ * haben will.
  */
+import { useRouter } from 'expo-router';
 import { Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
@@ -14,12 +20,25 @@ import { buildPrintHtml } from '@/print/document';
 import { canPrint, printHtml } from '@/print/print';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
-import { Button, Callout, DangerButton, Screen, Wordmark, useLineHeight } from '@/ui';
+import { Art, Button, Chip, DangerButton, Screen, Wordmark, useLineHeight } from '@/ui';
+
+const VORTEILE: { key: string; icon: string }[] = [
+  { key: 'family', icon: 'menschen' },
+  { key: 'online', icon: 'wolke' },
+  { key: 'history', icon: 'verlauf' },
+];
+
+const GEPLANT: { key: string; icon: string }[] = [
+  { key: 'living_will', icon: 'fueller' },
+  { key: 'last_will', icon: 'fueller' },
+  { key: 'documents', icon: 'ordner' },
+];
 
 export default function FinishScreen() {
   const { text, exists } = useText();
   const session = useSession();
   const flow = useFlow({ screenId: 'finish', pass: 1 });
+  const router = useRouter();
   const lineHeight = useLineHeight();
 
   function drucken() {
@@ -36,10 +55,71 @@ export default function FinishScreen() {
     );
   }
 
+  function zeile(key: string, icon: string, bereich: 'benefits' | 'planned') {
+    return (
+      <View key={key} style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md }}>
+        <View
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: radius.full,
+            backgroundColor: colors.surface,
+            borderWidth: 1,
+            borderColor: colors.border,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Art id={icon} size="symbol" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontSize: fontSize.md,
+              lineHeight: lineHeight(fontSize.md),
+              color: colors.textPrimary,
+            }}
+          >
+            {text(`flow.finish.${bereich}.${key}.title`)}
+          </Text>
+          <Text
+            style={{
+              fontSize: fontSize.sm,
+              lineHeight: lineHeight(fontSize.sm),
+              color: colors.textSecondary,
+            }}
+          >
+            {text(`flow.finish.${bereich}.${key}.text`)}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <Screen>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: spacing.sm,
+          marginBottom: spacing.xl,
+        }}
+      >
+        <Wordmark />
+        {canPrint() && (
+          <Chip
+            label={text('flow.finish.pdf_chip')}
+            accessibilityLabel={text('print.action')}
+            icon="zettel"
+            onPress={drucken}
+          />
+        )}
+      </View>
+
       <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
-        <Wordmark centered />
+        <Art id="schliessfach" size="medium" />
       </View>
 
       <Text
@@ -47,56 +127,48 @@ export default function FinishScreen() {
           fontSize: fontSize.xl,
           lineHeight: lineHeight(fontSize.xl, 1.25),
           color: colors.textPrimary,
-          marginBottom: spacing.lg,
           textAlign: 'center',
+          marginBottom: spacing.sm,
         }}
       >
         {text('flow.finish.title')}
       </Text>
-
-      <View
+      <Text
         style={{
-          backgroundColor: colors.surface,
-          borderWidth: 1,
-          borderColor: colors.border,
-          borderRadius: radius.md,
-          padding: spacing.md,
+          fontSize: fontSize.md,
+          lineHeight: lineHeight(fontSize.md),
+          color: colors.textSecondary,
+          textAlign: 'center',
+          marginBottom: spacing.xl,
+        }}
+      >
+        {text('flow.finish.subtitle')}
+      </Text>
+
+      <Text
+        style={{
+          fontSize: fontSize.xs,
+          lineHeight: lineHeight(fontSize.xs),
+          letterSpacing: 1,
+          color: colors.textSecondary,
           marginBottom: spacing.md,
         }}
       >
+        {text('flow.finish.benefits.heading').toUpperCase()}
+      </Text>
+      {VORTEILE.map((v) => zeile(v.key, v.icon, 'benefits'))}
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.lg, marginBottom: spacing.md }}>
         <Text
           style={{
-            fontSize: fontSize.md,
-            lineHeight: lineHeight(fontSize.md),
-            color: colors.textPrimary,
-            marginBottom: spacing.xs,
-          }}
-        >
-          {text('flow.finish.pdf.title')}
-        </Text>
-        <Text
-          style={{
-            fontSize: fontSize.sm,
-            lineHeight: lineHeight(fontSize.sm),
+            fontSize: fontSize.xs,
+            lineHeight: lineHeight(fontSize.xs),
+            letterSpacing: 1,
             color: colors.textSecondary,
-            marginBottom: spacing.md,
           }}
         >
-          {canPrint() ? text('flow.finish.pdf.hint') : text('print.only_browser')}
+          {text('flow.finish.planned.heading').toUpperCase()}
         </Text>
-        <Button label={text('print.action')} onPress={drucken} disabled={!canPrint()} />
-      </View>
-
-      <View
-        style={{
-          backgroundColor: colors.surface,
-          borderWidth: 1,
-          borderColor: colors.border,
-          borderRadius: radius.md,
-          padding: spacing.md,
-          marginBottom: spacing.md,
-        }}
-      >
         <Text
           style={{
             fontSize: fontSize.xs,
@@ -106,39 +178,15 @@ export default function FinishScreen() {
             borderRadius: radius.full,
             paddingHorizontal: spacing.sm,
             paddingVertical: 2,
-            alignSelf: 'flex-start',
-            marginBottom: spacing.sm,
           }}
         >
           {text('common.coming_soon')}
         </Text>
-
-        <Text
-          style={{
-            fontSize: fontSize.md,
-            lineHeight: lineHeight(fontSize.md),
-            color: colors.textPrimary,
-            marginBottom: spacing.xs,
-          }}
-        >
-          {text('flow.finish.account.title')}
-        </Text>
-        <Text
-          style={{
-            fontSize: fontSize.sm,
-            lineHeight: lineHeight(fontSize.sm),
-            color: colors.textSecondary,
-            marginBottom: spacing.md,
-          }}
-        >
-          {text('flow.finish.account.hint')}
-        </Text>
-        <Button label={text('flow.finish.account.title')} variant="quiet" disabled onPress={() => {}} />
       </View>
-
-      <Callout title={text('flow.finish.note.title')} text={text('flow.finish.note.text')} tone="warning" />
+      {GEPLANT.map((g) => zeile(g.key, g.icon, 'planned'))}
 
       <View style={{ marginTop: spacing.xl, gap: spacing.sm }}>
+        <Button label={text('flow.finish.cta')} onPress={() => router.push('/account')} />
         {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
         <DangerButton
           label={text('common.delete_all')}

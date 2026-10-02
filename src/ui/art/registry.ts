@@ -14,10 +14,13 @@ import {
   Dose,
   Fueller,
   Haus,
+  Menschen,
   Napf,
   Ordner,
   Schliessfach,
   Schublade,
+  Verlauf,
+  Wolke,
   Zettel,
   type DrawingProps,
 } from './drawings';
@@ -34,4 +37,7 @@ export const DRAWINGS: Record<ArtId, ComponentType<DrawingProps>> = {
   schublade: Schublade,
   schliessfach: Schliessfach,
   checkliste: Checkliste,
+  menschen: Menschen,
+  wolke: Wolke,
+  verlauf: Verlauf,
 };

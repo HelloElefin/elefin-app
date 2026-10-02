@@ -218,7 +218,7 @@ describe('Katalog: keine verwaisten Texte', () => {
    * Screens außerhalb des Fragenflusses. Sie stehen nicht im Katalog, weil
    * sie keine Fragen stellen — aber ihre Texte liegen in derselben Datei.
    */
-    const AUSSERHALB = ['bereavement', 'splash'];
+  const AUSSERHALB = ['bereavement', 'splash', 'account'];
   const felder = new Set(alleFelder.map(({ screen, field }) => `${screen.category}.${field.id}`));
   const optionen = new Set(
     alleFelder.flatMap(({ screen, field }) =>

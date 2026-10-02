@@ -5,19 +5,21 @@
  * eigener Screen im Fluss: Sonst wäre bei jedem Neuladen ein Klick mehr
  * nötig, und gerade in der Testfassung lädt man oft neu.
  *
+ * Umgekehrte Farben — grüner Grund, sandige Schrift. Der einzige Moment, in
+ * dem die Marke den ganzen Bildschirm bekommt.
+ *
  * Antippen überspringt. Wer schnell ist, sieht ihn also kaum.
  */
 import { useEffect, useRef, useState } from 'react';
-import { Animated, Pressable, StyleSheet, Text } from 'react-native';
+import { Animated, Pressable, Text } from 'react-native';
 
 import { colors, fontSize, screenPadding, spacing } from '@/design';
 
-import { Art } from './art';
-import { Wordmark } from './art';
+import { Art, Wordmark } from './art';
 import { useLineHeight } from './typography';
 
-const SICHTBAR = 1600;
-const AUSBLENDEN = 320;
+const SICHTBAR = 2500;
+const AUSBLENDEN = 500;
 
 export function Splash({ title, claim }: { title: string; claim: string }) {
   const [fertig, setFertig] = useState(false);
@@ -43,9 +45,13 @@ export function Splash({ title, claim }: { title: string; claim: string }) {
   return (
     <Animated.View
       style={{
-        ...StyleSheet.absoluteFill,
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
         opacity: deckkraft,
-        backgroundColor: colors.background,
+        backgroundColor: colors.accent,
         zIndex: 10,
       }}
     >
@@ -61,13 +67,13 @@ export function Splash({ title, claim }: { title: string; claim: string }) {
           padding: screenPadding,
         }}
       >
-        <Art id="schublade" size="medium" />
-        <Wordmark centered />
+        <Art id="schublade" size="medium" color={colors.background} />
+        <Wordmark centered color={colors.background} />
         <Text
           style={{
             fontSize: fontSize.lg,
             lineHeight: lineHeight(fontSize.lg, 1.25),
-            color: colors.textPrimary,
+            color: colors.background,
             textAlign: 'center',
           }}
         >
@@ -77,7 +83,8 @@ export function Splash({ title, claim }: { title: string; claim: string }) {
           style={{
             fontSize: fontSize.md,
             lineHeight: lineHeight(fontSize.md),
-            color: colors.textSecondary,
+            color: colors.background,
+            opacity: 0.8,
             textAlign: 'center',
           }}
         >

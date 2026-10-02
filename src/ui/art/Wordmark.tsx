@@ -4,6 +4,9 @@
  * Vorerst nur der Schriftzug mit einem Platzhalter daneben. Sobald es ein
  * Zeichen gibt, kommt es als Zeichnung mit der ID "elefant" hinein und
  * diese Datei bleibt, wie sie ist.
+ *
+ * Die Farbe lässt sich übergeben, damit die Wortmarke auch auf dunklem
+ * Grund funktioniert — etwa auf dem Willkommensgruß.
  */
 import { Text, View } from 'react-native';
 
@@ -12,8 +15,9 @@ import { colors, fontSize, spacing } from '@/design';
 import { useLineHeight } from '../typography';
 import { Art } from './Art';
 
-export function Wordmark({ centered = false }: { centered?: boolean }) {
+export function Wordmark({ centered = false, color }: { centered?: boolean; color?: string }) {
   const lineHeight = useLineHeight();
+  const farbe = color ?? colors.accent;
 
   return (
     <View
@@ -26,12 +30,12 @@ export function Wordmark({ centered = false }: { centered?: boolean }) {
       accessibilityRole="header"
       accessibilityLabel="Elefin"
     >
-      <Art id="elefant" size="symbol" />
+      <Art id="elefant" size="symbol" color={farbe} />
       <Text
         style={{
           fontSize: fontSize.lg,
           lineHeight: lineHeight(fontSize.lg),
-          color: colors.accent,
+          color: farbe,
           letterSpacing: 0.5,
         }}
       >

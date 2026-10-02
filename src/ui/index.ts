@@ -4,14 +4,16 @@
  */
 export { Button } from './Button';
 export { Callout } from './Callout';
+export { Chip } from './Chip';
 export { Choice, type ChoiceOption } from './Choice';
+export { DangerButton } from './DangerButton';
 export { Disclosure } from './Disclosure';
 export { Field } from './Field';
 export { MultiChoice } from './MultiChoice';
 export { Progress } from './Progress';
-export { TestBanner } from './TestBanner';
-export { useLineHeight } from './typography';
-export { DangerButton } from './DangerButton';
-export { Art, Wordmark, isArtId, useArtSize, type ArtId, type ArtSize } from './art';
 export { Screen } from './Screen';
 export { Splash } from './Splash';
+export { TestBanner } from './TestBanner';
+export { useLineHeight } from './typography';
+
+export { Art, Wordmark, ART_IDS, isArtId, useArtSize, type ArtId, type ArtSize } from './art';

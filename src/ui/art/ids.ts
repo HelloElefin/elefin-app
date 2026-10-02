@@ -6,7 +6,7 @@
  * dagegen schon — und genau die braucht die Katalogprüfung.
  *
  * Kommt eine Zeichnung dazu, gehört sie in beide Dateien. Dass das
- * zusammenpasst, prüft art.test.ts.
+ * zusammenpasst, erzwingt der Typ in registry.ts.
  */
 export const ART_IDS = [
   'dose',
@@ -19,6 +19,9 @@ export const ART_IDS = [
   'schublade',
   'schliessfach',
   'checkliste',
+  'menschen',
+  'wolke',
+  'verlauf',
 ] as const;
 
 export type ArtId = (typeof ART_IDS)[number];

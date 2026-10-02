@@ -12,8 +12,8 @@ import { View } from 'react-native';
 
 import { colors, radius } from '@/design';
 
-import { DRAWINGS } from './registry';
 import type { ArtId } from './ids';
+import { DRAWINGS } from './registry';
 import { useArtSize, type ArtSize } from './sizes';
 
 type Props = {
@@ -40,7 +40,10 @@ export function Art({ id, size, color = colors.accent }: Props) {
             height: Math.round(breite * 0.8),
             borderWidth: 1.5,
             borderStyle: 'dashed',
-            borderColor: colors.border,
+            // Platzhalter in der Farbe der Zeichnung, damit er auch auf
+            // dunklem Grund sichtbar bleibt.
+            borderColor: color,
+            opacity: 0.4,
             borderRadius: radius.md,
           }}
         />

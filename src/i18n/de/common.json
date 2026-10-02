@@ -1,103 +1,104 @@
 {
   "flow": {
     "splash": {
-      "title": "Herzlich willkommen bei Elefin",
-      "claim": "[Claim aus dem Marke-Chat]"
+      "title": "Willkommen bei Elefin",
+      "claim": "Damit Zeit bleibt für das Vermissen."
     },
     "start": {
-      "title": "Alles Wichtige an einem Ort",
-      "subtitle": "Ein paar Fragen — am Ende steht eine Übersicht, die Angehörigen im Ernstfall das Suchen erspart.",
-      "next": "Jetzt starten",
+      "title": "Alles, was die Familie einmal wissen muss.",
+      "subtitle": "Wenn jemand stirbt, beginnt für die Familie eine Suche. Elefin hält vorher fest, wo alles liegt — in rund zehn Minuten, aus dem Kopf.",
+      "next": "Los geht’s",
       "point_1": "Keine Unterlagen nötig",
-      "point_2": "Keine Passwörter, keine Kontonummern",
-      "point_3": "Alles bleibt auf dem Gerät",
+      "point_2": "Nie eine Frage nach Passwörtern oder Kontonummern",
+      "point_3": "Am Ende: eine Übersicht für die Angehörigen",
       "bereavement": {
-        "question": "Eine angehörige Person ist verstorben und Du brauchst Hilfe?",
-        "link": "Was jetzt zu tun ist"
+        "question": "Schnelle Hilfe im Todesfall: was in den ersten Stunden zu tun ist",
+        "link": "Was jetzt zu tun ist",
+        "chip": "Schnelle Hilfe im Todesfall"
       },
       "resume": "Weitermachen",
-      "resume_hint": "Es ist schon etwas festgehalten. Die Angaben bleiben {{days}} Tage in diesem Browser und werden dann gelöscht.",
-      "expired": "Die Angaben vom letzten Mal sind nach {{days}} Tagen abgelaufen und wurden gelöscht. Der Fragebogen beginnt wieder von vorn."
+      "resume_hint": "Es ist schon etwas festgehalten. Die Angaben bleiben {{days}} Tage in diesem Browser.",
+      "expired": "Die Angaben vom letzten Mal sind nach {{days}} Tagen gelöscht worden. Es geht von vorn los."
     },
     "bereavement": {
-      "title": "Was in den ersten Stunden zu tun ist",
-      "subtitle": "Eine kurze Liste. Das meiste davon hat Zeit bis morgen.",
+      "title": "Die ersten Stunden",
+      "subtitle": "Das Wichtigste zuerst. Vieles hat Zeit bis morgen.",
       "step_1": {
-        "title": "Eine Ärztin oder einen Arzt rufen",
+        "title": "Ärztin oder Arzt rufen",
         "text": "Der Tod muss ärztlich festgestellt werden. Ohne diese Bescheinigung geht nichts weiter. [Noch nicht juristisch geprüft]"
       },
       "step_2": {
-        "title": "Die nächsten Angehörigen verständigen",
-        "text": "Wer zuerst erfahren sollte, was passiert ist — bevor es jemand anders erzählt."
+        "title": "Die engsten Angehörigen verständigen",
+        "text": "Bevor sie es von jemand anderem erfahren."
       },
       "step_3": {
         "title": "Ein Bestattungsunternehmen beauftragen",
-        "text": "Es übernimmt die Formalitäten und meldet den Sterbefall beim Standesamt. Die Fristen sind in Österreich und Deutschland verschieden. [Noch nicht juristisch geprüft]"
+        "text": "Es übernimmt die Formalitäten und meldet den Sterbefall. Die Fristen sind in Österreich und Deutschland verschieden. [Noch nicht juristisch geprüft]"
       },
       "step_4": {
         "title": "Unterlagen zusammensuchen",
-        "text": "Ausweis, Geburts- und Heiratsurkunde, Versicherungspolicen, Testament. Das Bestattungsunternehmen sagt, was genau gebraucht wird."
+        "text": "Ausweis, Geburts- und Heiratsurkunde, Policen, Testament. Das Bestattungsunternehmen sagt, was genau gebraucht wird."
       },
       "step_5": {
         "title": "Wohnung und Tiere",
-        "text": "Wer hat einen Schlüssel, wer versorgt das Tier, läuft die Heizung. Das duldet keinen Aufschub."
+        "text": "Wer hat einen Schlüssel, wer versorgt das Tier, läuft die Heizung."
       },
       "step_6": {
         "title": "Arbeitgeber oder Pensionsversicherung melden",
-        "text": "Zu viel ausgezahltes Geld wird sonst später zurückgefordert. [Noch nicht juristisch geprüft]"
+        "text": "Sonst wird später zu viel Ausgezahltes zurückgefordert. [Noch nicht juristisch geprüft]"
       },
       "step_7": {
-        "title": "Banken, Verträge und Abos — später",
-        "text": "Nichts davon ist in den ersten Tagen eilig. Es hilft aber, schon eine Liste zu haben."
+        "title": "Banken, Verträge, Abos — später",
+        "text": "In den ersten Tagen ist nichts davon eilig."
       },
-      "note": "Diese Liste ist eine Orientierung und ersetzt keine Beratung. [Noch nicht juristisch geprüft]"
+      "note": "Eine Orientierung, keine Beratung. [Noch nicht juristisch geprüft]"
     },
     "principles": {
-      "title": "So geht Elefin mit den Angaben um",
-      "subtitle": "Hier geht es um Dinge, die persönlich sind. Deshalb vorab, was mit den Angaben passiert — und was nicht.",
-      "lead": "Zwei Schlüssel, die nur gemeinsam etwas öffnen.",
-      "next": "Verstanden, weiter",
+      "title": "So bleiben die Angaben geschützt",
+      "subtitle": "Bevor es losgeht: wo die Angaben liegen und wer sie öffnen kann.",
+      "lead": "Was hier steht, bleibt geschützt.",
+      "next": "Verstanden",
       "item_1": {
-        "title": "Es bleibt zuerst auf dem Gerät",
-        "text": "Eingaben werden sofort auf dem Handy verschlüsselt. Ohne Konto verlassen sie das Gerät überhaupt nicht."
+        "title": "Verschlüsselt, bevor etwas das Handy verlässt",
+        "text": "Ohne Konto verlässt nichts das Gerät."
       },
       "item_2": {
-        "title": "Elefin allein kann nichts öffnen",
-        "text": "Der Schlüssel zu den eigenen Angaben liegt auf dem Gerät, nicht bei Elefin. Für den Ernstfall liegt eine zweite Kopie in einer Kiste mit zwei Schlössern: Ein Teil liegt bei Elefin, einer bei der benannten Person. Getrennt ist beides wertlos. [Beispieltext, Fassung aus dem Marke-Chat folgt]"
+        "title": "Zwei Schlüssel, nur gemeinsam",
+        "text": "Für den Todesfall verwahrt Elefin einen Schlüssel, die Vertrauensperson den anderen. Nur beide zusammen öffnen das Fach."
       },
       "item_3": {
-        "title": "Gespeichert wird in Frankfurt",
-        "text": "Die Server stehen in Frankfurt. Es gilt europäisches Datenschutzrecht. [Noch nicht juristisch geprüft]"
+        "title": "Gespeichert in Frankfurt",
+        "text": "Nach europäischem Datenschutzrecht. [Noch nicht juristisch geprüft]"
       },
       "item_4": {
         "title": "Nie eine Frage nach Passwörtern",
-        "text": "Keine PIN, keine Zugangsdaten, keine Kontonummer. Es geht immer nur darum, wo etwas zu finden ist."
+        "text": "Keine PIN, keine Zugangsdaten, keine Kontonummer. Nur, wo etwas zu finden ist."
       },
       "item_5": {
-        "title": "Nichts davon ist Pflicht",
-        "text": "Es gibt kein Pflichtfeld. Was gerade nicht bekannt ist oder privat bleiben soll, lässt sich überspringen und später ergänzen — oder nie."
+        "title": "Kein Pflichtfeld",
+        "text": "Was fehlt, kommt später dazu. Oder bleibt weg."
       }
     },
     "situation": {
-      "title": "Ein paar Angaben zur Lebenssituation",
-      "subtitle": "Das steuert nur, welche Fragen später überhaupt kommen.",
+      "title": "Zur Lebenssituation",
+      "subtitle": "Zwei Angaben, die bestimmen, welche Fragen kommen.",
       "note": {
-        "title": "Warum diese Frage",
-        "text": "Ohne Testament entscheidet die gesetzliche Erbfolge. Wie die aussieht, hängt genau an diesen zwei Angaben."
+        "title": "Warum das hilft",
+        "text": "Ohne Testament regelt das Gesetz, wer erbt. Dafür zählen genau diese beiden Angaben."
       }
     },
     "inventory": {
-      "title": "Was davon trifft zu?",
-      "subtitle": "Einfach antippen, was es gibt. Danach kommen nur noch Fragen zu den angetippten Punkten.",
-      "counts_title": "Wie viele sind es jeweils?",
-      "counts_subtitle": "Eine grobe Zahl genügt. Sie hilft später beim Suchen, auch wenn nicht alles notiert ist."
+      "title": "Was gibt es?",
+      "subtitle": "Antippen, was zutrifft. Danach geht es nur noch darum.",
+      "counts_title": "Wie viele jeweils?",
+      "counts_subtitle": "Eine grobe Zahl reicht. Auch ein drittes Konto ohne Details ist für die Familie ein wichtiger Hinweis."
     },
     "emergency-contact": {
-      "title": "Wen sollten Angehörige zuerst anrufen?",
-      "subtitle": "Diese Nummer steht später in der Übersicht — damit jemand, der vor dem Aktenordner steht, weiß, wo er anfangen soll.",
+      "title": "Wer soll zuerst angerufen werden?",
+      "subtitle": "Diese Person steht ganz oben auf der Übersicht. Wer den Ordner aufschlägt, weiß sofort, wo er anfängt.",
       "note": {
-        "title": "Hier ruft niemand an",
-        "text": "Elefin verschickt keine Nachrichten und wählt keine Nummern. Die Angabe steht nur in der eigenen Übersicht — für Menschen, nicht für die App."
+        "title": "Elefin ruft niemanden an",
+        "text": "Die Nummer steht nur auf der eigenen Übersicht."
       },
       "summary": {
         "title": "Wer zuerst informiert wird",
@@ -106,10 +107,10 @@
       "phrase": "wer zuerst angerufen wird"
     },
     "funeral": {
-      "title": "Wie soll die Bestattung aussehen?",
+      "title": "Wie soll die Bestattung sein?",
       "note": {
-        "title": "Ein klarer Wunsch entlastet",
-        "text": "Angehörige müssen dann nicht raten, während sie ohnehin überfordert sind."
+        "title": "Warum das hilft",
+        "text": "Die Familie muss dann nicht raten — in Tagen, in denen sie ohnehin viel entscheiden muss."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -121,10 +122,10 @@
       "phrase": "wie die Bestattung aussehen soll"
     },
     "organ-donation": {
-      "title": "Ist etwas zur Organspende festgelegt?",
+      "title": "Gibt es eine Entscheidung zur Organspende?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Ohne Erklärung werden im Ernstfall die Angehörigen gefragt. Seit 2024 gibt es dafür ein bundesweites Register. [Noch nicht juristisch geprüft]"
+        "title": "Warum das hilft",
+        "text": "Ohne Erklärung werden im Ernstfall die Angehörigen gefragt. [Noch nicht juristisch geprüft]"
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -138,8 +139,8 @@
     "documents": {
       "title": "Wo liegen die wichtigen Unterlagen?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Ausweis, Verträge und Policen sollten an einem Ort liegen, den jemand kennt."
+        "title": "Warum das hilft",
+        "text": "Ausweis, Verträge, Policen: Wer den Ort kennt, erspart der Familie die erste und längste Suche."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -151,11 +152,11 @@
       "phrase": "wo die Unterlagen liegen"
     },
     "home-access": {
-      "title": "Wie kommt jemand in die Wohnung?",
-      "subtitle": "Damit in den ersten Tagen jemand nach dem Rechten sehen kann — Post, Heizung, Blumen.",
+      "title": "Wer kommt in die Wohnung?",
+      "subtitle": "Für die ersten Tage: Post, Heizung, Blumen.",
       "note": {
         "title": "Bitte keine Codes",
-        "text": "Codes für Tür oder Alarmanlage gehören nicht hierher. Es genügt zu notieren, wer sie kennt."
+        "text": "Nur notieren, wer sie kennt."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -167,10 +168,10 @@
       "phrase": "wie jemand in die Wohnung kommt"
     },
     "employment-pension": {
-      "title": "Arbeit, oder schon in Pension bzw. Rente?",
+      "title": "Arbeit oder Pension?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Arbeitgeber und Pensionsversicherung sollten früh Bescheid wissen. Zu viel Ausgezahltes wird sonst später zurückgefordert. [Noch nicht juristisch geprüft]"
+        "title": "Warum das hilft",
+        "text": "Arbeitgeber und Pensionsversicherung müssen früh Bescheid wissen. Sonst wird zu viel Ausgezahltes zurückgefordert. [Noch nicht juristisch geprüft]"
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -184,8 +185,8 @@
     "bank-account": {
       "title": "Bei welcher Bank liegt das Konto?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Banken sperren Konten im Todesfall automatisch. Wer weiß, wo welches Konto liegt, kommt schneller an Geld für laufende Kosten."
+        "title": "Warum das hilft",
+        "text": "Banken sperren Konten im Todesfall. Wer weiß, wo welches liegt, kommt schneller an Geld für laufende Kosten."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -199,8 +200,8 @@
     "securities": {
       "title": "Wo liegt das Depot?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Wertpapiere gehen nicht verloren. Sie werden nur oft lange nicht gefunden."
+        "title": "Warum das hilft",
+        "text": "Wertpapiere gehen selten verloren. Sie werden nur oft lange nicht gefunden."
       },
       "summary": {
         "title": "Depot",
@@ -211,8 +212,8 @@
     "safe-deposit": {
       "title": "Wo ist das Schließfach?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Der Zugang endet mit dem Tod. Erben brauchen einen Erbschein oder ein Testament, um es öffnen zu lassen."
+        "title": "Warum das hilft",
+        "text": "Mit dem Tod endet der Zugang. Erben brauchen Erbschein oder Testament, um es öffnen zu lassen."
       },
       "summary": {
         "title": "Schließfach",
@@ -221,10 +222,10 @@
       "phrase": "wo das Schließfach ist"
     },
     "valuables": {
-      "title": "Welche Wertsachen gibt es, und wo liegen sie?",
+      "title": "Welche Wertsachen gibt es — und wo?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Was niemand kennt, wird beim Räumen der Wohnung übersehen."
+        "title": "Warum das hilft",
+        "text": "Was niemand kennt, geht beim Räumen der Wohnung verloren."
       },
       "summary": {
         "title": "Wertsachen",
@@ -233,10 +234,10 @@
       "phrase": "wo die Wertsachen liegen"
     },
     "real-estate": {
-      "title": "Was für eine Immobilie ist das?",
+      "title": "Was für eine Immobilie?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Ohne Grundbuchauszug beginnt für Erben eine längere Suche."
+        "title": "Warum das hilft",
+        "text": "Mit dem Grundbuchauszug sparen Erben eine lange Suche."
       },
       "summary": {
         "title": "Immobilie",
@@ -245,10 +246,10 @@
       "phrase": "was mit der Immobilie ist"
     },
     "vehicle": {
-      "title": "Welches Fahrzeug ist das?",
+      "title": "Welches Fahrzeug?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Zulassungsbescheinigung und Schlüssel liegen selten am selben Ort. Für eine Abmeldung oder einen Verkauf braucht man beides."
+        "title": "Warum das hilft",
+        "text": "Schlüssel und Papiere liegen selten am selben Ort. Für Abmeldung oder Verkauf braucht es beides."
       },
       "summary": {
         "title": "Fahrzeug",
@@ -259,8 +260,8 @@
     "pet": {
       "title": "Wer kümmert sich um das Tier?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "In den ersten Tagen ist das oft die dringendste Frage überhaupt."
+        "title": "Warum das hilft",
+        "text": "In den ersten Tagen oft die dringendste Frage."
       },
       "summary": {
         "title": "Betreuung des Tieres",
@@ -271,7 +272,7 @@
     "insurances": {
       "title": "Welche Versicherungen gibt es?",
       "note": {
-        "title": "Gut zu wissen",
+        "title": "Warum das hilft",
         "text": "Eine Lebensversicherung zahlt erst, wenn jemand sie kennt und meldet."
       },
       "disclosure": {
@@ -284,11 +285,11 @@
       "phrase": "welche Versicherungen es gibt"
     },
     "subscriptions": {
-      "title": "Welche Abos gibt es?",
-      "subtitle": "Gemeint ist alles, was monatlich abgebucht wird und sich kündigen lässt.",
+      "title": "Welche Abos laufen?",
+      "subtitle": "Alles, was regelmäßig abgebucht wird und sich kündigen lässt.",
       "note": {
-        "title": "Warum die E-Mail-Adresse hilft",
-        "text": "Fast jedes Abo lässt sich über die Anmeldeadresse kündigen — das Passwort kann man sich darüber neu setzen lassen. Deshalb fragt Elefin danach und nie nach dem Passwort selbst."
+        "title": "Warum nur die E-Mail-Adresse",
+        "text": "Über die Anmeldeadresse lässt sich fast jedes Abo kündigen. Ein Passwort braucht es dafür nicht."
       },
       "disclosure": {
         "title": "Haupt-E-Mail-Adresse"
@@ -300,11 +301,11 @@
       "phrase": "welche Abos laufen"
     },
     "contracts": {
-      "title": "Welche laufenden Verträge gibt es?",
-      "subtitle": "Gemeint sind Verträge für Dinge des Alltags — die lässt man nicht einfach auslaufen.",
+      "title": "Welche Verträge laufen?",
+      "subtitle": "Strom, Miete, Handy — was übernommen oder umgemeldet werden muss.",
       "note": {
         "title": "Warum getrennt von den Abos",
-        "text": "Verträge für Strom oder Miete müssen übernommen oder umgemeldet werden. Abos kündigt man einfach. Das sind zwei ganz verschiedene Aufgaben."
+        "text": "Abos kündigt man. Verträge wie Strom oder Miete werden übernommen. Zwei verschiedene Aufgaben."
       },
       "summary": {
         "title": "Laufende Verträge",
@@ -313,11 +314,11 @@
       "phrase": "welche Verträge laufen"
     },
     "memberships": {
-      "title": "Wo gibt es Mitgliedschaften?",
-      "subtitle": "Mitgliedsbeiträge laufen weiter, bis jemand kündigt.",
+      "title": "Welche Mitgliedschaften gibt es?",
+      "subtitle": "Beiträge laufen weiter, bis jemand kündigt.",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Manche Mitgliedschaften enthalten ein Sterbegeld oder eine Versicherung, von der die Familie nichts weiß. [Noch nicht juristisch geprüft]"
+        "title": "Warum das hilft",
+        "text": "Manche enthalten Sterbegeld oder eine Versicherung, von der die Familie nichts weiß. [Noch nicht juristisch geprüft]"
       },
       "disclosure": {
         "title": "Namen, damit man sie findet"
@@ -332,7 +333,7 @@
       "title": "Wer ist die Hausärztin oder der Hausarzt?",
       "note": {
         "title": "Keine Frage nach Diagnosen",
-        "text": "Es geht nur darum, wer die Person kennt und wo die Unterlagen liegen. Was darin steht, bleibt privat."
+        "text": "Nur, wer Bescheid weiß und wo die Unterlagen liegen."
       },
       "disclosure": {
         "title": "Weitere Angaben"
@@ -346,8 +347,8 @@
     "power-of-attorney": {
       "title": "Wo liegt die Vorsorgevollmacht?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Damit darf eine benannte Person entscheiden, wenn das selbst nicht mehr möglich ist. [Noch nicht juristisch geprüft]"
+        "title": "Warum das hilft",
+        "text": "Damit darf eine benannte Person entscheiden, wenn es selbst nicht mehr geht. [Noch nicht juristisch geprüft]"
       },
       "summary": {
         "title": "Vorsorgevollmacht",
@@ -358,8 +359,8 @@
     "living-will": {
       "title": "Wo liegt die Patientenverfügung?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Ärzte fragen im Ernstfall zuerst die Angehörigen danach, nicht die Schublade."
+        "title": "Warum das hilft",
+        "text": "Im Ernstfall fragen Ärzte zuerst die Angehörigen danach."
       },
       "summary": {
         "title": "Patientenverfügung",
@@ -370,8 +371,8 @@
     "last-will": {
       "title": "Wo liegt das Testament?",
       "note": {
-        "title": "Gut zu wissen",
-        "text": "Ein Testament in der Wohnung kann übersehen werden. Beim Nachlassgericht wird es sicher gefunden. [Noch nicht juristisch geprüft]"
+        "title": "Warum das hilft",
+        "text": "In der Schublade wird es leicht übersehen. Beim Nachlassgericht wird es sicher gefunden. [Noch nicht juristisch geprüft]"
       },
       "summary": {
         "title": "Testament",
@@ -381,24 +382,49 @@
     },
     "summary": {
       "title": "Das ist festgehalten",
-      "subtitle": "Was offen ist, ist kein Versäumnis. Es ist einfach der nächste Schritt.",
+      "subtitle": "Was noch offen ist, lässt sich jederzeit ergänzen.",
       "sentence": "Damit ist festgehalten, {{list}}.",
-      "fallback": "Noch ist nichts festgehalten. Jeder offene Punkt unten ist ein möglicher nächster Schritt."
+      "fallback": "Noch ist nichts festgehalten. Jeder Punkt unten ist ein möglicher Anfang."
     },
     "finish": {
-      "title": "Wie soll das gesichert werden?",
-      "note": {
-        "title": "Was das PDF nicht kann",
-        "text": "Es liegt dort, wo es abgelegt wird. Geht das Gerät verloren, ist auch die Übersicht weg."
+      "title": "Die Übersicht steht.",
+      "subtitle": "Im Schließfach von Elefin wird daraus mehr als ein Blatt Papier.",
+      "pdf_chip": "PDF",
+      "benefits": {
+        "heading": "Im Schließfach von Elefin",
+        "family": {
+          "title": "Die ganze Familie an einem Ort",
+          "text": "Angehörige ergänzen ihren Teil. Die Vertrauensperson ist von Anfang an benannt."
+        },
+        "online": {
+          "title": "Sicher verwahrt, auf jedem Gerät",
+          "text": "Verschlüsselt in Frankfurt. Geht das Handy verloren, ist nichts verloren."
+        },
+        "history": {
+          "title": "Jede Änderung nachvollziehbar",
+          "text": "Frühere Stände bleiben erhalten. Die Familie sieht, was zuletzt gegolten hat."
+        }
       },
-      "pdf": {
-        "title": "Als PDF speichern",
-        "hint": "Kostenlos, auch ohne Konto. Das Blatt für den Ordner — unverschlüsselt, also nichts, was offen herumliegen sollte."
+      "planned": {
+        "heading": "Danach",
+        "living_will": {
+          "title": "Patientenverfügung",
+          "text": "Vorbereitet bis zur Unterschrift, mit dem Weg zu Anwalt oder Notariat."
+        },
+        "last_will": {
+          "title": "Testament",
+          "text": "Gedanken ordnen und vorbereiten. Elefin zeigt, wie es gültig wird."
+        },
+        "documents": {
+          "title": "Dokumente",
+          "text": "Policen und Urkunden selbst ablegen, nicht nur ihren Fundort."
+        }
       },
-      "account": {
-        "title": "Bei Elefin aufbewahren lassen",
-        "hint": "Verschlüsselt, auf allen Geräten, im Ernstfall für die benannte Person erreichbar. Ab hier beginnt das Konto."
-      }
+      "cta": "Weiter zur Speicherung bei Elefin"
+    },
+    "account": {
+      "title": "Das Schließfach kommt",
+      "text": "Speichern bei Elefin ist in Arbeit. Diese Testfassung hält alles nur in diesem Browser fest. Bis dahin ist das Blatt für den Ordner der sichere Weg."
     }
   },
   "question": {
@@ -950,13 +976,13 @@
   },
   "block": {
     "before-start": {
-      "title": "Vorab"
+      "title": "Sicherheit"
     },
     "situation": {
       "title": "Lebenssituation"
     },
     "your-list": {
-      "title": "Die eigene Liste"
+      "title": "Was es gibt"
     },
     "who-knows": {
       "title": "Wer Bescheid weiß"
@@ -965,7 +991,7 @@
       "title": "Wünsche"
     },
     "findability": {
-      "title": "Auffindbarkeit"
+      "title": "Wo etwas liegt"
     },
     "work": {
       "title": "Arbeit und Pension"
@@ -999,11 +1025,11 @@
     "later": "Später weiter",
     "progress": "Bereich {{current}} von {{total}}",
     "unknown": "Weiß ich gerade nicht",
-    "skip_unknown": "Weiß ich gerade nicht — überspringen",
+    "skip_unknown": "Weiß ich gerade nicht — weiter",
     "multi_hint": "Mehrfachauswahl möglich",
     "select_all": "Alles auswählen",
     "deselect_all": "Auswahl aufheben",
-    "disclosure_later": "Lässt sich auch später ergänzen",
+    "disclosure_later": "Lässt sich später ergänzen",
     "add_another": "Weitere hinzufügen",
     "pass": "{{current}} von {{total}}",
     "count_question": "Wie viele?",
@@ -1016,12 +1042,12 @@
     },
     "trust": {
       "title": "Wie am Anfang gesagt",
-      "text": "Elefin fragt nie nach Kontonummer, PIN oder Passwort. Es geht nur darum, wo etwas liegt — damit niemand suchen muss."
+      "text": "Elefin fragt nie nach Kontonummer, PIN oder Passwort. Nur, wo etwas liegt."
     },
     "summary_state": {
-      "answered": "Steht fest",
+      "answered": "Festgehalten",
       "unknown": "Später klären",
-      "open": "Nächster Schritt"
+      "open": "Noch offen"
     },
     "test_banner": "Test-App — die Angaben liegen unverschlüsselt in diesem Browser und werden nach 7 Tagen gelöscht.",
     "delete_all": "Alles löschen",
@@ -1032,7 +1058,7 @@
     "list_and": "und"
   },
   "print": {
-    "title": "Übersicht für den Ernstfall",
+    "title": "Übersicht für die Familie",
     "created": "Erstellt am {{date}}",
     "action": "Blatt drucken oder als PDF sichern",
     "unknown": "noch nicht bekannt",

@@ -2,12 +2,13 @@
  * Die Zeichnungen — vorerst Platzhalter von der Entwicklung.
  *
  * Alle nach denselben Leitplanken: nur Linien, nur Gegenstände, eine Farbe,
- * keine Flächen, keine Menschen, keine Schlösser oder Schilde. Sie zeigen
- * Größe und Gewicht, nicht den endgültigen Strich.
+ * keine Flächen, keine Menschen als Figuren, keine Schlösser oder Schilde.
+ * Sie zeigen Größe und Gewicht, nicht den endgültigen Strich.
  *
  * Wenn die echten Zeichnungen kommen, wird NUR diese Datei ersetzt. Kein
  * Screen wird dafür angefasst.
  */
+import type { ReactNode } from 'react';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
 export type DrawingProps = {
@@ -23,7 +24,7 @@ function Canvas({
   viewBox,
   ratio,
   children,
-}: DrawingProps & { viewBox: string; ratio: number; children: React.ReactNode }) {
+}: DrawingProps & { viewBox: string; ratio: number; children: ReactNode }) {
   return (
     <Svg
       width={size}
@@ -111,6 +112,40 @@ export function Zettel(p: DrawingProps) {
   );
 }
 
+// --- Symbole für die Vorteile des Schließfachs -----------------------------
+
+/** Zwei Köpfe, angedeutet — die Familie. */
+export function Menschen(p: DrawingProps) {
+  return (
+    <Canvas {...p} viewBox="0 0 24 24" ratio={1}>
+      <Circle cx={8} cy={8} r={3} />
+      <Circle cx={16} cy={9} r={2.5} />
+      <Path d="M3 20c0-3 2.5-5 5-5s5 2 5 5" />
+      <Path d="M13 20c0-2.5 1.5-4 3-4s3 1.5 3 4" />
+    </Canvas>
+  );
+}
+
+/** Eine Wolke — online verwahrt. */
+export function Wolke(p: DrawingProps) {
+  return (
+    <Canvas {...p} viewBox="0 0 24 24" ratio={1}>
+      <Path d="M7 18h10a4 4 0 0 0 .5-7.97A6 6 0 0 0 6.1 11 3.5 3.5 0 0 0 7 18Z" />
+    </Canvas>
+  );
+}
+
+/** Eine Uhr mit Rückwärtspfeil — frühere Stände bleiben erhalten. */
+export function Verlauf(p: DrawingProps) {
+  return (
+    <Canvas {...p} viewBox="0 0 24 24" ratio={1}>
+      <Path d="M4 12a8 8 0 1 0 2.3-5.6" />
+      <Path d="M4 4v4h4" />
+      <Path d="M12 8v4l3 2" />
+    </Canvas>
+  );
+}
+
 // --- Größere Zeichnungen für die Schwellen ---------------------------------
 
 /** Offene Schublade mit Schlüssel und Brief. Für den Startscreen. */
@@ -131,7 +166,7 @@ export function Schublade(p: DrawingProps) {
   );
 }
 
-/** Schließfach mit zwei Schlüsseln. Für die Grundsätze. */
+/** Schließfach mit zwei Schlüsseln. Für die Grundsätze und den Abschluss. */
 export function Schliessfach(p: DrawingProps) {
   return (
     <Canvas {...p} viewBox="0 0 160 110" ratio={0.69}>
@@ -151,7 +186,7 @@ export function Schliessfach(p: DrawingProps) {
   );
 }
 
-/** Zettel mit Haken. Für den Abschluss und den Todesfall-Weg. */
+/** Zettel mit Haken. Für die Übersicht und den Todesfall-Weg. */
 export function Checkliste(p: DrawingProps) {
   return (
     <Canvas {...p} viewBox="0 0 140 126" ratio={0.9}>

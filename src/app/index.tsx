@@ -4,21 +4,20 @@
  * Erster Eindruck und zugleich das Versprechen, worauf man sich einlässt.
  * Ist schon etwas gespeichert, wird daraus ein Wiedereinstieg.
  *
- * Unten, abgetrennt, die Ecke für den Ernstfall. Bewusst kein eigener
- * Entscheidungsscreen davor: Fast jeder kommt hier an, um vorzusorgen, und
- * müsste sonst einen Schritt für eine Minderheit mitgehen.
+ * Oben rechts der Nebeneingang für den Todesfall. Dort, wo Menschen Hilfe
+ * suchen — und nicht unten, wo er wie „Abmelden" aussah.
  */
 import { useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
-import { colors, fontSize, minTouchTarget, radius, spacing } from '@/design';
+import { colors, fontSize, radius, spacing } from '@/design';
 import { openSteps } from '@/domain';
 import { useText } from '@/i18n/dynamic';
 import { useFlow } from '@/state/flow-navigation';
 import { useSession } from '@/state/session';
 import { MAX_AGE_DAYS } from '@/state/storage';
-import { Art, Button, DangerButton, Screen, Wordmark, useLineHeight } from '@/ui';
+import { Art, Button, Chip, DangerButton, Screen, Wordmark, useLineHeight } from '@/ui';
 
 export default function StartScreen() {
   const { text } = useText();
@@ -36,10 +35,26 @@ export default function StartScreen() {
   }
 
   return (
-    <Screen centered>
-      <View style={{ gap: spacing.lg }}>
-        <Wordmark centered />
+    <Screen>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: spacing.sm,
+          marginBottom: spacing.xl,
+        }}
+      >
+        <Wordmark />
+        <Chip
+          label={text('flow.start.bereavement.chip')}
+          accessibilityLabel={text('flow.start.bereavement.question')}
+          dot={colors.warning}
+          onPress={() => router.push('/bereavement')}
+        />
+      </View>
 
+      <View style={{ gap: spacing.lg }}>
         <View style={{ alignItems: 'center' }}>
           <Art id="schublade" size="large" />
         </View>
@@ -126,43 +141,6 @@ export default function StartScreen() {
         ) : (
           <Button label={text('flow.start.next')} onPress={flow.goNext} />
         )}
-      </View>
-
-      {/* Der Nebeneingang. Kein eigener Screen davor, aber auch nicht versteckt. */}
-      <View
-        style={{
-          marginTop: spacing.xl,
-          paddingTop: spacing.md,
-          borderTopWidth: 1,
-          borderTopColor: colors.border,
-          alignItems: 'center',
-        }}
-      >
-        <Text
-          style={{
-            fontSize: fontSize.sm,
-            lineHeight: lineHeight(fontSize.sm),
-            color: colors.textSecondary,
-          }}
-        >
-          {text('flow.start.bereavement.question')}
-        </Text>
-        <Pressable
-          onPress={() => router.push('/bereavement')}
-          accessibilityRole="link"
-          style={{ minHeight: minTouchTarget, justifyContent: 'center', paddingHorizontal: spacing.sm }}
-        >
-          <Text
-            style={{
-              fontSize: fontSize.md,
-              lineHeight: lineHeight(fontSize.md),
-              color: colors.accent,
-              textDecorationLine: 'underline',
-            }}
-          >
-            {text('flow.start.bereavement.link')}
-          </Text>
-        </Pressable>
       </View>
     </Screen>
   );

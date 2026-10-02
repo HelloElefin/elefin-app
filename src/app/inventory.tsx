@@ -6,11 +6,15 @@
  * überhaupt — sie verrät, dass es ein drittes Konto gibt, auch wenn nichts
  * dazu eingetragen wurde.
  *
- * Die Punkte stehen in Gruppen, mit dem Symbol des jeweiligen Blocks als
- * Überschrift. Die Zuordnung ergibt sich aus dem Katalog: Zu welcher Gruppe
- * eine Kategorie gehört, sagt der Block ihres Screens. Eine zweite Tabelle
- * dafür gibt es bewusst nicht.
+ * ZWEI PHASEN. Erst ankreuzen, dann die Anzahl. Vorher standen beide
+ * untereinander, und man musste nach dem Ankreuzen an allem vorbeiscrollen,
+ * um unten dieselben Themen noch einmal zu beantworten.
+ *
+ * Bewusst kein eigener Screen im Katalog: Der müsste übersprungen werden,
+ * wenn nichts Zählbares angekreuzt ist — und Screens, die sich selbst
+ * überspringen, führen beim Zurückgehen in eine Schleife.
  */
+import { useState } from 'react';
 import { Text, View } from 'react-native';
 
 import { loadCatalog } from '@/catalog';
@@ -32,11 +36,14 @@ import {
 
 const COUNTS: DeclaredCount[] = [1, 2, 3, 'more', 'unknown'];
 
+type Phase = 'auswahl' | 'anzahl';
+
 export default function InventoryScreen() {
   const { text, exists } = useText();
   const session = useSession();
   const flow = useFlow({ screenId: 'inventory', pass: 1 });
   const lineHeight = useLineHeight();
+  const [phase, setPhase] = useState<Phase>('auswahl');
 
   const catalog = loadCatalog();
   const screen = catalog.screens.find((s) => s.id === 'inventory');
@@ -73,6 +80,10 @@ export default function InventoryScreen() {
     .map((o) => o.value)
     .filter((v) => isCategory(v) && declaredFor(session.caseFile, v)?.applies === true);
 
+  const mitAnzahl = angetippt.filter(
+    (v) => isCategory(v) && zuKategorie.get(v)?.repeatable === true,
+  );
+
   function toggle(value: string) {
     if (!isCategory(value)) return;
     const anGerade = declaredFor(session.caseFile, value)?.applies === true;
@@ -102,7 +113,22 @@ export default function InventoryScreen() {
     return Number(value) as DeclaredCount;
   }
 
-  const mitAnzahl = angetippt.filter((v) => isCategory(v) && zuKategorie.get(v)?.repeatable === true);
+  /** Weiter: erst zur Anzahl, wenn es überhaupt etwas zu zählen gibt. */
+  function weiter() {
+    if (phase === 'auswahl' && mitAnzahl.length > 0) {
+      setPhase('anzahl');
+      return;
+    }
+    flow.goNext();
+  }
+
+  function zurueck() {
+    if (phase === 'anzahl') {
+      setPhase('auswahl');
+      return;
+    }
+    flow.goBack();
+  }
 
   return (
     <Screen>
@@ -120,96 +146,102 @@ export default function InventoryScreen() {
           marginBottom: spacing.sm,
         }}
       >
-        {text('flow.inventory.title')}
+        {phase === 'auswahl' ? text('flow.inventory.title') : text('flow.inventory.counts_title')}
       </Text>
       <Text
         style={{
           fontSize: fontSize.md,
           lineHeight: lineHeight(fontSize.md),
           color: colors.textSecondary,
-          marginBottom: spacing.xs,
+          marginBottom: phase === 'auswahl' ? spacing.xs : spacing.lg,
         }}
       >
-        {text('flow.inventory.subtitle')}
-      </Text>
-      <Text
-        style={{
-          fontSize: fontSize.xs,
-          lineHeight: lineHeight(fontSize.xs),
-          color: colors.textSecondary,
-          marginBottom: spacing.lg,
-        }}
-      >
-        {text('common.multi_hint')}
+        {phase === 'auswahl'
+          ? text('flow.inventory.subtitle')
+          : text('flow.inventory.counts_subtitle')}
       </Text>
 
-      {gruppen.map((gruppe) => (
-        <View key={gruppe.block} style={{ marginBottom: spacing.lg }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: spacing.sm,
-              marginBottom: spacing.sm,
-            }}
-          >
-            <Art id={catalog.blocks[gruppe.block]?.icon ?? ''} size="symbol" />
-            <Text
-              style={{
-                fontSize: fontSize.sm,
-                lineHeight: lineHeight(fontSize.sm),
-                color: colors.textPrimary,
-              }}
-            >
-              {text(`block.${gruppe.block}.title`)}
-            </Text>
-          </View>
-
-          <MultiChoice options={gruppe.werte.map(optionFor)} values={angetippt} onToggle={toggle} />
-        </View>
-      ))}
-
-      {mitAnzahl.length > 0 && (
-        <View style={{ marginTop: spacing.lg }}>
+      {phase === 'auswahl' && (
+        <>
           <Text
             style={{
-              fontSize: fontSize.lg,
-              lineHeight: lineHeight(fontSize.lg, 1.25),
-              color: colors.textPrimary,
-              marginBottom: spacing.md,
+              fontSize: fontSize.xs,
+              lineHeight: lineHeight(fontSize.xs),
+              color: colors.textSecondary,
+              marginBottom: spacing.lg,
             }}
           >
-            {text('common.count_question')}
+            {text('common.multi_hint')}
           </Text>
 
-          {mitAnzahl.map((value) => {
-            if (!isCategory(value)) return null;
-            return (
-              <View key={value} style={{ marginBottom: spacing.lg }}>
+          {gruppen.map((gruppe) => (
+            <View key={gruppe.block} style={{ marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: spacing.sm,
+                  marginBottom: spacing.sm,
+                }}
+              >
+                <Art id={catalog.blocks[gruppe.block]?.icon ?? ''} size="symbol" />
                 <Text
                   style={{
                     fontSize: fontSize.sm,
                     lineHeight: lineHeight(fontSize.sm),
-                    color: colors.textSecondary,
-                    marginBottom: spacing.sm,
+                    color: colors.textPrimary,
+                  }}
+                >
+                  {text(`block.${gruppe.block}.title`)}
+                </Text>
+              </View>
+
+              <MultiChoice
+                options={gruppe.werte.map(optionFor)}
+                values={angetippt}
+                onToggle={toggle}
+              />
+            </View>
+          ))}
+        </>
+      )}
+
+      {phase === 'anzahl' &&
+        mitAnzahl.map((value) => {
+          if (!isCategory(value)) return null;
+          return (
+            <View key={value} style={{ marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: spacing.sm,
+                  marginBottom: spacing.sm,
+                }}
+              >
+                <Art id={catalog.blocks[zuKategorie.get(value)?.block ?? '']?.icon ?? ''} size="symbol" />
+                <Text
+                  style={{
+                    fontSize: fontSize.md,
+                    lineHeight: lineHeight(fontSize.md),
+                    color: colors.textPrimary,
                   }}
                 >
                   {text(`option.case_profile.inventory.${value}.label`)}
                 </Text>
-                <Choice
-                  options={countOptions()}
-                  value={currentCount(value)}
-                  onSelect={(c) => setCount(value, parseCount(c))}
-                />
               </View>
-            );
-          })}
-        </View>
-      )}
+              <Choice
+                options={countOptions()}
+                value={currentCount(value)}
+                onSelect={(c) => setCount(value, parseCount(c))}
+              />
+            </View>
+          );
+        })}
 
       <View style={{ marginTop: spacing.xl, gap: spacing.sm }}>
-        <Button label={text('common.next')} onPress={flow.goNext} />
-        {flow.hasBack && <Button label={text('common.back')} variant="quiet" onPress={flow.goBack} />}
+        <Button label={text('common.next')} onPress={weiter} />
+        <Button label={text('common.back')} variant="quiet" onPress={zurueck} />
       </View>
     </Screen>
   );
